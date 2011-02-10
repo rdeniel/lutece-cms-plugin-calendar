@@ -1,0 +1,51 @@
+<table>
+   	<tr>
+   		<th>#i18n{calendar.dashboard.columnTitleLabel}</th>
+   		<th>#i18n{calendar.dashboard.columnTitleActions}</th>
+   		<th>#i18n{calendar.dashboard.columnTitleSubscribers}</th>
+   	</tr>
+    <#list calendar_list as calendar>
+    	<tr>
+    		<td>
+                <a href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}" class="admin-menu">
+                    <img src="${calendar.eventImage}" alt="${calendar.eventImage}" title="${calendar.eventImage}" /> ${calendar.name}
+                </a>
+                <ul>
+                	<#assign nb_event = 0>
+                	<#list event_list as event>
+                		<#if event.idCalendar == calendar.id?number>
+                			<#if ( nb_event <= nb_events_max )>
+	                			<li>
+	                				-
+	                				<a href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&calendar_id=${calendar.id}&event_id=${event.id}">
+					                    ${event.title} (${event.date?date})
+					                </a>
+	                			</li>
+                				<#assign nb_event = nb_event + 1>
+                			<#else>
+                				<li>
+                					-
+	                				<a href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}">
+	                					#i18n{calendar.dashboard.etc}
+	                				</a>
+	                			</li>
+                				<#break>
+                			</#if>
+                		</#if>
+                	</#list>
+                </ul>
+            </td>
+            <td>
+            	<a href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}">
+           			<img src="images/admin/skin/actions/calendar_add.png" title="#i18n{calendar.dashboard.addEvent}" alt="#i18n{calendar.dashboard.addEvent}" />
+           		</a>
+            </td>
+            <td>
+            	<a href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}">
+           			<img src="images/admin/skin/actions/subscriber.png" title="#i18n{calendar.dashboard.nbSubscribers}" alt="#i18n{calendar.dashboard.nbSubscribers}">
+           		</a>
+           		(${nb_subscribers_list[calendar.id]})
+            </td>
+    	</tr>
+    </#list>
+</table>

@@ -1,0 +1,46 @@
+<div class="highlight-box">
+	<table>
+		<tr>
+			<td>
+				<a href="jsp/admin/plugins/calendar/ManageCalendarCategory.jsp" class="bullet-link">
+				#i18n{calendar.adminFeature.category_management.name}</a>
+			</td>
+			<td>
+				#i18n{calendar.adminFeature.category_management.description}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="jsp/admin/plugins/calendar/style/ManageExportStyleSheets.jsp" class="bullet-link">
+				#i18n{calendar.adminFeature.calendar_management_export_stylesheet.name}</a>
+			</td>
+			<td>
+				#i18n{calendar.adminFeature.calendar_management_export_stylesheet.description}
+			</td>
+		</tr>
+	       
+	</table>
+</div>
+
+<div class="highlight-box">
+	<p>#i18n{calendar.advanced_parameters.dashboard}</p>
+	<form method="post" action="jsp/admin/plugins/calendar/DoModifyCalendarParameterValues.jsp">
+		<p>
+			<label>#i18n{calendar.advanced_parameters.dashboard.nNextDays} :</label>
+			<input type="text" maxlength="2" size="2" name="dashboard_n_next_days" value="${calendar_parameters['dashboard_n_next_days']}"/>
+			<br/>
+			<label>&nbsp;</label>
+			#i18n{calendar.advanced_parameters.dashboard.nNextDaysComment}
+		</p>
+		<p>
+			<label>#i18n{calendar.advanced_parameters.dashboard.nbEvents} :</label>
+			<input type="text" maxlength="2" size="2" name="dashboard_nb_events" value="${calendar_parameters['dashboard_nb_events']}"/>
+			<br/>
+			<label>&nbsp;</label>
+			#i18n{calendar.advanced_parameters.dashboard.nbEventsComment}
+		</p>
+		<p>
+			<input type="submit" class="button" value="#i18n{calendar.advanced_parameters.dashboard.labelButtonModify}" />
+		</p>
+	</form>
+</div>

@@ -1,0 +1,24 @@
+<div class="portlet -lutece-border-radius calendar-left-content-search">
+<div class="portlet-header">#i18n{calendar.subscription.event.title}</div>
+    <form action="${jsp_url}" method="post">
+    	<p>
+			<label for="agenda">#i18n{calendar.search.event.label.calendar_choice} * :</label>
+			<@combo name="agenda" default_value=" " items=calendar_list /> 
+		</p>
+		<p>
+	        <label for="subscriber_email">#i18n{calendar.subscription.subscriber.email} * :</label>
+	        <input type="text" id="subscriber_email" name="email" tabindex="1" size="20" maxlength="160" />
+		</p>
+		<p>
+	    	<#if is_active_captcha>
+				<div >${captcha}</div>
+			</#if>
+		</p>
+		<p>
+			<input type="hidden" name="page" value="calendar" /> 
+	    	<input type="hidden" name="action" value="subscribe" /> 
+			<input type="submit" value="#i18n{calendar.subscription.buttonLabelSubscribe}" tabindex="10" class="button" />
+			<input class="button" type="button"  onclick="javascript:history.go(-1)" value="#i18n{portal.admin.message.buttonCancel}" />
+		</p>
+    </form>
+</div>

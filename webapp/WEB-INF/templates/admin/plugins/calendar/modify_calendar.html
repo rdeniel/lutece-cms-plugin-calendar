@@ -1,0 +1,82 @@
+<div class="content-box">	
+    
+    <h2>#i18n{calendar.modify_calendar.pageTitle}</h2>
+    
+    <form method="post" action="jsp/admin/plugins/calendar/DoModifyCalendar.jsp" name="modify_calendar">
+        <input type="hidden" name="calendar_id" value="${calendar.id}" />        
+        <p>
+            <label for="calendar_name" >#i18n{calendar.modify_calendar.name}&nbsp;*&nbsp;:</label>
+            <input type="text" id="calendar_name" name="calendar_name" value="${calendar.name}" size="100" maxlength="250" />			
+        </p>
+        <p>
+            <label for="calendar_image" >#i18n{calendar.modify_calendar.image}&nbsp;*&nbsp;:</label>
+            <@radioImageList name="calendar_image" default_value="${calendar.eventImage}" items=dots_list />
+        </p>				
+        <p>
+            <label for="calendar_prefix" >#i18n{calendar.modify_calendar.prefix}&nbsp;:</label>
+            <input type="text" id="calendar_prefix" name="calendar_prefix" value="${calendar.eventPrefix}" size="100" maxlength="250" />			
+        </p>
+        <p>
+            <label for="calendar_role">#i18n{calendar.modify_calendar.role} :</label>
+            <@combo name="calendar_role" default_value="${calendar.role}" items=roles_list />
+        </p>
+        <p>
+            <label for="calendar_role_manager">#i18n{calendar.modify_calendar.manager_role} :</label>
+            <@combo name="calendar_role_manager" default_value="${calendar.roleManager}" items=roles_list />
+        </p>
+        <p>
+            <label for="workgroup">#i18n{calendar.modify_calendar.workgroup}  :</label>
+            <@combo name="workgroup" default_value="${calendar.workgroup}" items=workgroups_list />
+        </p>
+        <p>
+			<label for="calendar_notification">#i18n{calendar.modify_calendar.notification}  :</label>
+			<#if calendar.notify>
+				<input name="calendar_notification" id="calendar_notification" value = 1 type="checkbox" checked="checked" onclick="javascript:notification();"/>
+			<#else>	
+				<input name="calendar_notification" id="calendar_notification"  type="checkbox" onclick="javascript:notification(  );"/>
+			</#if>	
+		</p>
+		<p>
+			<label>&nbsp;</label>
+			#i18n{calendar.modify_calendar.notification.comment}
+		</p>
+		<p id="notification">
+			<label for="calendar_period">#i18n{calendar.modify_calendar.periodValidity} * :</label>
+			<#if calendar.periodValidity?exists && calendar.periodValidity != -1>
+				<input type="text" id="calendar_period" name="calendar_period" value="${calendar.periodValidity}" tabindex="1" size="2" maxlength="2" />
+			<#else>
+				<input type="text" id="calendar_period" name="calendar_period" value="" tabindex="1" size="2" maxlength="2" />
+			</#if>
+			&nbsp;#i18n{calendar.modify_calendar.periodValidityUnit} 
+		</p>
+        <p>
+            <input type="submit" value="#i18n{calendar.modify_calendar.buttonLabelValidate}" tabindex="9" class="button" />
+            <a href="jsp/admin/plugins/calendar/CreateEvent.jsp?plugin_name=calendar&calendar_id=${calendar.id}"><input type="button" class="button" value="#i18n{calendar.modify_calendar.buttonCreate}"></a>
+            <a href="jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=${calendar.id}"><input type="button" class="button" value="#i18n{calendar.modify_calendar.titleEventsList}"></a>
+            <a href="jsp/admin/plugins/calendar/ManageCalendars.jsp?plugin_name=calendar"><input type="button" class="button" value="#i18n{calendar.modify_calendar.backToCalendarList}"></a>
+        </p>							 
+    </form>	
+    
+</div>
+
+<script type="text/javascript">
+	function notification(  )
+	{
+		var notification  = document.getElementById( "calendar_notification" );
+
+		if(notification .checked)
+		{
+			document.getElementById( "notification" ).style.display = "block";
+		}
+		else
+		{
+			document.getElementById( "notification" ).style.display = "none";
+		}
+	}
+	var initialisation = document.getElementById( "calendar_notification" );
+
+	if( !initialisation.checked )
+	{
+		notification(  );
+	}	
+</script>

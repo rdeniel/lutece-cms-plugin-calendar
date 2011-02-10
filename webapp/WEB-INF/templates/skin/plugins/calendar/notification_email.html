@@ -1,0 +1,10 @@
+<#if sender_message?exists>
+	${sender_message}
+</#if>
+<#if email_content??>
+	${email_content} :
+</#if>
+<br/>
+<#if calendar_id != 0>
+	<a href="${base_url}/jsp/site/Portal.jsp?page=calendar&action=${action}&event_id=${event_id}&agenda=${calendar_id}">#i18n{calendar.email-friend.link_to_event}</a>
+</#if>

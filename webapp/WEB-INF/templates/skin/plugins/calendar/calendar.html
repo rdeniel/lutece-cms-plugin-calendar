@@ -1,0 +1,27 @@
+<div id="content" class="span-15 prepend-1 append-1 append-bottom">
+	<table width="100%" class="-lutece-border-radius append-bottom">
+		<tr>
+			<th align="center" width="5%">
+				<a href="${jsp_url}?page=calendar&amp;date=${previous}"><img src="images/local/skin/plugins/calendar/previous.png" alt="Previous" border="0" /></a>
+			</th>
+			<th align="center" width="90%">
+				<a href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=day"><img src="images/local/skin/plugins/calendar/viewday.png" alt="View Day" border="0" /></a>
+				<a href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=week"><img src="images/local/skin/plugins/calendar/viewweek.png" alt="View Week" border="0" /></a>
+				<a href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=month"><img src="images/local/skin/plugins/calendar/viewmonth.png" alt="View Month" border="0" /></a>
+			</th>
+			<th align="center" width="5%">
+				<a href="${jsp_url}?page=calendar&amp;date=${next}"><img src="images/local/skin/plugins/calendar/next.png" alt="Next" border="0" /></a>
+			</th>
+		</tr>
+	</table>
+	<div class="portlet -lutece-border-radius append-bottom">
+		<h3>${title}</h3><br />
+		<div>${view_calendar}</div>
+	</div>
+	${event_list}
+</div>
+
+<div id="sidebar" class="span-6 append-1 append-bottom last">
+	${small_month_calendar}
+	${legend}
+</div>

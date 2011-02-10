@@ -1,0 +1,174 @@
+<#function isDayExcluded nDay listExcludedDays>
+	<#list listExcludedDays as excludedDay>
+		<#if excludedDay == nDay>
+			<#return true>
+		</#if>
+	</#list>
+	<#return false>
+</#function>
+
+<div class="content-box">
+	<form method="post" action="jsp/admin/plugins/calendar/DoModifyOccurrencePeriodicity.jsp">
+		<input type="hidden" name="event_id" value="${event.id}" />
+		<input type="hidden" name="calendar_id" value="${calendar_id}" />
+		<p>
+          	#i18n{calendar.modify_event.periodicity} :
+           	<@combo name="periodicity" default_value="${number_days}" items=interval_list />#i18n{calendar.modify_event.labelStartingDateStart}
+       		<br/>
+           	#i18n{calendar.modify_event.occurrence} :
+           	<input type="text" id="occurrence" name="occurrence" value="${event.occurrence}" tabindex="5" size="3" maxlength="3" />
+       	</p>
+       	<p>
+       		#i18n{calendar.modify_event.excluded_days} :
+       		<input type="checkbox" class="checkbox" value="2" name="excluded_days" <#if isDayExcluded("2", event.excludedDays)> checked="checked" </#if> />
+       		#i18n{calendar.label.monday}
+       		<input type="checkbox" class="checkbox" value="3" name="excluded_days" <#if isDayExcluded("3", event.excludedDays)> checked="checked" </#if> />
+       		#i18n{calendar.label.tuesday}
+       		<input type="checkbox" class="checkbox" value="4" name="excluded_days" <#if isDayExcluded("4", event.excludedDays)> checked="checked" </#if> />
+       		#i18n{calendar.label.wednesday}
+       		<input type="checkbox" class="checkbox" value="5" name="excluded_days" <#if isDayExcluded("5", event.excludedDays)> checked="checked" </#if> />
+       		#i18n{calendar.label.thursday}
+       		<input type="checkbox" class="checkbox" value="6" name="excluded_days" <#if isDayExcluded("6", event.excludedDays)> checked="checked" </#if> />
+       		#i18n{calendar.label.friday}
+       		<input type="checkbox" class="checkbox" value="7" name="excluded_days" <#if isDayExcluded("7", event.excludedDays)> checked="checked" </#if> />
+       		#i18n{calendar.label.saturday}
+       		<input type="checkbox" class="checkbox" value="1" name="excluded_days" <#if isDayExcluded("1", event.excludedDays)> checked="checked" </#if> />
+       		#i18n{calendar.label.sunday}
+       	</p>
+       	<p>
+       		<input type="submit" value="#i18n{calendar.modify_event.buttonLabelmodify}" class="button" />
+       		<a href="jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=${calendar_id}"><input type="button" class="button" value="#i18n{calendar.modify_event.backToEventList}"/></a>
+       	</p>
+    </form>
+</div>
+
+<div class="content-box">	
+    
+    <h2 class="content-box-header">#i18n{calendar.modify_occurrence.ListOccurrence}</h2>
+    
+    <@paginationAdmin paginator=paginator combo=1 />
+    <form method="post"  action="jsp/admin/plugins/calendar/ModifyOccurrenceList.jsp" name="form_modify_occurrence">
+	    <table>
+	        <tr>
+	            <th>
+	            	<input type="checkbox" id="cbx_0" name="cbx_check" onclick="doCheckBox();" />
+	            	#i18n{calendar.modify_occurrence.columnEventDate}
+	            	<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="date&calendar_id=${calendar_id}&event_id=${event.id}" />
+	            </th>
+	            <th>
+	            	#i18n{calendar.modify_event.status}
+	            	<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="status&calendar_id=${calendar_id}&event_id=${event.id}" />
+	            </th>           
+	            <th>
+	            	#i18n{calendar.modify_occurrence.columnEventTimeStart}
+	            	<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="dateTimeStart&calendar_id=${calendar_id}&event_id=${event.id}" />
+	            </th>
+	            <th>
+	            	#i18n{calendar.modify_occurrence.columnEventTimeEnd}
+	            	<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="dateTimeEnd&calendar_id=${calendar_id}&event_id=${event.id}" />
+	            </th>
+	            <th>
+	            	#i18n{calendar.modify_occurrence.columnEventTitle}
+	            	<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="title&calendar_id=${calendar_id}&event_id=${event.id}" />
+	            </th>           
+	            <th>#i18n{calendar.modify_occurrence.columnEventActions}</th>
+	        </tr> 
+	        
+	        <#assign i=0>                
+	        <#list occurrence_list as occurrence >
+	        <tr>
+	            <td>
+	            	<input type="checkbox" id="cbx_occurrence_${i}" name="cbx_occurrence" class="checkbox" value="${occurrence.id}" />
+	                <a href="jsp/admin/plugins/calendar/ModifyOccurrence.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${occurrence.eventId}&occurrence_id=${occurrence.id}" >
+	                    ${occurrence.date?date}
+	                </a>                        
+	            </td>
+	            <td>
+	                <#if occurrence.status?exists>
+						<#switch occurrence.status>
+						  <#case "confirmed">
+						    #i18n{calendar.event.status.confirmed.value}
+						    <#break>
+						  <#case "tentative">
+						    #i18n{calendar.event.status.tentative.value}
+						    <#break>
+						  <#case "cancelled">
+						    #i18n{calendar.event.status.cancelled.value}
+						    <#break>
+						</#switch>
+	                </#if>
+	            </td>
+	            <td>
+	                <#if occurrence.dateTimeStart?exists>
+	                ${occurrence.dateTimeStart}
+	                </#if>
+	            </td>
+	            <td>
+	                <#if occurrence.dateTimeEnd?exists>
+	                ${occurrence.dateTimeEnd}
+	                </#if>
+	            </td>
+	            <td>
+	                ${occurrence.title}
+	            </td>
+	            <td>
+	                <a href="jsp/admin/plugins/calendar/RemoveOccurrence.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${occurrence.eventId}&occurrence_id=${occurrence.id}">
+	                    <img src="images/admin/skin/actions/delete.png" alt="#i18n{calendar.modify_occurrence.actionDeleteEvent}" title="#i18n{calendar.modify_occurrence.actionDeleteEvent}" />
+	                </a>
+	            </td>
+	        </tr>
+	        <#assign i=i+1>
+	        </#list>
+	    </table>
+	    <@paginationAdmin paginator=paginator />
+	    <input type="hidden" name="plugin_name" value="calendar" /> 
+        <input type="hidden" name="calendar_id" value="${calendar_id}" />   
+       	<input type="hidden" name="event_id" value="${event.id}" />
+       	<br />
+        <p>
+        	#i18n{calendar.modify_occurrence.labelStatus} :
+	        <@combo name="event_status" default_value="${default_status}" items=event_status_list />
+	        <input type="submit" name="modify_occurrences_status" value="#i18n{calendar.modify_occurrence.buttonModify}" class="button" />
+        </p>
+        <p>
+        	<input type="submit" name="remove_occurrences" value="#i18n{calendar.modify_occurrence.buttonDelete}" class="button" />
+        </p> 
+    </form>
+</div>
+
+<script type="text/javascript">
+
+function doCheckBox( ){
+	
+	//Retrieve a checkbox[] from the form
+	allcheckBox = document.forms["form_modify_occurrence"].cbx_occurrence;
+
+	//when the main checkbox is checked all the checkbox of the list are checked
+	if(document.getElementById("cbx_0").checked )
+	{	
+		//if there are several checkbox	to check	
+		if( allcheckBox.length > 0)
+			for (i=0; i < allcheckBox.length ; ++i){
+				document.getElementById("cbx_occurrence_" + i).checked = true;
+				}
+		//if there is just one checkbox to check		
+		else
+			document.getElementById("cbx_occurrence_0").checked = true;	
+	}
+	//when the main checkbox is checked all the uncheckbox of the list are unchecked
+	else {
+		if( allcheckBox.length > 0)
+			for (i=0; i < allcheckBox.length ; ++i){
+					document.getElementById("cbx_occurrence_"+i).checked = false;
+				}			
+		else
+			document.getElementById("cbx_occurrence_0").checked = false;	
+	}
+}
+
+function checkRadio( radio ){
+	
+	document.getElementById(radio).checked = true;
+}
+
+</script>

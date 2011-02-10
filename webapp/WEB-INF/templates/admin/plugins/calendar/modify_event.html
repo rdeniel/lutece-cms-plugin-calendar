@@ -1,0 +1,216 @@
+<#include "/admin/plugins/calendar/util/calendar.html" />
+<#include "/admin/util/editor/editor.html" />
+
+<#function isDayExcluded nDay listExcludedDays>
+	<#list listExcludedDays as excludedDay>
+		<#if excludedDay == nDay>
+			<#return true>
+		</#if>
+	</#list>
+	<#return false>
+</#function>
+
+<#escape x as x?html>
+<div class="content-box">
+	<h2 class="content-box-header">#i18n{calendar.modify_event.pageTitle}</h2>
+	<form method="post" action="jsp/admin/plugins/calendar/ModifyEventConfirmation.jsp" name="form_modify_event" enctype="multipart/form-data">
+		<input type="hidden" name="calendar_id" value="${calendar_id}" />   
+		<input type="hidden" name="event_id" value="${event.id}" /> 
+		<input type="hidden" name="sort_events" value="${default_sort_event}" />
+		<input type="hidden" name="box" value="mandatory" />	
+		
+
+        <p>
+            <label for="event_title" >#i18n{calendar.modify_event.title}&nbsp;* :</label>
+            <input type="text" id="event_title" name="event_title" value="${event.title}" tabindex="4" size="60" maxlength="60" />			
+        </p>
+        <p>
+            <label for="event_top_event">#i18n{calendar.modify_event.topevent} * :</label>
+            <@combo name="event_top" default_value="${top_event_default}" items=top_event_list />            
+        </p>
+        <label for="event_description">#i18n{calendar.modify_event.description} * :</label>
+	    <div class="editor">
+	        <textarea id="event_description" class="richtext" name="event_description" style="width:100%" rows="20" cols="90">
+	        ${event.description}
+	        </textarea>
+	    </div>
+	    <br/>
+	    <fieldset>
+	    	<legend>#i18n{calendar.modify_event.event_hour_and_time}</legend>
+	    	<p>
+	            <label for="event_date" >#i18n{calendar.modify_event.date} (dd/MM/yyyy)&nbsp;*&nbsp;:</label>
+	            <input type="text" name="event_date" id="event_date" size="10" value="${event.date?date}"/>
+	        </p>
+	        <p>
+	        	<label for="event_date_end"> #i18n{calendar.modify_event.date_end} (dd/MM/yyyy) * :</label>
+	            <input type="text" name="event_date_end" id="event_date_end" size="10" value="${event_date_end?date}"/>
+	       	</p>
+	       	<p>
+	       		<label for="">#i18n{calendar.modify_event.periodicity} : </label>
+	            <a href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}&sort_events=${default_sort_event}"><input type="button" class="button" value="#i18n{calendar.modify_event.buttonApply}"/></a>
+	       	</p>
+	       	<p>
+	       		<label for="excluded_days">#i18n{calendar.modify_event.excluded_days} : </label>
+	       		<input type="checkbox" class="checkbox" value="2" name="excluded_days" <#if isDayExcluded("2", event.excludedDays)> checked="checked" </#if> />
+	       		#i18n{calendar.label.monday}
+	       		<input type="checkbox" class="checkbox" value="3" name="excluded_days" <#if isDayExcluded("3", event.excludedDays)> checked="checked" </#if> />
+	       		#i18n{calendar.label.tuesday}
+	       		<input type="checkbox" class="checkbox" value="4" name="excluded_days" <#if isDayExcluded("4", event.excludedDays)> checked="checked" </#if> />
+	       		#i18n{calendar.label.wednesday}
+	       		<input type="checkbox" class="checkbox" value="5" name="excluded_days" <#if isDayExcluded("5", event.excludedDays)> checked="checked" </#if> />
+	       		#i18n{calendar.label.thursday}
+	       		<input type="checkbox" class="checkbox" value="6" name="excluded_days" <#if isDayExcluded("6", event.excludedDays)> checked="checked" </#if> />
+	       		#i18n{calendar.label.friday}
+	       		<input type="checkbox" class="checkbox" value="7" name="excluded_days" <#if isDayExcluded("7", event.excludedDays)> checked="checked" </#if> />
+	       		#i18n{calendar.label.saturday}
+	       		<input type="checkbox" class="checkbox" value="1" name="excluded_days" <#if isDayExcluded("1", event.excludedDays)> checked="checked" </#if> />
+	       		#i18n{calendar.label.sunday}
+	       	</p>
+			<p>
+	            <label for="event_time_start" >#i18n{calendar.modify_event.time_start} (hh:mm)&nbsp;:</label>
+	            <input type="text" id="event_time_start" name="event_time_start" tabindex="2" value="<#if event.dateTimeStart?exists>${event.dateTimeStart}</#if>" size="5" maxlength="5" />			
+	        </p>
+	        				
+	        <p>
+	            <label for="event_time_end" >#i18n{calendar.modify_event.time_end} (hh:mm)&nbsp;:</label>
+	            <input type="text" id="event_time_end" name="event_time_end" tabindex="3" value="<#if event.dateTimeEnd?exists>${event.dateTimeEnd}</#if>" size="5" maxlength="5" />			
+	        </p>
+		</fieldset>
+       	<br/>
+		<fieldset>
+			<legend>
+				<a href="javascript:displayId('advanced_parameters');"><img src="images/admin/skin/open_block.gif" alt="" border="0"></a>
+       			<a href="javascript:hideId('advanced_parameters');"><img src="images/admin/skin/closed_block.gif" alt="" border="0"></a>
+       			#i18n{calendar.modify_event.advanced_parameters}
+       		</legend>
+			<div id="advanced_parameters" style="visibility:hidden; display:none;">
+		        <p>
+		            <label for="event_location">#i18n{calendar.modify_event.location} :</label>
+		            <input type="text" id="event_location" name="event_location" size="60" maxlength="60" value="<#if event.location?exists>${event.location}</#if>"/>
+		        </p>
+		        <p>
+		            <label for="event_location_address">#i18n{calendar.modify_event.location.address} :</label>
+		            <input type="text" id="event_location_address" name="event_location_address" value="<#if event.locationAddress?exists>${event.locationAddress}</#if>" size="60" maxlength="130" />
+		        </p>
+		        <p>
+		            <label for="event_location_town">#i18n{calendar.modify_event.location.town} :</label>
+		            <input type="text" id="event_location_town" name="event_location_town" value="<#if event.locationTown?exists>${event.locationTown}</#if>" size="60" maxlength="130" />
+		        </p>
+		        
+		        <p>
+		            <label for="event_location_zip">#i18n{calendar.modify_event.location.zip} :</label>
+		            <input type="text" id="event_location_zip" name="event_location_zip" value="<#if event.locationZip?exists>${event.locationZip}</#if>" size="20" maxlength="20" />
+		        </p>
+		        <p>
+		            <label for="event_tags">#i18n{calendar.modify_event.tags} :</label>
+		            <input type="text" id="event_tags" name="event_tags" value="<#if event.listTags?exists>${event.listTags}</#if>" size="60" maxlength="130" />#i18n{calendar.modify_event.separator}
+		        </p>
+		        <p>
+		            <label for="event_map_url">#i18n{calendar.modify_event.map} :</label>
+		            <input type="text" id="event_map" name="event_map_url" value="<#if event.mapUrl?exists>${event.mapUrl}</#if>" size="60" maxlength="130" />
+		        </p>
+		       	<p>
+		            <label for="event_link_url">#i18n{calendar.modify_event.linkurl} :</label>
+		            <input type="text" id="event_linkurl" name="event_link_url" value="<#if event.linkUrl?exists>${event.linkUrl}</#if>" size="60" maxlength="130" />
+		            
+		        </p>
+		        <p>
+		            <label for="event_document_id">#i18n{calendar.modify_event.documentid} :</label>
+		            <input type="text" id="event_document_id" name="event_document_id" value="<#if event.documentId?exists && (event.documentId > 0) >${event.documentId}</#if>" size="60" maxlength="130" />
+		       		<a href="javascript:insertDocument()"><img src="images/admin/skin/plugins/calendar/ed_linkservice2.png"/></a>       
+		        </p>
+		        <p>
+		            <label for="event_page_url">#i18n{calendar.modify_event.pageurl} :</label>
+		            <input type="text" id="event_page_url" name="event_page_url" value="<#if event.pageUrl?exists>${event.pageUrl}</#if>" size="60" maxlength="130" />
+		            <a href="javascript:insertLink()"><img src="images/admin/skin/plugins/calendar/ed_linkservice2.png"/></a>
+		        </p>
+		        <p>
+			        <label for="event_category">#i18n{calendar.modify_event.category} :</label>
+			       	<@multiCombo name="category" list_default_values=category_default_list items=category_list />#i18n{calendar.modify_event.labelMultiCategorySelection}
+		        </p>
+	
+	            <label for="event_image">#i18n{calendar.modify_event.imagelink} :</label>
+				<input type="file" id="event_image" name="event_image" size="32" />
+				<div style="float:right; width:40%;">
+					<img height="200px" width="200px" border="0" width="auto" title="Women are heroes" src="${event.imageUrl}"/>
+			    </div>
+		    </div>
+		</fieldset>
+		<br />
+	    <p>
+            <input type="submit" value="#i18n{calendar.modify_event.buttonLabelmodify}" tabindex="6" class="button" />
+            <a href="jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&sort_events=${default_sort_event}"><input type="button" class="button" value="#i18n{calendar.modify_event.backToEventList}"/></a>       
+        </p>
+
+	</form>
+</div>
+
+<script type="text/javascript">
+
+function doCheckBox( ){
+	
+	//Retrieve a checkbox[] from the form
+	allcheckBox = document.forms["form_modify_occurrence"].cbx_occurrence;
+
+	//when the main checkbox is checked all the checkbox of the list are checked
+	if(document.getElementById("cbx_0").checked )
+	{	
+		//if there are several checkbox	to check	
+		if( allcheckBox.length > 0)
+			for (i=0; i < allcheckBox.length ; ++i){
+				document.getElementById("cbx_occurrence_" + i).checked = true;
+				}
+		//if there is just one checkbox to check		
+		else
+			document.getElementById("cbx_occurrence_0").checked = true;	
+	}
+	//when the main checkbox is checked all the uncheckbox of the list are unchecked
+	else {
+		if( allcheckBox.length > 0)
+			for (i=0; i < allcheckBox.length ; ++i){
+					document.getElementById("cbx_occurrence_"+i).checked = false;
+				}			
+		else
+			document.getElementById("cbx_occurrence_0").checked = false;	
+	}
+}
+
+function checkRadio( radio ){
+	
+	document.getElementById(radio).checked = true;
+}
+
+
+function insertDocument() {
+	var page="${insert_service_page}";
+	window.open(page,"","toolbar=no, scrollbars=yes, status=yes, location=no, directories=no, menubar=no, width=550, height=450");
+   }
+   
+   function insertLink() {
+	var page="${insert_service_link_page}";
+	window.open(page,"","toolbar=no, scrollbars=yes, status=yes, location=no, directories=no, menubar=no, width=550, height=450");
+   }
+
+
+</script>
+<script type="text/javascript">
+	function displayId(baliseId)
+	{
+		if (document.getElementById && document.getElementById(baliseId) != null) {
+			document.getElementById(baliseId).style.visibility='visible';
+			document.getElementById(baliseId).style.display='block';
+		}
+	}
+	
+	function hideId(baliseId) {
+		if (document.getElementById && document.getElementById(baliseId) != null) {
+	   		document.getElementById(baliseId).style.visibility='hidden';
+	    	document.getElementById(baliseId).style.display='none';
+		}
+	}
+</script>
+</div>
+</#escape>
+
+<@initEditor />
+<@getDatePickerRange idFieldFrom="event_date" idFieldTo="event_date_end" language=locale />

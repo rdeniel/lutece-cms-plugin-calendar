@@ -1,0 +1,38 @@
+<div class="content-box">
+    <h2 class="content-box-header">#i18n{calendar.manage_subscribers.boxTitle}</h2>
+
+	<div class="highlight-box">
+		<div id="search-subscriber">
+			<form method="post" name="search-subscriber" action="jsp/admin/plugins/calendar/ManageSubscribers.jsp"  >
+				<p>
+					<label for="subscriber_search" >#i18n{calendar.manage_subscribers.searchTitle} :</label>
+					<input type="text" id="key" name="search_key" value="" size="30" />
+				</p>
+				<p>
+					<input type="hidden" name="calendar_id" value="${calendar_id}" />
+		           	 <input type="submit" value="#i18n{calendar.manage_subscribers.buttonSearch}" class="button" />   
+		        </p>
+			</form>
+    	</div>
+    </div>
+	<@paginationAdmin paginator=paginator combo=1 />
+    <table>
+        <tr>
+            <th>#i18n{calendar.manage_subscribers.columnTitleEmail}</th>
+            <th>#i18n{calendar.manage_subscribers.columnTitleSubscriptionDate}</th>
+            <th>#i18n{calendar.manage_subscribers.columnTitleDelete}</th>
+        </tr>
+        <#list subscribers_list as subscriber>
+        <tr>
+            <td>${subscriber.email}</td>
+            <td>${subscriber.dateSubscription}</td>
+            <td>
+                <a href="jsp/admin/plugins/calendar/UnsubscribeCalendarAdmin.jsp?subscriber_id=${subscriber.id}&calendar_id=${calendar_id}">
+                    <img src="images/admin/skin/actions/delete.png" border="0">
+                </a>
+            </td>
+        </tr>
+        </#list>
+    </table>
+    <@paginationAdmin paginator=paginator />
+</div>

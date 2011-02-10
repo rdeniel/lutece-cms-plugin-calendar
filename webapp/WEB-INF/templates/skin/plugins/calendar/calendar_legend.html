@@ -1,0 +1,40 @@
+<table class="calendar-legend">
+    <tr>
+        <th class="calendar-legend">
+            #i18n{calendar.label.legend}
+        </th>
+    </tr> 
+    <tr>
+        <td class="calendar-legend">
+            
+            <ul class="calendar-legend">
+                <#list agenda_resource_list as agendaResource >
+                
+                <li class="calendar-legend">
+                    <table>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                    <td>
+                        <img src="${agendaResource.eventImage}" />
+                    
+                    <#if agendaResource.resourceType="READ_WRITE">
+                     
+                    <a href="jsp/site/Portal.jsp?page=calendar&action=manage_events&calendar_id=${agendaResource.id}">
+                         <img src="images/local/skin/plugins/calendar/rights/write.png" />${agendaResource.name} 
+                    </a>
+                    <#else>
+                    <img src="images/local/skin/plugins/calendar/rights/locked.png" /> 
+                     ${agendaResource.name}
+                    
+                    </#if>
+                    </td>
+                </li>  
+                </#list>
+            </ul>
+            
+        </td>
+    </tr>
+</table>

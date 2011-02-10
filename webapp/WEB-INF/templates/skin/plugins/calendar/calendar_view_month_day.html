@@ -1,0 +1,13 @@
+<td class="${day_class}">
+	<div class="calendar-view-month-day">
+	<#if jsp_url != ""> <a href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=day">${day}</a></div>
+	<#else>
+	${day}</div>
+	</#if>	
+ 	<div class="calendar-view-month-event">
+		<ul class="calendar-view-month-event">
+     	${events}
+    	</ul>
+ 	</div>
+</td>
+

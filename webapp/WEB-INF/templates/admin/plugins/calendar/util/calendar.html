@@ -1,0 +1,13 @@
+<#macro multiCombo name list_default_values items >
+	<select multiple="multiple" id="${name}" name="${name}" size="4" style="cursor:default">			
+		<#if list_default_values?has_content>
+			<#list list_default_values as default_value>
+				<#if items[default_value.id?string]?exists>
+      				<option selected="selected" value="${default_value.id}" >${default_value.name}</option>
+      			<#else>
+      				<option value="${default_value.id}" >${default_value.name}</option>
+      			</#if>
+   			</#list>
+  		</#if>
+	</select>
+</#macro>

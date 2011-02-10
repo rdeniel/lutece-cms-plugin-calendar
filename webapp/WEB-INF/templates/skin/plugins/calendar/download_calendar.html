@@ -1,0 +1,19 @@
+<#escape x as x?html>
+<div class="portlet -lutece-border-radius calendar-left-content-search">
+<div class="portlet-header">#i18n{calendar.download.agenda.title}</div>
+    <form action="jsp/site/plugins/calendar/GetCalendarFile.jsp" method="post">
+    	<p>
+			<label for="agenda">#i18n{calendar.search.event.label.calendar_choice} * :</label>
+			<@combo name="agenda" default_value=" " items=calendar_list /> 
+		</p>
+		<p>
+ 	       <label for="export_sheet">#i18n{calendar.search.event.label.stylesheet_choice} * :</label>
+           <@combo name="stylesheet_id" default_value=" " items=stylesheet_list /> 
+        </p>            
+        <p>
+	        <input type="submit" value="#i18n{calendar.label.download}" tabindex="10" class="button" />
+            <input class="button" type="button" onclick="javascript:history.go(-1)" value="#i18n{portal.admin.message.buttonCancel}" />
+		</p>
+    </form>
+</div>
+</#escape>

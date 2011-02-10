@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Introduction</title>
+	</properties>
+	<body>
+		<section name="Descriptif du plugin">
+		<p>Ce plugin permet de présenter des évènements sur un calendrier publié sur le portail Lutece.</p>
+		
+		<p>
+			Ce plugin peut s'utiliser conjointement avec 
+			<a href="../../module-calendar-document/fr/">module-calendar-document</a> 
+			ou 
+			<a href="../../module-documenttocalendar/fr/">module-documenttocalendar</a>
+		</p>		
+		
+		</section>
+	</body>
+</document>

@@ -1,0 +1,74 @@
+<h2 class="page-title" style="margin-left:10px;">#i18n{calendar.calendar_manage_events.title} ${calendar.name}</h2>
+
+<div class="prepend-1 span-22 append-1 last">
+	<div class="portlet -lutece-border-radius append-bottom">
+		<div style="margin-left:10px;">
+		        <table summary="#i18n{calendar.calendar_manage_events.tableSummary}" width="60%" >
+		            <tr>
+		                <th>#i18n{calendar.calendar_manage_events.columnEventTitle}</th>
+		                <th>#i18n{calendar.calendar_manage_events.columnEventDateStart}</th>
+		                <th>#i18n{calendar.calendar_manage_events.columnEventDateEnd}</th>
+		                <th>#i18n{calendar.calendar_manage_events.columnEventPeriodicity}</th>
+		                <th>#i18n{calendar.calendar_manage_events.columnEventTimeStart}</th>
+		                <th>#i18n{calendar.calendar_manage_events.columnEventTimeEnd}</th>
+		                <th>#i18n{calendar.calendar_manage_events.columnEventActions}</th>
+		            </tr>                
+		            <#list event_list as event >
+		            <tr>
+		                <td>
+		                    <a href="jsp/site/Portal.jsp?page=calendar&amp;action=modify_event&amp;calendar_id=${calendar.id}&amp;event_id=${event.id}">
+		                        ${event.title}
+		                    </a>
+		                </td>
+		                <td>
+		                    ${event.date?date}
+		                </td>
+		                <td>
+		                	${event.dateEnd?date}
+		                </td>
+		                <td>
+		                	<#switch event.periodicity>
+		                		<#case 1>
+									#i18n{calendar.interval.periodicity.day.description}
+									<#break>
+								<#case 7>
+									#i18n{calendar.interval.periodicity.week.description}
+							    	<#break>				  
+								<#case 30>
+									#i18n{calendar.interval.periodicity.month.description}
+									<#break>
+								<#default>
+									#i18n{calendar.interval.periodicity.day.description}				  
+							</#switch>     
+		                </td>
+			            <td>
+			                <#if event.dateTimeStart?exists>
+			                	${event.dateTimeStart}
+			                </#if>
+			            </td>
+			            <td>
+			                <#if event.dateTimeEnd?exists>
+			                	${event.dateTimeEnd}
+			                </#if>
+			            </td>
+		                <td>
+		                    <a href="jsp/site/Portal.jsp?page=calendar&amp;action=remove_event&amp;calendar_id=${calendar.id}&amp;event_id=${event.id}">
+		                        <img src="images/admin/skin/actions/delete.png" alt="#i18n{calendar.calendar_manage_events.actionDeleteEvent}" title="#i18n{calendar.calendar_manage_events.actionDeleteEvent}" />
+		                    </a>
+		                </td>
+		            </tr>
+		            </#list>              
+		        </table>
+		</div>
+		<div style="margin-left:10px;">
+		    <form action="jsp/site/Portal.jsp" method="post">
+		        <div>
+		            <input type="hidden" name="page" value="calendar" /> 
+		            <input type="hidden" name="action" value="add_event" />
+		            <input type="hidden" name="calendar_id" value="${calendar.id}" /> 
+		            <input type="submit" value="#i18n{calendar.calendar_manage_events.buttonCreate}" class="button" />
+		        </div>
+		    </form>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,105 @@
+<#if is_authorized>
+	<div id="content" class="span-15 prepend-1 append-1 append-bottom">
+	
+		<div class="portlet -lutece-border-radius append-bottom">
+			<div class="calendar-search-result-img calendar-search-float-right">
+				<a href="${subscription_page}">
+					<img border="0" src="images/local/skin/buttons/b_subscribe.png" alt="#i18n{calendar.subscription.buttonLabelSubscribe}" title="#i18n{calendar.subscription.buttonLabelSubscribe}"/>
+				</a>
+				&nbsp;	
+				<a href="${download_page}">
+					<img border="0" src="images/local/skin/plugins/calendar/download.jpg" alt="#i18n{calendar.label.download}" title="#i18n{calendar.label.download}"/>
+				</a>
+				&nbsp;	
+				<a href="javascript:window.print();">
+					<img border="0" src="images/local/skin/buttons/b_print.png" alt="#i18n{calendar.label.buttonPrint}" title="#i18n{calendar.search.label.buttonPrint}"/>
+				</a>
+				&nbsp;
+				<a href="${rss_page}">
+					<img border="0" src="images/local/skin/feed.png " alt="RSS" title="RSS"/>
+				</a>
+				&nbsp;
+				<a href="${email_friend_page}&event_id=${event.id}&agenda=${agenda.id}">
+					<img src="images/local/skin/buttons/b_send.png" alt="#i18n{calendar.email-friend.sendTofriend}" title="#i18n{calendar.email-friend.sendTofriend}"/>
+				</a>
+				
+			</div>
+			<#if event.imageUrl?has_content>
+				<div class="calendar-search-result-img calendar-search-float-left">
+					<img border="0" src=${event.imageUrl} title="${event.title}"/>
+				</div>
+			</#if>
+			<div class="calendar-search-result-description calenddar-search-float-left">
+					<div>	
+						<input type="hidden" name="event_id" value="${event.id}" />
+	        			<input type="hidden" name="calendar_id" value="${agenda.id}" />			
+						<span class="calendar-search-header">${event.title}</span>  - <span class="calendar-search-header-agenda">
+						${agenda.name}
+						</span> 
+						
+						<br/>
+						
+						<#if event.date?date?string == event.dateEnd?date?string >					
+							<span class="calendar-search-element">${event.date?date?string.short}</span>
+						<#else>
+						<span class="calendar-search-element">#i18n{calendar.search_result.labelFrom} ${event.date?date?string.short} #i18n{calendar.search_result.labelTo} ${event.dateEnd?date?string.short}</span>
+						</#if>
+						
+						<#if event.location?has_content>
+							|<span class="calendar-search-element">${event.location}</span>
+						</#if>
+						<#if event.dateTimeStart?has_content>
+							|<span class="calendar-search-element">${event.dateTimeStart}</span>
+						</#if>
+						
+						<#if event.dateTimeEnd?has_content>
+							|<span class="calendar-search-element">${event.dateTimeEnd}</span>
+						</#if>
+		
+					</div>
+		
+					<div>
+						<#if event.description?has_content>
+							<p class="calendar-description">${event.description}</p>
+						</#if>
+						<#if event.locationAddress?has_content | event.locationZip?has_content | event.locationTown?has_content>
+							<p>#i18n{calendar.modify_event.location.address} : 
+						</#if>
+						<#if event.locationAddress?has_content >
+							${event.locationAddress}
+						</#if>
+						<#if event.locationZip?has_content >
+							${event.locationZip}
+						</#if>
+						<#if event.locationTown?has_content >
+							${event.locationTown}
+						</#if>
+						<#if event.locationAddress?has_content | event.locationZip?has_content | event.locationTown?has_content>
+							</p> 
+						</#if>
+						<#if event.mapUrl?has_content >
+							<p>#i18n{calendar.modify_event.map} : ${event.mapUrl}</p>
+						</#if>
+						<#if event.linkUrl?has_content >
+							<p>#i18n{calendar.modify_event.linkurl} : <a href="${event.linkUrl}" target="_blank">${event.linkUrl}</a></p>
+						</#if>
+						<#if event.listTags?has_content >
+							<p>#i18n{calendar.modify_event.tags} : ${event.listTags}</p>
+						</#if>
+					</div>
+			</div>
+			
+			<div class="calendar-clearboth"></div>
+		</div>
+		${document}
+	</div>
+<#else>
+	<div id="content" class="span-15 prepend-1 append-1 append-bottom">
+		<div class="portlet -lutece-border-radius append-bottom">
+			#i18n{calendar.message.event.unauthorized}
+		</div>
+	</div>
+</#if>
+<div id="sidebar" class="span-6 append-1 append-bottom last">
+	${small_month_calendar}
+</div>

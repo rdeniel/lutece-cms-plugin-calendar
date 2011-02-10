@@ -1,0 +1,43 @@
+<div class="insert-service">
+	<h2>#i18n{calendar.insertService.name}</h2>
+
+	<#if calendar_list?size = 0>
+		<p>
+			#i18n{calendar.selector.calendar.noCalendar}
+		</p>
+		<p>
+			<input type="button" class="button" onclick="javascript:history.go(-1);"
+				value="#i18n{portal.util.labelBack}" />
+		</p>
+	<#else>
+		<form method="post" name="fsubmit"
+			action="jsp/admin/plugins/calendar/DoSelectCalendar.jsp">
+			<h3>#i18n{calendar.selector.calendar.calendarChoice}</h3>
+			
+			<p>
+			<table>
+				<tr>
+					<th></th>
+					<th>#i18n{calendar.selector.calendar.calendarName}</th>
+				</tr>
+				<#list calendar_list as calendar>
+				<tr>
+					<td>
+						<input class="radio" type="radio" id="calendar_id_${calendar.id}"
+							name="calendar_id" value="${calendar.id}" />
+					</td>
+					<td>${calendar.name}</td>
+				</tr>
+				</#list>
+			</table>
+			</p>
+			<p>
+			<input type="submit" class="button" value="#i18n{portal.util.labelValidate}" /> 
+			<input type="button"
+				class="button" onclick="javascript:history.go(-1);"
+				value="#i18n{portal.util.labelBack}" />
+			</p>
+			<input type="hidden" name="input" value="${input}" />
+		</form>
+	</#if>
+</div>

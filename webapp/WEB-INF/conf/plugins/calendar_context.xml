@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    
+   <!-- package calendar -->
+  <bean id="calendar.calendarDAO"  class="fr.paris.lutece.plugins.calendar.business.CalendarDAO" />  
+  <bean id="calendar.calendarPortletDAO"  class="fr.paris.lutece.plugins.calendar.business.portlet.CalendarPortletDAO" />
+  <bean id="calendar.calendarStyleSheetDAO"  class="fr.paris.lutece.plugins.calendar.business.stylesheet.CalendarStyleSheetDAO" /> 
+  <bean id="calendar.calendarSubscriberDAO"  class="fr.paris.lutece.plugins.calendar.business.CalendarSubscriberDAO" />  
+  <bean id="calendar.calendarLuceneSearchEngine"  class="fr.paris.lutece.plugins.calendar.service.search.CalendarLuceneSearchEngine" /> 
+  <bean id="calendar.miniCalendarPortletDAO"  class="fr.paris.lutece.plugins.calendar.business.portlet.MiniCalendarPortletDAO" />
+  <bean id="calendar.categoryDAO"  class="fr.paris.lutece.plugins.calendar.business.category.CategoryDAO" /> 
+  <bean id="calendar.calendarNotificationDAO"  class="fr.paris.lutece.plugins.calendar.business.notification.CalendarNotificationDAO" />
+  <bean id="calendar.calendarParameterDAO"  class="fr.paris.lutece.plugins.calendar.business.parameter.CalendarParameterDAO" />
+</beans>

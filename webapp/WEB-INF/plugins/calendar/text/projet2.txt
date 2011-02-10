@@ -1,0 +1,25 @@
+20060920 9:00-11:00 Réunion de lancement
+20061002 9:00-11:00 Réunion de projet
+20061016 9:00-11:00 Réunion de projet
+20061017 Livraison spécifications détaillées
+20061102 9:00-11:00 Réunion de projet
+20061116 9:00-11:00 Réunion de projet
+20061030 9:00-11:00 Réunion de projet
+20061017 9:00-11:00 Comité de pilotage
+20061015 Validation spécifications détaillées
+20061106 9:00-11:00 Réunion de projet
+20061120 9:00-11:00 Réunion de projet
+20061211 9:00-11:00 Réunion de projet
+20061225 9:00-11:00 Réunion de projet
+20061223 Livraison du logiciel
+20061224 Installation du logiciel
+20061230 Début de la Vérification d'Aptitude
+20070108 9:00-11:00 Réunion de projet
+20070122 9:00-11:00 Réunion de projet
+20070105 Prononciation de la VA
+20070120 Formation des utilisateurs
+20070115 Mise production
+20070206 9:00-11:00 Réunion de projet
+20070220 9:00-11:00 Réunion de projet
+20070210 Ouverture du service
+20070210 Prononciation de la VSR

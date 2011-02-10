@@ -1,0 +1,185 @@
+<#include "/admin/plugins/calendar/util/calendar.html" />
+<#include "/admin/util/editor/editor.html" />
+
+<#escape x as x?html>
+<div class="content-box" >
+    <h2 class="content-box-header">#i18n{calendar.create_event.pageTitle}</h2>
+    <form method="post" name="create_event" action="jsp/admin/plugins/calendar/DoCreateEvent.jsp" enctype="multipart/form-data">	
+	<div style="width:90%;">
+        <p>
+            <label for="event_title">#i18n{calendar.create_event.title} * :</label>
+            <input type="text" id="event_title" name="event_title" tabindex="4" size="60" maxlength="60" />
+        </p>
+        <p>
+            <label for="event_top_event">#i18n{calendar.create_event.topevent} * :</label>
+            <@combo name="event_top" default_value="${top_event_default}" items=top_event_list />            
+        </p>
+        <label for="event_description">#i18n{calendar.modify_event.description} * :</label>
+	    <div class="editor">
+	        <textarea id="event_description" class="richtext" name="event_description" style="width:100%" rows="20" cols="90">
+	        </textarea>
+	    </div>
+    </div>
+    <br/>
+	
+	<fieldset>
+	    <legend>#i18n{calendar.create_event.event_hour_and_time}</legend>
+	    <p>
+            <label for="event_date">#i18n{calendar.create_event.date}  (dd/MM/yyyy) * :</label>
+            <input type="text" name="event_date" id="event_date" size="10" value=""/>
+        </p>
+	    <label for="">#i18n{calendar.create_event.periodicity_choice} :</label>
+	    <div style="margin-left: 33%;">
+		    <p>
+	        	<input class="radio" name="radioPeriodicity" value="1"  id="radio_1"<#if time_span="FALSE">checked="checked"</#if>type="radio"/><b> #i18n{calendar.create_event.date_end}</b>
+	            <input type="text" name="event_date_end" id="event_date_end" size="10" value="" onclick="checkRadio('radio_1')" onchange="checkRadio('radio_1')"/>
+	       	</p>	       	
+	        <b>#i18n{calendar.create_event.labelor}</b>
+	       	<p> 
+		        <b><input class="radio" name="radioPeriodicity" value="0" id="radio_2"<#if time_span="TRUE">checked="checked"</#if> type="radio" />#i18n{calendar.create_event.periodicity}</b>
+		        <br/>
+	          	#i18n{calendar.create_event.periodicity} :
+	           	<@comboWithParams name="periodicity" default_value="${number_days}" additionalParameters="onclick=\"checkRadio('radio_2')\"" items=interval_list />#i18n{calendar.create_event.labelStartingDateStart}
+				<br/>
+	           	#i18n{calendar.create_event.occurrence} :
+	           	<input type="text" id="occurrence" name="occurrence" tabindex="3" size="3" maxlength="3" onclick="checkRadio('radio_2')"/>
+	       	</p>
+       	</div>
+       	<p>
+       		<label for="excluded_days">#i18n{calendar.create_event.excluded_days} : </label>
+       		<input type="checkbox" class="checkbox" value="2" name="excluded_days" />
+       		#i18n{calendar.label.monday}
+       		<input type="checkbox" class="checkbox" value="3" name="excluded_days" />
+       		#i18n{calendar.label.tuesday}
+       		<input type="checkbox" class="checkbox" value="4" name="excluded_days" />
+       		#i18n{calendar.label.wednesday}
+       		<input type="checkbox" class="checkbox" value="5" name="excluded_days" />
+       		#i18n{calendar.label.thursday}
+       		<input type="checkbox" class="checkbox" value="6" name="excluded_days" />
+       		#i18n{calendar.label.friday}
+       		<input type="checkbox" class="checkbox" value="7" name="excluded_days" />
+       		#i18n{calendar.label.saturday}
+       		<input type="checkbox" class="checkbox" value="1" name="excluded_days" />
+       		#i18n{calendar.label.sunday}
+       	</p>
+       	<p>
+            <label for="event_time_start">#i18n{calendar.create_event.time_start} (hh:mm) :</label>
+            <input type="text" id="event_time_start" name="event_time_start" tabindex="2" size="5" maxlength="5" />
+        </p>
+        <p>
+            <label for="event_time_end">#i18n{calendar.create_event.time_end}  (hh:mm) :</label>
+            <input type="text" id="event_time_end" name="event_time_end" tabindex="3" size="5" maxlength="5" />
+        </p>
+	</fieldset>
+	<br/>
+	<fieldset>
+	    <legend>
+	    	<a href="javascript:displayId('advanced_parameters');"><img src="images/admin/skin/open_block.gif" alt="" border="0"></a>
+        	<a href="javascript:hideId('advanced_parameters');"><img src="images/admin/skin/closed_block.gif" alt="" border="0"></a>
+        	#i18n{calendar.create_event.advanced_parameters}
+        </legend>
+ 		
+ 		<div id="advanced_parameters" style="visibility:hidden; display:none;">
+	       	<p>
+	            <label for="event_location">#i18n{calendar.create_event.location} :</label>
+	            <input type="text" id="event_location" name="event_location" size="60" maxlength="60" />
+	        </p>
+	        <p>
+	            <label for="event_location_address">#i18n{calendar.create_event.location.address} :</label>
+	            <input type="text" id="event_location_address" name="event_location_address" size="60" maxlength="130" />
+	        </p>
+	        <p>
+	            <label for="event_location_town">#i18n{calendar.create_event.location.town} :</label>
+	            <input type="text" id="event_location_town" name="event_location_town" size="60" maxlength="130" />
+	        </p> 
+	        <p>
+	            <label for="event_location_zip">#i18n{calendar.create_event.location.zip} :</label>
+	            <input type="text" id="event_location_zip" name="event_location_zip" size="20" maxlength="20" />
+	        </p>
+	        <p>
+	            <label for="event_tags">#i18n{calendar.create_event.tags} :</label>
+	            <input type="text" id="event_tags" name="event_tags" size="60" maxlength="130" />#i18n{calendar.create_event.separator}
+	        </p>
+	        <p>
+	            <label for="event_map">#i18n{calendar.create_event.map} :</label>
+	            <input type="text" id="event_map_url" name="event_map_url" size="60" maxlength="130" />
+	        </p>
+	        
+	       	<p>
+	            <label for="event_linkurl">#i18n{calendar.create_event.linkurl} :</label>
+	            <input type="text" id="event_link_url" name="event_link_url" size="60" maxlength="130" />
+	            
+	        </p>
+	        
+	        <p>
+	            <label for="event_document_id">#i18n{calendar.create_event.documentid} :</label>
+	            <input type="text" id="event_document_id" name="event_document_id" size="60" maxlength="130" />
+	            <a href="javascript:insertDocument()"><img src="images/admin/skin/plugins/calendar/ed_linkservice2.png"/></a> 
+	        </p>
+	        
+	        <p>
+	            <label for="event_page_url">#i18n{calendar.create_event.pageurl} :</label>
+	            <input type="text" id="event_page_url" name="event_page_url" size="60" maxlength="130" />
+	            <a href="javascript:insertLink()"><img src="images/admin/skin/plugins/calendar/ed_linkservice2.png"/></a>
+	        </p>
+	        <p>
+	            <label for="notify">#i18n{calendar.create_event.notify} :</label>
+	            <input type="checkbox" name="notify" class="checkbox" value="${notify}" checked ="${notify}" />            
+	        </p>
+	        <p>
+	        <label for="event_category">#i18n{calendar.create_event.category} :</label>
+	       	<@multiCombo name="category" list_default_values=category_default_list items=category_list />#i18n{calendar.modify_event.labelMultiCategorySelection}
+	        </p>
+	        <p>
+	            <label for="event_image">#i18n{calendar.create_event.imagelink} :</label>
+	            <input type="file" id="event_image" name="event_image" size="32" />
+	        </p>
+		</div>
+	</fieldset>
+	<br />
+	<p>
+        <input type="hidden" name="calendar_id" value="${calendar_id}" /> 
+        <input type="submit" value="#i18n{calendar.create_event.buttonLabelCreate}" tabindex="10" class="button" />
+        <input class="button" type="button" onclick="javascript:history.go(-1)" value="#i18n{portal.admin.message.buttonCancel}" />
+    </p>
+    </div>
+    </form>
+    
+</div>
+</#escape>
+
+<script type="text/javascript">
+	function displayId(baliseId)
+	{
+		if (document.getElementById && document.getElementById(baliseId) != null) {
+			document.getElementById(baliseId).style.visibility='visible';
+			document.getElementById(baliseId).style.display='block';
+		}
+	}
+	
+	function hideId(baliseId) {
+		if (document.getElementById && document.getElementById(baliseId) != null) {
+	   		document.getElementById(baliseId).style.visibility='hidden';
+	    	document.getElementById(baliseId).style.display='none';
+		}
+	}
+</script>
+
+<script type="text/javascript">
+
+	function checkRadio( radio ){	
+	document.getElementById(radio).checked = true;
+	}
+	
+	function insertDocument() {
+	var page="${insert_service_page}";
+	window.open(page,"","toolbar=no, scrollbars=yes, status=yes, location=no, directories=no, menubar=no, width=550, height=450");
+    }
+    function insertLink() {
+	 var page="${insert_service_link_page}";
+	 window.open(page,"","toolbar=no, scrollbars=yes, status=yes, location=no, directories=no, menubar=no, width=550, height=450");
+    }
+
+</script>
+<@initEditor />
+<@getDatePickerRange idFieldFrom="event_date" idFieldTo="event_date_end" language=locale />

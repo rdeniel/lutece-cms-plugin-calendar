@@ -1,0 +1,56 @@
+<div id="content-box-actions">
+	<#if permission_advanced_parameter>
+		<form method="post" action="jsp/admin/plugins/calendar/ManageAdvancedParameters.jsp">
+			<input type="submit" value="#i18n{calendar.manage_calendars.labelAdvancedParameters}" class="button bt-toolbar" />
+		</form>		        
+    </#if>
+    <form method="post"  action="jsp/admin/plugins/calendar/CreateCalendar.jsp">
+        <p><input type="submit" value="#i18n{calendar.manage_calendars.buttonAddCalendar}" class="button bt-toolbar" name="calendar"/></p>
+    </form>
+</div>
+<div class="content-box" >
+    <h2 class="content-box-header">#i18n{calendar.manage_calendars.tableLabel}</h2>
+    
+    <table>
+        <tr>
+            <th width="30%">#i18n{calendar.manage_calendars.columnTitleLabel}</th>
+            <th width="10%">#i18n{calendar.manage_calendars.columnTitleRole}</th>
+            <th width="10%">#i18n{calendar.manage_calendars.columnTitleWorkgroup}</th>
+            <th width="10%">#i18n{calendar.manage_calendars.columnTitleActions}</th>
+        </tr>
+        
+        <#list calendar_list as calendar >
+        
+        <tr>
+            <td>
+                <a href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}" class="admin-menu">
+                    <img src="${calendar.eventImage}" alt="${calendar.eventImage}" title="${calendar.eventImage}" /> ${calendar.name}
+                </a>
+            </td>
+            <td>
+                <#if calendar.role?exists>
+                ${calendar.role}
+                </#if>
+            </td> 
+            <td>
+                ${calendar.workgroup}
+            </td> 
+            <td>            
+            	<a href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}">
+            		<img src="images/admin/skin/actions/calendar_add.png" title="#i18n{calendar.manage_calendars.manage_calendars.actionAddEvent}" alt="#i18n{calendar.manage_calendars.manage_calendars.actionAddEvent}"></a>
+            	<a href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}">
+            		<img src="images/admin/skin/actions/manage_calendar.png" title="#i18n{calendar.manage_calendars.manage_calendars.actionManageEvent}" alt="#i18n{calendar.manage_calendars.manage_calendars.actionManageEvent}"></a>
+            	<a href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}">
+            		<img src="images/admin/skin/actions/subscriber.png" title="#i18n{calendar.manage_calendars.manage_calendars.actionManageSubscribers}" alt="#i18n{calendar.manage_calendars.manage_calendars.actionManageSubscribers}"></a>
+                <a href="jsp/admin/plugins/calendar/RemoveCalendar.jsp?calendar_id=${calendar.id}">
+                    <img src="images/admin/skin/actions/delete.png" alt="#i18n{calendar.manage_calendars.actionDelete}" title="#i18n{calendar.manage_calendars.actionDelete}" />
+                </a>
+            </td>
+        </tr>					
+        </#list>
+        
+    </table>
+</div>
+
+
+
