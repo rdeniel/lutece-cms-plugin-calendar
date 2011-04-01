@@ -1180,8 +1180,11 @@ public class CalendarApp implements XPageApplication
 
             for ( Agenda agenda : listAgendas )
             {
-                AgendaResource agendaResource = AgendaService.getInstance(  ).getAgendaResource( agenda.getKeyName(  ) );
-                listAgendaResource.add( agendaResource );
+            	if ( agenda != null )
+            	{
+            		AgendaResource agendaResource = AgendaService.getInstance(  ).getAgendaResource( agenda.getKeyName(  ) );
+                    listAgendaResource.add( agendaResource );
+            	}
             }
 
             model.put( Constants.MARK_AGENDA_RESOURCE_LIST, listAgendaResource );

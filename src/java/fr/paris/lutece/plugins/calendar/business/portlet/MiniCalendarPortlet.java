@@ -43,11 +43,14 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.SimpleEvent;
 import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
 import fr.paris.lutece.plugins.calendar.service.EventImageResourceService;
+import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.plugins.calendar.service.XMLUtils;
 import fr.paris.lutece.plugins.calendar.service.search.CalendarSearchService;
 import fr.paris.lutece.plugins.calendar.web.Constants;
@@ -186,8 +189,8 @@ public class MiniCalendarPortlet extends Portlet
         if ( strDateBegin != null && !strDateBegin.equals( Constants.EMPTY_STRING ) )
         {
             String[] arrayCategory = null;
-            String[] arrayCalendar = null;
-            String strQuery = "";
+            String[] arrayCalendar = Utils.getCalendarIds( request );
+            String strQuery = StringUtils.EMPTY;
             List<Event> listEvent = null;
             Plugin pluginCalendar = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
             
