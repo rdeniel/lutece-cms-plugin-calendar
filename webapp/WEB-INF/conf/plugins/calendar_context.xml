@@ -13,4 +13,12 @@
   <bean id="calendar.categoryDAO"  class="fr.paris.lutece.plugins.calendar.business.category.CategoryDAO" /> 
   <bean id="calendar.calendarNotificationDAO"  class="fr.paris.lutece.plugins.calendar.business.notification.CalendarNotificationDAO" />
   <bean id="calendar.calendarParameterDAO"  class="fr.paris.lutece.plugins.calendar.business.parameter.CalendarParameterDAO" />
+  
+  <!-- RSS -->
+  <bean id="ResourceRssTypeCalendar" class="fr.paris.lutece.portal.business.rss.ResourceRssType" >
+   	<property name="key" value="ResourceRssTypeCalendar" />
+	<property name="titleI18nKey" value="calendar.resource_rss_type.label" />
+	<property name="className" value="fr.paris.lutece.plugins.calendar.business.rss.CalendarResourceRss"/>
+  </bean>
+  
 </beans>
