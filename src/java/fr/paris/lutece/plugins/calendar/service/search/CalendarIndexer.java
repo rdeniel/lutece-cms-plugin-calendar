@@ -80,6 +80,7 @@ public class CalendarIndexer implements SearchIndexer
     private static final String PROPERTY_DESCRIPTION_MAX_CHARACTERS = "calendar.description.max.characters";
     private static final String BLANK = " ";
     private static final String PROPERTY_DESCRIPTION_ETC = "...";
+    private static final String JSP_SEARCH_CALENDAR = "jsp/site/Portal.jsp?page=calendar&action=search";
 
     /**
      * Index all documents
@@ -267,7 +268,7 @@ public class CalendarIndexer implements SearchIndexer
         {
         }
 
-        doc.add( new Field( SearchItem.FIELD_SUMMARY, strDescription, Field.Store.YES, Field.Index.NO ) );
+        doc.add( new Field( SearchItem.FIELD_SUMMARY, strDescription, Field.Store.YES, Field.Index.ANALYZED ) );
 
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.
@@ -277,7 +278,7 @@ public class CalendarIndexer implements SearchIndexer
         // separately.
         doc.add( new Field( SearchItem.FIELD_TITLE, occurrence.getTitle(  ), Field.Store.YES, Field.Index.ANALYZED ) );
 
-        doc.add( new Field( SearchItem.FIELD_TYPE, CalendarPlugin.PLUGIN_NAME, Field.Store.YES, Field.Index.ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_TYPE, CalendarPlugin.PLUGIN_NAME, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
 
         // return the document
         return doc;
@@ -348,4 +349,23 @@ public class CalendarIndexer implements SearchIndexer
 
         return bReturn;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+	public List<String> getListType(  )
+	{
+		List<String> listType = new ArrayList<String>(  );
+		listType.add( CalendarPlugin.PLUGIN_NAME );
+		
+		return listType;
+	}
+
+	/**
+     * {@inheritDoc}
+     */
+	public String getSpecificSearchAppUrl(  )
+	{
+		return JSP_SEARCH_CALENDAR;
+	}
 }
