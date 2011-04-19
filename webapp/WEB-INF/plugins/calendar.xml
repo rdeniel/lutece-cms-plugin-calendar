@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
 <plug-in>
-    
+
     <!-- Plugin Informations -->
     <name>calendar</name>
     <class>fr.paris.lutece.plugins.calendar.service.CalendarPlugin</class>
@@ -14,15 +13,15 @@
     <provider>calendar.plugin.provider</provider>
     <provider-url>http://lutece.paris.fr</provider-url>
     <icon-url>images/admin/skin/plugins/calendar/calendar.png</icon-url>
-    <copyright>Copyright 2001-2009 Mairie de Paris</copyright>
-	<core-version-dependency>
-		<min-core-version>2.3.0</min-core-version>
-		<max-core-version></max-core-version>	
-	</core-version-dependency>
-    
+    <copyright>Copyright 2001-2011 Mairie de Paris</copyright>
+    <core-version-dependency>
+        <min-core-version>2.3.0</min-core-version>
+        <max-core-version></max-core-version>
+    </core-version-dependency>
+
     <!-- if the plugin must have a connection pool with parameter : 1 - yes, 0 - no -->
     <db-pool-required>1</db-pool-required>
-    
+
     <admin-features>
         <admin-feature>
             <feature-id>CALENDAR_MANAGEMENT</feature-id>
@@ -33,29 +32,31 @@
             <feature-icon-url>images/admin/skin/plugins/calendar/calendar.png</feature-icon-url>
         </admin-feature>
     </admin-features>
-    
+
     <!-- RBAC Resources -->
-	<rbac-resource-types>
-		<rbac-resource-type>
-			<rbac-resource-type-class>
-				fr.paris.lutece.plugins.calendar.service.CalendarResourceIdService
-			</rbac-resource-type-class>
-		</rbac-resource-type>
-	</rbac-resource-types>
-    
+    <rbac-resource-types>
+        <rbac-resource-type>
+            <rbac-resource-type-class>fr.paris.lutece.plugins.calendar.service.CalendarResourceIdService</rbac-resource-type-class>
+        </rbac-resource-type>
+    </rbac-resource-types>
+
     <!-- Specific plugin CSS stylesheets -->
     <css-stylesheets>
+        <css-stylesheets-scope>portal</css-stylesheets-scope>
         <css-stylesheet>calendar/calendar.css</css-stylesheet>
     </css-stylesheets>
-    
-    
+    <javascript-files>
+        <javascript-files-scope>portal</javascript-files-scope>
+        <javascript-file>plugin-calendar/calendar-galleryview.js</javascript-file>
+    </javascript-files>
+
     <!-- Xpage configuration -->
     <applications>
         <application>
             <application-id>calendar</application-id>
             <application-class>fr.paris.lutece.plugins.calendar.web.CalendarApp</application-class>
         </application>
-    </applications>   
+    </applications>
     <!-- Portlet parameters -->
     <portlets>
         <portlet>
@@ -72,9 +73,8 @@
             <portlet-create-specific-template></portlet-create-specific-template>
             <portlet-modify-specific-template>/admin/plugins/calendar/portlet_modify_calendar.html</portlet-modify-specific-template>
             <portlet-create-specific-form-template></portlet-create-specific-form-template>
-            <portlet-modify-specific-form-template></portlet-modify-specific-form-template>    
+            <portlet-modify-specific-form-template></portlet-modify-specific-form-template>
         </portlet>
-        
         <portlet>
             <portlet-class>fr.paris.lutece.plugins.calendar.business.portlet.MiniCalendarPortletHome</portlet-class>
             <portlet-type-id>MINI_CALENDAR_PORTLET</portlet-type-id>
@@ -89,51 +89,36 @@
             <portlet-create-specific-template></portlet-create-specific-template>
             <portlet-modify-specific-template>/admin/plugins/calendar/portlet_modify_mini_calendar.html</portlet-modify-specific-template>
             <portlet-create-specific-form-template></portlet-create-specific-form-template>
-            <portlet-modify-specific-form-template></portlet-modify-specific-form-template>    
+            <portlet-modify-specific-form-template></portlet-modify-specific-form-template>
         </portlet>
-        
     </portlets>
-    
+
     <!-- Search Indexer Service -->
-	<search-indexers>
-		<search-indexer>
-			<search-indexer-class>
-				fr.paris.lutece.plugins.calendar.service.search.CalendarIndexer
-			</search-indexer-class>
-		</search-indexer>
-	</search-indexers>
-	
-	<!-- Insert Services -->
-	<insert-services>
-		<insert-service>
-			<insert-service-id>
-				CALENDAR_INSERT_SERVICE
-			</insert-service-id>
-			<insert-service-name>
-				calendar.insertService.name
-			</insert-service-name>
-			<insert-service-bean-class>
-				fr.paris.lutece.plugins.calendar.web.CalendarServiceJspBean
-			</insert-service-bean-class>
-			<insert-service-label>
-				calendar.insertService.label
-			</insert-service-label>
-		</insert-service>
-	</insert-services>
-	
-	<javascript-files>
-         <javascript-file>plugin-calendar/calendar-galleryview.js</javascript-file>
-    </javascript-files>
-	
-	<!-- Admin Dashboard  components -->
+    <search-indexers>
+        <search-indexer>
+            <search-indexer-class>fr.paris.lutece.plugins.calendar.service.search.CalendarIndexer</search-indexer-class>
+        </search-indexer>
+    </search-indexers>
+
+    <!-- Insert Services -->
+    <insert-services>
+        <insert-service>
+            <insert-service-id>CALENDAR_INSERT_SERVICE</insert-service-id>
+            <insert-service-name>calendar.insertService.name</insert-service-name>
+            <insert-service-bean-class>fr.paris.lutece.plugins.calendar.web.CalendarServiceJspBean</insert-service-bean-class>
+            <insert-service-label>calendar.insertService.label</insert-service-label>
+        </insert-service>
+    </insert-services>
+
+    <!-- Admin Dashboard components -->
     <admindashboard-components>
-    	<admindashboard-component>
+        <admindashboard-component>
             <dashboard-component-name>calendarAdminDashboardComponent</dashboard-component-name>
             <dashboard-component-class>fr.paris.lutece.plugins.calendar.web.CalendarAdminDashboardComponent</dashboard-component-class>
         </admindashboard-component>
     </admindashboard-components>
-    
-    <!-- Dashboard  components -->
+
+    <!-- Dashboard components -->
     <dashboard-components>
         <dashboard-component>
             <dashboard-component-name>CALENDAR</dashboard-component-name>
@@ -141,21 +126,15 @@
             <dashboard-feature-right>CALENDAR_MANAGEMENT</dashboard-feature-right>
         </dashboard-component>
     </dashboard-components>
-    
+
     <!-- Daemons -->
-	<daemons>
-		<daemon>
-			<daemon-id>calendarNotificationCleaner</daemon-id>
-			<daemon-name>
-				calendar.daemon.cleanerNotify.name
-			</daemon-name>
-			<daemon-description>
-				calendar.daemon.cleanerNotify.description
-			</daemon-description>
-			<daemon-class>
-				fr.paris.lutece.plugins.calendar.service.daemon.DaemonCleanerNotifySubscription
-			</daemon-class>
-		</daemon>
-	</daemons>
-    
+    <daemons>
+        <daemon>
+            <daemon-id>calendarNotificationCleaner</daemon-id>
+            <daemon-name>calendar.daemon.cleanerNotify.name</daemon-name>
+            <daemon-description>calendar.daemon.cleanerNotify.description</daemon-description>
+            <daemon-class>fr.paris.lutece.plugins.calendar.service.daemon.DaemonCleanerNotifySubscription</daemon-class>
+        </daemon>
+    </daemons>
+
 </plug-in>
