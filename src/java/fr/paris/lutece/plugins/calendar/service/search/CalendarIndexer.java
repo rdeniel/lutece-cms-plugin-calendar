@@ -151,12 +151,12 @@ public class CalendarIndexer implements SearchIndexer
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
 
         OccurrenceEvent occurrence = CalendarHome.findOccurrence( Integer.parseInt( strDocument ), plugin );
-        SimpleEvent event = CalendarHome.findEvent( occurrence.getEventId(  ), plugin );
-
-        if ( !event.getStatus(  ).equals( AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_STATUS_CONFIRMED ) ) )
+        if ( !occurrence.getStatus(  ).equals( AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_STATUS_CONFIRMED ) ) )
         {
         	return null;
         }
+
+        SimpleEvent event = CalendarHome.findEvent( occurrence.getEventId(  ), plugin );
         
         AgendaResource agendaResource = CalendarHome.findAgendaResource( event.getIdCalendar(  ), plugin );
         Utils.loadAgendaOccurrences( agendaResource, plugin );
