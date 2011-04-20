@@ -67,6 +67,7 @@ import fr.paris.lutece.plugins.calendar.service.CalendarResourceIdService;
 import fr.paris.lutece.plugins.calendar.service.EventImageResourceService;
 import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.plugins.calendar.service.search.CalendarIndexer;
+import fr.paris.lutece.plugins.calendar.utils.CalendarIndexerUtils;
 import fr.paris.lutece.portal.business.indexeraction.IndexerAction;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.role.RoleHome;
@@ -458,6 +459,16 @@ public class CalendarJspBean extends PluginAdminPageJspBean
 
         for ( SimpleEvent event : listEvents )
         {
+        	List<OccurrenceEvent> listOccurencesEvent = CalendarHome.findOccurrencesList( nCalendarId, event.getId(  ), 1,
+                    getPlugin(  ) );
+
+            for ( OccurrenceEvent occ : listOccurencesEvent )
+            {
+                IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
+                    AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
+                CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_DELETE  );
+            }
+        	
             CalendarHome.removeEvent( nCalendarId, event.getId(  ), getPlugin(  ) );
         }
 
@@ -882,6 +893,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         {
             IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
                 AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
+            CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_CREATE  );
         }
 
         /*IndexationService.addIndexerAction( Constants.EMPTY_STRING + nCalendarId
@@ -1220,6 +1232,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
             // Index Occurrence
             IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
                 AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_MODIFY );
+            CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_MODIFY  );
         }
 
         _mapParameters = null;
@@ -1304,6 +1317,8 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         IndexationService.addIndexerAction( Integer.toString( occurrence.getId(  ) ),
             AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_MODIFY );
 
+        CalendarIndexerUtils.addIndexerAction( occurrence.getId(  ), IndexerAction.TASK_MODIFY  );
+        
         return JSP_OCCURRENCE_LIST2 + nCalendarId + "&" + Constants.PARAMETER_SORT_EVENTS + "=" +
         request.getParameter( Constants.PARAMETER_SORT_EVENTS ) + "&" + Constants.PARAMETER_EVENT_ID + "=" +
         occurrence.getEventId(  );
@@ -1361,6 +1376,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
             // Index Occurrence - Add
             IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
                 AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
+            CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_CREATE  );
         }
 
         return JSP_OCCURRENCE_LIST2 + nCalendarId + "&" + Constants.PARAMETER_SORT_EVENTS + "=" + strSortEvents + "&" +
@@ -1434,6 +1450,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         {
             IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
                 AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
+            CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_DELETE  );
         }
 
         CalendarHome.removeEvent( nCalendarId,
@@ -1819,16 +1836,19 @@ public class CalendarJspBean extends PluginAdminPageJspBean
             //Incremental indexation - Delete
             IndexationService.addIndexerAction( Integer.toString( nOccurrenceId ),
                 AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
+            CalendarIndexerUtils.addIndexerAction( nOccurrenceId, IndexerAction.TASK_DELETE  );
         }
         else if ( tableCBXOccurrence.length > 0 )
         {
             for ( int i = 0; tableCBXOccurrence.length > i; i++ )
             {
-                CalendarHome.removeOccurrence( Integer.parseInt( tableCBXOccurrence[i] ), nEventId, nCalendarId, getPlugin(  ) );
+            	int nOccId = Integer.parseInt( tableCBXOccurrence[i] );
+                CalendarHome.removeOccurrence( nOccId, nEventId, nCalendarId, getPlugin(  ) );
                 nOccurrence--;
                 //Incremental indexation - Delete
                 IndexationService.addIndexerAction( tableCBXOccurrence[i],
                     AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
+                CalendarIndexerUtils.addIndexerAction( nOccId, IndexerAction.TASK_DELETE  );
             }
         }
 
@@ -2062,6 +2082,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
             //Incremental indexation - Modify
             IndexationService.addIndexerAction( tableCBXOccurrence[i],
                 AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_MODIFY );
+            CalendarIndexerUtils.addIndexerAction( nIdOccurrenceEvent, IndexerAction.TASK_MODIFY  );
         }
         
         // Go to the parent page          
