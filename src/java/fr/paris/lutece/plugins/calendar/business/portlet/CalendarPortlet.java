@@ -36,18 +36,16 @@ package fr.paris.lutece.plugins.calendar.business.portlet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.calendar.business.Event;
-import fr.paris.lutece.plugins.calendar.business.OccurrenceEvent;
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
 import fr.paris.lutece.plugins.calendar.service.AgendaService;
 import fr.paris.lutece.plugins.calendar.service.EventImageResourceService;
@@ -59,7 +57,6 @@ import fr.paris.lutece.portal.business.portlet.Portlet;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.SecurityService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
 
@@ -143,7 +140,7 @@ public class CalendarPortlet extends Portlet
                 if ( ( strRole != null ) && ( !strRole.equals( "" ) ) && ( request != null ) &&
                         ( !strRole.equals( Constants.PROPERTY_ROLE_NONE ) ) )
                 {
-                    if ( SecurityService.getInstance(  ).isAuthenticationEnable(  ) )
+                    if ( SecurityService.isAuthenticationEnable(  ) )
                     {
                         if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
                         {
@@ -167,103 +164,21 @@ public class CalendarPortlet extends Portlet
             // ;
             String strAgendaId = agendaResource.getAgenda(  ).getKeyName(  );
             String strAgendaDesc = agendaResource.getAgenda(  ).getName(  );
-
-            //If nDays=0
-            //Loop from today to afterwards
-
-            //Else filter date from begin->end
-            List<OccurrenceEvent> listEventsTmp;
-            List<OccurrenceEvent> listEvents = new ArrayList<OccurrenceEvent>(  );
-            int nDays = CalendarPortletHome.getRepetitionDays( this.getId(  ), plugin );
-
-            HashMap<String, OccurrenceEvent> hmListEvent = new HashMap<String, OccurrenceEvent>(  );
-
-            if ( nDays <= 0 )
-            {
-                Date dateBegin;
-                Date dateEnd;
-                dateBegin = CalendarPortletHome.getBeginDate( this.getId(  ), plugin );
-                dateEnd = CalendarPortletHome.getEndDate( this.getId(  ), plugin );
-
-                //Reload agendaResource with occurences
-                Utils.loadAgendaOccurrences( agendaResource, plugin );
-                //Retrieve events within the dates
-                listEventsTmp = agendaResource.getAgenda(  ).getEventsByDate( dateBegin, dateEnd, local );
-
-                //if it is not already present stroring the event to the temp list
-                for ( OccurrenceEvent event : listEventsTmp )
-                {
-                    if ( !hmListEvent.containsKey( Integer.toString( event.getEventId(  ) ) ) )
-                    {
-                        hmListEvent.put( Integer.toString( event.getEventId(  ) ), event );
-                    }
-                }
-
-                //Adding the event to final list
-                if ( !hmListEvent.isEmpty(  ) )
-                {
-                    Collection<OccurrenceEvent> collection = hmListEvent.values(  );
-                    Iterator<OccurrenceEvent> i = collection.iterator(  );
-
-                    while ( i.hasNext(  ) )
-                        listEvents.add( (OccurrenceEvent) i.next(  ) );
-                }
-            }
-            else
-            {
-                Date dateToday = Utils.getDate( Utils.getDateToday(  ) );
-
-                //Reload agendaResource with occurences
-                Utils.loadAgendaOccurrences( agendaResource, plugin );
-                //Retrieve events within the dates
-                listEventsTmp = agendaResource.getAgenda(  )
-                                              .getEventsByDate( dateToday, Utils.getDayAfter( dateToday, nDays ), local );
-
-                //if it is not already present stroring the event to the temp list
-                for ( OccurrenceEvent event : listEventsTmp )
-                {
-                    if ( !hmListEvent.containsKey( Integer.toString( event.getEventId(  ) ) ) )
-                    {
-                        hmListEvent.put( Integer.toString( event.getEventId(  ) ), event );
-                    }
-                }
-
-                //Adding the event to final list
-                if ( !hmListEvent.isEmpty(  ) )
-                {
-                    Collection<OccurrenceEvent> collection = hmListEvent.values(  );
-                    Iterator<OccurrenceEvent> i = collection.iterator(  );
-
-                    while ( i.hasNext(  ) )
-                        listEvents.add( (OccurrenceEvent) i.next(  ) );
-                }
-            }
             
             // Retrieve the indexed events
             Date dateBegin = CalendarPortletHome.getBeginDate( this.getId(  ), plugin ); 
             Date dateEnd = CalendarPortletHome.getEndDate( this.getId(  ), plugin );
+            String[] arrayAgendaIds = { strAgendaId };
             List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
-            	.getSearchResults( null, null, "", dateBegin, dateEnd, request, plugin );
-            List<OccurrenceEvent> listOccurrenceEvents = new ArrayList<OccurrenceEvent>(  );
-            // Get the the events that are indexed and is an occurrence event
-            for ( Event indexedEvent : listIndexedEvents )
-            {
-            	for ( OccurrenceEvent event : listEvents )
-            	{
-            		if ( event.getEventId(  ) == indexedEvent.getId(  ) )
-            		{
-            			listOccurrenceEvents.add( event );
-            		}
-            	}
-            }
+            	.getSearchResults( arrayAgendaIds, null, StringUtils.EMPTY, dateBegin, dateEnd, request, plugin );
 
-            for ( OccurrenceEvent event : listOccurrenceEvents )
+            for ( Event event : listIndexedEvents )
             {
                 if ( ( event.getTitle(  ) != null ) && !event.getTitle(  ).equals( "" ) )
                 {
                     XmlUtil.beginElement( strXml, TAG_AGENDA_EVENT );
                     XmlUtil.addElement( strXml, TAG_AGENDA_ID, strAgendaId );
-                    XmlUtil.addElement( strXml, TAG_EVENT_ID, event.getEventId(  ) );
+                    XmlUtil.addElement( strXml, TAG_EVENT_ID, event.getId(  ) );
                     XmlUtil.addElement( strXml, TAG_AGENDA_NAME, strAgendaDesc );
                     XmlUtil.addElement( strXml, TAG_AGENDA_EVENT_TITLE, event.getTitle(  ) );
                     XmlUtil.addElement( strXml, TAG_AGENDA_EVENT_TOP_EVENT, event.getTopEvent( ) );
@@ -272,14 +187,14 @@ public class CalendarPortlet extends Portlet
                     XmlUtil.addElement( strXml, TAG_EVENT_MONTH,
                         new SimpleDateFormat( "MMMM" ).format( event.getDate(  ) ) );
                     XmlUtil.addElement( strXml, TAG_EVENT_IMAGE,
-                        ( EventImageResourceService.getInstance(  ).getResourceImageEvent( event.getEventId(  ) ) ).replaceAll( 
+                        ( EventImageResourceService.getInstance(  ).getResourceImageEvent( event.getId(  ) ) ).replaceAll( 
                             "&", "&amp;" ) );
                     XmlUtil.addElementHtml( strXml, TAG_EVENT_DESCRIPTION, event.getDescription(  ) );
 
                     Calendar calendar = new GregorianCalendar(  );
                     calendar.setTime( event.getDate(  ) );
 
-                    String strFormat = AppPropertiesService.getProperty( Constants.PROPERTY_LABEL_FORMAT_DATE_OF_DAY );
+                    //String strFormat = AppPropertiesService.getProperty( Constants.PROPERTY_LABEL_FORMAT_DATE_OF_DAY );
 
                     //DateFormat formatDate = new SimpleDateFormat( strFormat,
                     //        ( request == null ) ? Locale.getDefault(  ) : request.getLocale(  ) );	                    
