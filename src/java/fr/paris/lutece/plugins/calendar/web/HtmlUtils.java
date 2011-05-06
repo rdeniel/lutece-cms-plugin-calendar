@@ -33,11 +33,16 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
-import fr.paris.lutece.plugins.calendar.service.AgendaService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import java.util.Map;
 
-import java.util.HashMap;
+import org.apache.commons.lang.StringUtils;
+
+import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
+import fr.paris.lutece.plugins.calendar.service.AgendaResource;
+import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
+import fr.paris.lutece.plugins.calendar.service.CalendarService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 
 /**
@@ -46,7 +51,8 @@ import java.util.HashMap;
 public class HtmlUtils
 {
     private static final String HTML_START = "<";
-    private static final String EMPTY_STRING = " ";
+    private static final String HTML_BR = "<br />";
+    private static final String LINEFEED = "\\n";
 
     /**
      * Remove the part of the string that contains HTML
@@ -73,11 +79,11 @@ public class HtmlUtils
      */
     public static String convertCR( String strSource )
     {
-        String strReturn = "";
+        String strReturn = StringUtils.EMPTY;
 
-        if ( strSource != null )
+        if ( StringUtils.isNotBlank( strSource ) )
         {
-            strReturn = strSource.replaceAll( "\\n", "<br />" );
+            strReturn = strSource.replaceAll( LINEFEED, HTML_BR );
         }
 
         return strReturn;
@@ -89,46 +95,55 @@ public class HtmlUtils
      * @param event The event
      * @param strDate The current date
      */
-    public static void fillEventTemplate( HashMap model, MultiAgendaEvent event, String strDate )
+    public static void fillEventTemplate( Map<String, Object> model, MultiAgendaEvent event, String strDate )
     {
-        String strShortTitleLength = AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_SHORT_TITLE_LENGTH );
-        int nShortTitleLength = Integer.parseInt( strShortTitleLength );
-
-        String strTitle = AgendaService.getInstance(  ).getAgendaResource( event.getAgenda(  ) ).getEventPrefix(  ) +
-            EMPTY_STRING;
-
-        if ( ( event.getDateTimeStart(  ) != null ) || ( event.getDateTimeEnd(  ) != null ) )
+    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
+        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
+    	int nShortTitleLength = AppPropertiesService.getPropertyInt( Constants.PROPERTY_EVENT_SHORT_TITLE_LENGTH, 18 );
+        StringBuilder sbTitle = new StringBuilder(  );
+        String strImage = StringUtils.EMPTY;
+        
+        AgendaResource agenda = calendarService.getAgendaResource( event.getAgenda(  ) );
+        if ( agenda != null )
         {
-            String strTimeStart = event.getDateTimeStart(  );
-            strTimeStart = ( strTimeStart != null ) ? strTimeStart : EMPTY_STRING;
-
-            String strTimeEnd = event.getDateTimeEnd(  );
-            strTimeEnd = ( strTimeEnd != null ) ? strTimeEnd : EMPTY_STRING;
-            strTitle += ( strTimeStart + "-" + strTimeEnd );
+        	sbTitle.append( agenda.getEventPrefix(  ) );
+        	sbTitle.append( Constants.SPACE );
+        	strImage = agenda.getEventImage(  );
         }
+        
+        if ( StringUtils.isNotBlank( event.getDateTimeStart(  ) ) )
+        {
+        	sbTitle.append( event.getDateTimeStart(  ) );
+        }
+        sbTitle.append( Constants.INDENT );
+        if ( StringUtils.isNotBlank( event.getDateTimeEnd(  ) ) )
+        {
+        	sbTitle.append( event.getDateTimeEnd(  ) );
+        }
+        sbTitle.append( Constants.SPACE );
+        
+        sbTitle.append( removeHtml( event.getTitle(  ) ) );
 
-        strTitle += ( EMPTY_STRING + removeHtml( event.getTitle(  ) ) );
-
-        String strShortTitle = strTitle;
+        String strShortTitle = sbTitle.toString(  );
 
         if ( strShortTitle.length(  ) > nShortTitleLength )
         {
-            strShortTitle = strShortTitle.substring( 0, nShortTitleLength );
-            strShortTitle += AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_SHORT_TITLE_END );
+        	StringBuilder sbShortTitle = new StringBuilder(  );
+        	sbShortTitle.append( strShortTitle.substring( 0, nShortTitleLength ) );
+        	sbShortTitle.append( AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_SHORT_TITLE_END ) );
+        	strShortTitle = sbShortTitle.toString(  );
         }
 
-        String strDescription = ( event.getDescription(  ) != null ) ? event.getDescription(  ) : "";
-        String strLocation = ( event.getLocation(  ) != null ) ? event.getLocation(  ) : "";
-        String strUrl = ( event.getUrl(  ) != null ) ? event.getUrl(  ) : "";
+        String strDescription = ( event.getDescription(  ) != null ) ? event.getDescription(  ) : StringUtils.EMPTY;
+        String strLocation = ( event.getLocation(  ) != null ) ? event.getLocation(  ) : StringUtils.EMPTY;
+        String strUrl = ( event.getUrl(  ) != null ) ? event.getUrl(  ) : StringUtils.EMPTY;
 
         model.put( Constants.MARK_AGENDA, event.getAgenda(  ) );
-        model.put( Constants.MARK_EVENT_TITLE, strTitle );
+        model.put( Constants.MARK_EVENT_TITLE, sbTitle.toString(  ) );
         model.put( Constants.MARK_EVENT_SHORT_TITLE, strShortTitle );
         model.put( Constants.MARK_EVENT_DESCRIPTION, strDescription );
         model.put( Constants.MARK_EVENT_LOCATION, strLocation );
         model.put( Constants.MARK_EVENT_URL, strUrl );
-
-        String strImage = AgendaService.getInstance(  ).getAgendaResource( event.getAgenda(  ) ).getEventImage(  );
         model.put( Constants.MARK_EVENT_IMAGE, strImage );
         model.put( Constants.MARK_DATE, strDate );
     }

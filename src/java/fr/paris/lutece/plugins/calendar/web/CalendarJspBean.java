@@ -39,7 +39,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -50,6 +49,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.CalendarSubscriber;
@@ -61,10 +61,13 @@ import fr.paris.lutece.plugins.calendar.business.category.Category;
 import fr.paris.lutece.plugins.calendar.business.category.CategoryHome;
 import fr.paris.lutece.plugins.calendar.business.parameter.CalendarParameterHome;
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
-import fr.paris.lutece.plugins.calendar.service.AgendaService;
 import fr.paris.lutece.plugins.calendar.service.AgendaSubscriberService;
+import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
 import fr.paris.lutece.plugins.calendar.service.CalendarResourceIdService;
+import fr.paris.lutece.plugins.calendar.service.CalendarService;
+import fr.paris.lutece.plugins.calendar.service.CategoryService;
 import fr.paris.lutece.plugins.calendar.service.EventImageResourceService;
+import fr.paris.lutece.plugins.calendar.service.EventListService;
 import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.plugins.calendar.service.search.CalendarIndexer;
 import fr.paris.lutece.plugins.calendar.utils.CalendarIndexerUtils;
@@ -81,6 +84,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.search.IndexationService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -155,9 +159,8 @@ public class CalendarJspBean extends PluginAdminPageJspBean
     private static final String JSP_DO_REMOVE_CALENDAR = "jsp/admin/plugins/calendar/DoRemoveCalendar.jsp";
     private static final String JSP_DO_REMOVE_EVENT = "jsp/admin/plugins/calendar/DoRemoveEvent.jsp";
     private static final String JSP_DO_REMOVE_OCCURRENCE = "jsp/admin/plugins/calendar/DoRemoveOccurrence.jsp";
-    private static final String JSP_DO_MODIFY_EVENT = "jsp/admin/plugins/calendar/DoModifyEvent.jsp";
     private static final String DO_MODIFY_EVENT = "DoModifyEvent.jsp?plugin_name=calendar&calendar_id=";
-    private static final String JSP_MODIFY_CALENDAR = "jsp/admin/plugins/calendar/ModifyCalendar.jsp?plugin_name=calendar&calendar_id=";
+    private static final String JSP_MODIFY_CALENDAR = "jsp/admin/plugins/calendar/ModifyCalendar.jsp";
     private static final String JSP_EVENT_LIST = "EventList.jsp?plugin_name=calendar&calendar_id=";
     private static final String JSP_EVENT_LIST2 = "jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=";
     private static final String JSP_OCCURRENCE_LIST = "jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=";
@@ -177,7 +180,6 @@ public class CalendarJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_CONFIRM_REMOVE_EVENT = "calendar.message.confirmRemoveEvent";
     private static final String MESSAGE_CONFIRM_REMOVE_OCCURRENCE = "calendar.message.confirmRemoveOccurrence";
     private static final String MESSAGE_CONFIRM_REMOVE_ALL_OCCURRENCE = "calendar.message.confirmRemoveAllOccurrence";
-    private static final String MESSAGE_CONFIRM_MODIFY_EVENT = "calendar.message.modifyEvent";
     private static final String EXT_IMAGE_FILES = ".png";
     private static final String MESSAGE_INVALID_OCCURRENCE_NUMBER = "calendar.message.invalidOccurrenceNumber";
     private static final String MESSAGE_INVALID_TAG = "calendar.message.invalidTagsInput";
@@ -192,7 +194,13 @@ public class CalendarJspBean extends PluginAdminPageJspBean
     private FileItem _EventItem;
     private String[] _EventCategories;
     private String _EventDescription;
-    private HashMap<String, Object> _mapParameters;
+    private Map<String, Object> _mapParameters;
+    private CategoryService _categoryService = CategoryService.getInstance(  );
+    private AgendaSubscriberService _agendaSubscriberService = AgendaSubscriberService.getInstance(  );
+    private EventListService _eventListService = (EventListService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
+    		Constants.BEAN_CALENDAR_EVENTLISTSERVICE );
+    private CalendarService _calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
+    		Constants.BEAN_CALENDAR_CALENDARSERVICE );
 
     /**
      * This class is used to handle back office management of database calendars.
@@ -216,11 +224,10 @@ public class CalendarJspBean extends PluginAdminPageJspBean
                 _nDefaultItemsPerPage );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-        List<AgendaResource> listCalendar = CalendarHome.findAgendaResourcesList( getPlugin(  ) );
-        listCalendar = (List) AdminWorkgroupService.getAuthorizedCollection( listCalendar, getUser(  ) );
+        List<AgendaResource> listCalendar = _calendarService.getAgendaResources( getUser(  ), getPlugin(  ) );
 
-        Paginator paginator = new Paginator( listCalendar, _nItemsPerPage, getHomeUrl( request ),
-                Constants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+        LocalizedPaginator paginator = new LocalizedPaginator( listCalendar, _nItemsPerPage, getHomeUrl( request ),
+                Constants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
         
         boolean bPermissionAdvancedParameter = RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, 
         		RBAC.WILDCARD_RESOURCES_ID,	CalendarResourceIdService.PERMISSION_MANAGE, getUser(  ) );
@@ -248,7 +255,8 @@ public class CalendarJspBean extends PluginAdminPageJspBean
     	{
     		throw new AccessDeniedException(  );
     	}
-    	Map<String, Object> model = AgendaService.getInstance(  ).getManageAdvancedParameters( getUser(  ) );
+		Map<String, Object> model = new HashMap<String, Object>(  );
+    	model.put( Constants.MARK_CALENDAR_PARAMETERS, _calendarService.getCalendarParameters( getPlugin(  ) ) );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ADVANCED_PARAMETERS, getLocale(  ), model );
 
         return getAdminPage( template.getHtml(  ) );
@@ -295,45 +303,49 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String doCreateCalendar( HttpServletRequest request )
     {
+    	String strJspReturn = StringUtils.EMPTY;
         String strName = request.getParameter( Constants.PARAMETER_CALENDAR_NAME );
         String strImage = request.getParameter( Constants.PARAMETER_CALENDAR_IMAGE );
         String strWorkgroup = request.getParameter( Constants.PARAMETER_WORKGROUP );
         String strIsNotify = request.getParameter( Constants.PARAMETER_CALENDAR_NOTIFICATION );
         boolean bIsNotify = ( strIsNotify != null );
         String strPeriodValidity = request.getParameter( Constants.PARAMETER_CALENDAR_PERIOD );
-        int nPeriodValidity = -1;
 
         // Mandatory field
-        if ( strName.equals( Constants.EMPTY_STRING ) || ( strImage == null ) || ( bIsNotify && 
-        		( strPeriodValidity == null || strPeriodValidity.equals( Constants.EMPTY_STRING ) ) ) )
+        if ( StringUtils.isNotBlank( strName ) && StringUtils.isNotBlank( strImage ) &&
+        		!( bIsNotify && StringUtils.isBlank( strPeriodValidity ) ) )
         {
-            return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+        	int nPeriodValidity = -1;
+        	if ( bIsNotify )
+        	{
+            	if( strPeriodValidity.matches( Constants.REG_NUMBER ) )
+            	{
+            		nPeriodValidity = StringUtil.getIntValue( strPeriodValidity, -1 );
+            	}
+            	else
+            	{
+            		return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_NUMBER_FORMAT, AdminMessage.TYPE_STOP );
+            	}
+        	}
+
+            AgendaResource calendar = new AgendaResource(  );
+            calendar.setName( strName );
+            calendar.setEventImage( strImage );
+            calendar.setEventPrefix( request.getParameter( Constants.PARAMETER_CALENDAR_PREFIX ) );
+            calendar.setRole( request.getParameter( Constants.PARAMETER_CALENDAR_ROLE ) );
+            calendar.setWorkgroup( strWorkgroup );
+            calendar.setRoleManager( request.getParameter( Constants.PARAMETER_CALENDAR_ROLE_MANAGER ) );
+            calendar.setNotify( bIsNotify );
+            calendar.setPeriodValidity( bIsNotify ? nPeriodValidity : -1 );
+            _calendarService.doCreateAgenda( calendar, getPlugin(   ) );
+
+            strJspReturn = AppPathService.getBaseUrl( request ) + JSP_MANAGE_CALENDAR;
         }
-        
-        if ( bIsNotify )
-    	{
-        	if( strPeriodValidity.matches( Constants.REG_NUMBER ) )
-        	{
-        		nPeriodValidity = StringUtil.getIntValue( strPeriodValidity, -1 );
-        	}
-        	else
-        	{
-        		return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_NUMBER_FORMAT, AdminMessage.TYPE_STOP );
-        	}
-    	}
-
-        AgendaResource calendar = new AgendaResource(  );
-        calendar.setName( strName );
-        calendar.setEventImage( strImage );
-        calendar.setEventPrefix( request.getParameter( Constants.PARAMETER_CALENDAR_PREFIX ) );
-        calendar.setRole( request.getParameter( Constants.PARAMETER_CALENDAR_ROLE ) );
-        calendar.setWorkgroup( strWorkgroup );
-        calendar.setRoleManager( request.getParameter( Constants.PARAMETER_CALENDAR_ROLE_MANAGER ) );
-        calendar.setNotify( bIsNotify );
-        calendar.setPeriodValidity( bIsNotify ? nPeriodValidity : -1 );
-        CalendarHome.createAgenda( calendar, getPlugin(  ) );
-
-        return AppPathService.getBaseUrl( request ) + JSP_MANAGE_CALENDAR;
+        else
+        {
+        	strJspReturn = AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+        }
+        return strJspReturn;
     }
 
     /**
@@ -344,39 +356,55 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String getModifyCalendar( HttpServletRequest request )
     {
+    	String strHtml = StringUtils.EMPTY;
         setPageTitleProperty( Constants.PROPERTY_PAGE_TITLE_MODIFY_CALENDAR );
 
-        int nCalendarId = Integer.parseInt( request.getParameter( Constants.PARAMETER_CALENDAR_ID ) );
-        String strSortEvents = request.getParameter( Constants.PARAMETER_SORT_EVENTS );
-        strSortEvents = ( strSortEvents != null ) ? strSortEvents : "1";
+        String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
+        if ( StringUtils.isNotBlank( strCalendarId ) && StringUtils.isNumeric( strCalendarId ) )
+        {
+        	int nCalendarId = Integer.parseInt( strCalendarId );
+            String strSortEvents = request.getParameter( Constants.PARAMETER_SORT_EVENTS );
+            int nSortEvents = Constants.SORT_ASC;
+            if ( StringUtils.isNotBlank( strSortEvents ) && StringUtils.isNumeric( strSortEvents ) )
+            {
+            	nSortEvents = Integer.parseInt( strSortEvents );
+            }
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( Constants.MARK_CALENDAR, CalendarHome.findAgendaResource( nCalendarId, getPlugin(  ) ) );
-        model.put( Constants.MARK_WORKGROUPS_LIST, AdminWorkgroupService.getUserWorkgroups( getUser(  ), getLocale(  ) ) );
-        model.put( Constants.MARK_DOTS_LIST, getDotsList(  ) );
+            Map<String, Object> model = new HashMap<String, Object>(  );
+            model.put( Constants.MARK_CALENDAR, _calendarService.getAgendaResource( nCalendarId ) );
+            model.put( Constants.MARK_WORKGROUPS_LIST, AdminWorkgroupService.getUserWorkgroups( getUser(  ), getLocale(  ) ) );
+            model.put( Constants.MARK_DOTS_LIST, getDotsList(  ) );
 
-        List<SimpleEvent> listEvents = CalendarHome.findEventsList( nCalendarId, Integer.parseInt( strSortEvents ),
-                getPlugin(  ) );
+            List<SimpleEvent> listEvents = _eventListService.getSimpleEvents( nCalendarId, nSortEvents );
 
-        //paginator parameters
-        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                _nDefaultItemsPerPage );
+            //paginator parameters
+            _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+            _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
+                    _nDefaultItemsPerPage );
+            
+            UrlItem url = new UrlItem( JSP_MODIFY_CALENDAR );
+            url.addParameter( Constants.PARAMETER_CALENDAR_ID, nCalendarId );
+            url.addParameter( Constants.PARAMETER_SORT_EVENTS, nSortEvents );
 
-        Paginator paginator = new Paginator( listEvents, _nItemsPerPage,
-                JSP_MODIFY_CALENDAR + nCalendarId + "&sort_events=" + Integer.parseInt( strSortEvents ),
-                Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+            LocalizedPaginator paginator = new LocalizedPaginator( listEvents, _nItemsPerPage,
+                    url.getUrl(  ), Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
 
-        model.put( Constants.MARK_PAGINATOR, paginator );
-        model.put( Constants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( Constants.MARK_EVENTS_LIST, paginator.getPageItems(  ) );
-        model.put( Constants.MARK_EVENTS_SORT_LIST, getSortEventList(  ) );
-        model.put( Constants.MARK_DEFAULT_SORT_EVENT, Integer.parseInt( strSortEvents ) );
-        model.put( Constants.MARK_ROLES_LIST, RoleHome.getRolesList(  ) );
+            model.put( Constants.MARK_PAGINATOR, paginator );
+            model.put( Constants.MARK_NB_ITEMS_PER_PAGE, Integer.toString( _nItemsPerPage ) );
+            model.put( Constants.MARK_EVENTS_LIST, paginator.getPageItems(  ) );
+            model.put( Constants.MARK_EVENTS_SORT_LIST, getSortEventList(  ) );
+            model.put( Constants.MARK_DEFAULT_SORT_EVENT, nSortEvents );
+            model.put( Constants.MARK_ROLES_LIST, RoleHome.getRolesList(  ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_CALENDAR, getLocale(  ), model );
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_CALENDAR, getLocale(  ), model );
 
-        return getAdminPage( template.getHtml(  ) );
+            strHtml = getAdminPage( template.getHtml(  ) );
+        }
+        else
+        {
+        	strHtml = getManageCalendars( request );
+        }
+        return strHtml;
     }
 
     /**
@@ -387,47 +415,56 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String doModifyCalendar( HttpServletRequest request )
     {
+    	String strJspReturn = StringUtils.EMPTY;
+    	
         String strName = request.getParameter( Constants.PARAMETER_CALENDAR_NAME );
         String strWorkgroup = request.getParameter( Constants.PARAMETER_WORKGROUP );
         String strImage = request.getParameter( Constants.PARAMETER_CALENDAR_IMAGE );
         String strIsNotify = request.getParameter( Constants.PARAMETER_CALENDAR_NOTIFICATION );
+        String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
         boolean bIsNotify = ( strIsNotify != null );
         String strPeriodValidity = request.getParameter( Constants.PARAMETER_CALENDAR_PERIOD );
         int nPeriodValidity = -1;
 
         // Mandatory field
-        if ( strName.equals( Constants.EMPTY_STRING ) || ( strImage == null ) || ( bIsNotify && 
-        		( strPeriodValidity == null || strPeriodValidity.equals( Constants.EMPTY_STRING ) ) ) )
+        if ( StringUtils.isNotBlank( strName ) && StringUtils.isNotBlank( strImage ) &&
+        		StringUtils.isNotBlank( strCalendarId ) && StringUtils.isNumeric( strCalendarId ) &&
+        		!( bIsNotify && StringUtils.isBlank( strPeriodValidity ) ) )
         {
-            return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+        	if ( bIsNotify )
+        	{
+            	if( strPeriodValidity.matches( Constants.REG_NUMBER ) )
+            	{
+            		nPeriodValidity = StringUtil.getIntValue( strPeriodValidity, -1 );
+            	}
+            	else
+            	{
+            		return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_NUMBER_FORMAT, AdminMessage.TYPE_STOP );
+            	}
+        	}
+        	
+        	int nCalendarId = Integer.parseInt( strCalendarId );
+
+            AgendaResource calendar = _calendarService.getAgendaResource( nCalendarId );
+
+            calendar.setName( strName );
+            calendar.setEventImage( strImage );
+            calendar.setEventPrefix( request.getParameter( Constants.PARAMETER_CALENDAR_PREFIX ) );
+            calendar.setRole( request.getParameter( Constants.PARAMETER_CALENDAR_ROLE ) );
+            calendar.setRoleManager( request.getParameter( Constants.PARAMETER_CALENDAR_ROLE_MANAGER ) );
+            calendar.setWorkgroup( strWorkgroup );
+            calendar.setNotify( bIsNotify );
+            calendar.setPeriodValidity( nPeriodValidity );
+            _calendarService.doModifyAgenda( calendar, getPlugin(  ) );
+
+            strJspReturn = AppPathService.getBaseUrl( request ) + JSP_MANAGE_CALENDAR;
+        }
+        else
+        {
+        	strJspReturn = AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
         
-        if ( bIsNotify )
-    	{
-        	if( strPeriodValidity.matches( Constants.REG_NUMBER ) )
-        	{
-        		nPeriodValidity = StringUtil.getIntValue( strPeriodValidity, -1 );
-        	}
-        	else
-        	{
-        		return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_NUMBER_FORMAT, AdminMessage.TYPE_STOP );
-        	}
-    	}
-
-        AgendaResource calendar = CalendarHome.findAgendaResource( Integer.parseInt( request.getParameter( 
-                        Constants.PARAMETER_CALENDAR_ID ) ), getPlugin(  ) );
-
-        calendar.setName( strName );
-        calendar.setEventImage( strImage );
-        calendar.setEventPrefix( request.getParameter( Constants.PARAMETER_CALENDAR_PREFIX ) );
-        calendar.setRole( request.getParameter( Constants.PARAMETER_CALENDAR_ROLE ) );
-        calendar.setRoleManager( request.getParameter( Constants.PARAMETER_CALENDAR_ROLE_MANAGER ) );
-        calendar.setWorkgroup( strWorkgroup );
-        calendar.setNotify( bIsNotify );
-        calendar.setPeriodValidity( bIsNotify ? nPeriodValidity : -1 );
-        CalendarHome.updateAgenda( calendar, getPlugin(  ) );
-
-        return AppPathService.getBaseUrl( request ) + JSP_MANAGE_CALENDAR;
+        return strJspReturn;
     }
 
     /**
@@ -454,28 +491,38 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String doRemoveCalendar( HttpServletRequest request )
     {
-        int nCalendarId = Integer.parseInt( request.getParameter( Constants.PARAMETER_CALENDAR_ID ) );
-        List<SimpleEvent> listEvents = CalendarHome.findEventsList( nCalendarId, 1, getPlugin(  ) );
+    	String strJspReturn = StringUtils.EMPTY;
+    	String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
+    	if ( StringUtils.isNotBlank( strCalendarId ) && StringUtils.isNumeric( strCalendarId ) )
+    	{
+    		int nCalendarId = Integer.parseInt( strCalendarId );
+            List<SimpleEvent> listEvents = _eventListService.getSimpleEvents( nCalendarId, Constants.SORT_ASC );
 
-        for ( SimpleEvent event : listEvents )
-        {
-        	List<OccurrenceEvent> listOccurencesEvent = CalendarHome.findOccurrencesList( nCalendarId, event.getId(  ), 1,
-                    getPlugin(  ) );
-
-            for ( OccurrenceEvent occ : listOccurencesEvent )
+            for ( SimpleEvent event : listEvents )
             {
-                IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
-                    AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
-                CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_DELETE  );
+            	List<OccurrenceEvent> listOccurencesEvent = _eventListService.getOccurrenceEvents( nCalendarId, event.getId(  ), 
+            			Constants.SORT_ASC, getPlugin(  ) );
+
+                for ( OccurrenceEvent occ : listOccurencesEvent )
+                {
+                    IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
+                        AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_DELETE );
+                    CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_DELETE  );
+                }
+            	_eventListService.doRemoveEvent( nCalendarId, event.getId(  ), null, getPlugin(  ) );
             }
-        	
-            CalendarHome.removeEvent( nCalendarId, event.getId(  ), getPlugin(  ) );
-        }
+            
+            _calendarService.doRemoveAgenda( nCalendarId, getPlugin(  ) );
 
-        CalendarHome.removeAgenda( nCalendarId, getPlugin(  ) );
-
-        // Go to the parent page
-        return AppPathService.getBaseUrl( request ) + JSP_MANAGE_CALENDAR;
+            // Go to the parent page
+            strJspReturn = AppPathService.getBaseUrl( request ) + JSP_MANAGE_CALENDAR;
+    	}
+    	else
+    	{
+    		strJspReturn = AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_NUMBER_FORMAT, AdminMessage.TYPE_STOP );
+    	}
+    	
+    	return strJspReturn;
     }
 
     /**
@@ -486,37 +533,47 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String getCreateEvent( HttpServletRequest request )
     {
-        setPageTitleProperty( Constants.PROPERTY_PAGE_TITLE_CREATE_EVENT );
+    	String strHtml = StringUtils.EMPTY;
+    	String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
+    	if ( StringUtils.isNotBlank( strCalendarId ) && StringUtils.isNumeric( strCalendarId ) )
+    	{
+    		int nCalendarId = Integer.parseInt( strCalendarId );
+    		setPageTitleProperty( Constants.PROPERTY_PAGE_TITLE_CREATE_EVENT );
 
-        //The defaut number of day for the list
-        int nDays = 1;
+            //The defaut number of day for the list
+            int nDays = 1;
 
-        //Retrieve category list
-        Collection<Category> categoryList = CategoryHome.findAll( getPlugin(  ) );
+            //Retrieve category list
+            Collection<Category> categoryList = _categoryService.getCategories( getPlugin(  ) );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+            Map<String, Object> model = new HashMap<String, Object>(  );
 
-        String strBooleanTimeSpan = "TRUE";
-        model.put( MARK_INTERVAL_TIME_SPAN, strBooleanTimeSpan );
-        model.put( Constants.MARK_CALENDAR_ID,
-            Integer.parseInt( request.getParameter( Constants.PARAMETER_CALENDAR_ID ) ) );
-        model.put( Constants.MARK_LOCALE, getLocale(  ).getLanguage(  ) );
-        model.put( MARK_INTERVAL_LIST, getIntervalList( request ) );
-        model.put( MARK_NUMBER_DAYS, nDays );
-        model.put( MARK_INTERVAL_LIST, getIntervalList( request ) );
-        model.put( MARK_TOP_EVENT_LIST, getTopEventList(  ) );
-        model.put( MARK_EMAIL_NOTIFY, AppPropertiesService.getProperty( PROPERTY_EMAIL_NOTIFY ) );
-        model.put( MARK_TOP_EVENT_DEFAULT, AppPropertiesService.getProperty( PROPERTY_TOP_EVENT_DEFAULT ) );
-        model.put( MARK_TOP_EVENT_DEFAULT, AppPropertiesService.getProperty( PROPERTY_TOP_EVENT_DEFAULT ) );
-        model.put( MARK_INSERT_SERVICE_PAGE, JSP_GET_INSERT_SERVICE );
-        model.put( MARK_INSERT_SERVICE_LINK_PAGE, JSP_GET_INSERT_LINK_SERVICE );
-        model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
-        model.put( Constants.MARK_CATEGORY_LIST, new HashMap<String, Object>(  ) );
-        model.put( Constants.MARK_CATEGORY_DEFAULT_LIST, categoryList );
+            String strBooleanTimeSpan = Constants.TRUE;
+            model.put( MARK_INTERVAL_TIME_SPAN, strBooleanTimeSpan );
+            model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
+            model.put( Constants.MARK_LOCALE, getLocale(  ).getLanguage(  ) );
+            model.put( MARK_INTERVAL_LIST, getIntervalList( request ) );
+            model.put( MARK_NUMBER_DAYS, nDays );
+            model.put( MARK_INTERVAL_LIST, getIntervalList( request ) );
+            model.put( MARK_TOP_EVENT_LIST, getTopEventList(  ) );
+            model.put( MARK_EMAIL_NOTIFY, AppPropertiesService.getProperty( PROPERTY_EMAIL_NOTIFY ) );
+            model.put( MARK_TOP_EVENT_DEFAULT, AppPropertiesService.getProperty( PROPERTY_TOP_EVENT_DEFAULT ) );
+            model.put( MARK_TOP_EVENT_DEFAULT, AppPropertiesService.getProperty( PROPERTY_TOP_EVENT_DEFAULT ) );
+            model.put( MARK_INSERT_SERVICE_PAGE, JSP_GET_INSERT_SERVICE );
+            model.put( MARK_INSERT_SERVICE_LINK_PAGE, JSP_GET_INSERT_LINK_SERVICE );
+            model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
+            model.put( Constants.MARK_CATEGORY_LIST, new HashMap<String, Object>(  ) );
+            model.put( Constants.MARK_CATEGORY_DEFAULT_LIST, categoryList );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_EVENT, getLocale(  ), model );
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_EVENT, getLocale(  ), model );
 
-        return getAdminPage( template.getHtml(  ) );
+            strHtml = getAdminPage( template.getHtml(  ) );
+    	}
+    	else
+    	{
+    		strHtml = getManageCalendars( request );
+    	}
+    	return strHtml;
     }
 
     /**
@@ -526,69 +583,72 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String getEventList( HttpServletRequest request )
     {
-        int nCalendarId = Integer.parseInt( request.getParameter( Constants.PARAMETER_CALENDAR_ID ) );
+    	String strHtml = StringUtils.EMPTY;
+    	String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
+    	if ( StringUtils.isNotBlank( strCalendarId ) && StringUtils.isNumeric( strCalendarId ) )
+    	{
+    		int nCalendarId = Integer.parseInt( strCalendarId );
 
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
-        model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
-        
-        List<SimpleEvent> listEvents = null;
-        
-        // SORT
-        String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
-        String strAscSort = null;
-        if ( strSortedAttributeName != null && strSortedAttributeName.equals( Constants.PARAMETER_DATE ) )
-        {
-        	strAscSort = request.getParameter( Parameters.SORTED_ASC );
+            Map<String, Object> model = new HashMap<String, Object>(  );
+            model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
+            
+            List<SimpleEvent> listEvents = null;
+            
+            // SORT
+            String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
+            String strAscSort = request.getParameter( Parameters.SORTED_ASC );
+            if ( StringUtils.isNotBlank( strSortedAttributeName ) )
+            {
+            	boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
+            	int nIsAscSort = bIsAscSort ? Constants.SORT_ASC : Constants.SORT_DESC;
+            	listEvents = _eventListService.getSimpleEvents( nCalendarId, nIsAscSort );
+            	if ( !Constants.PARAMETER_DATE.equals( strSortedAttributeName ) )
+            	{
+            		Collections.sort( listEvents, new AttributeComparator( strSortedAttributeName, bIsAscSort ) );
+            	}
+            }
+            else
+            {
+            	listEvents = _eventListService.getSimpleEvents( nCalendarId, Constants.SORT_ASC );
+            }
 
-            boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
-            int nIsAscSort = bIsAscSort? 1 : 0;
-            listEvents = CalendarHome.findEventsList( nCalendarId, nIsAscSort, getPlugin(  ) );
-        }
-        else
-        {
-        	listEvents = CalendarHome.findEventsList( nCalendarId, 1, getPlugin(  ) );
-        }
-        
-        if ( strSortedAttributeName != null )
-        {
-            strAscSort = request.getParameter( Parameters.SORTED_ASC );
+            //paginator parameters
+            _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+            _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
+                    _nDefaultItemsPerPage );
+            
+            String strURL = AppPathService.getBaseUrl( request ) + JSP_EVENT_LIST2 + nCalendarId;
+            UrlItem url = new UrlItem( strURL );
+            url.addParameter( Constants.PARAMETER_CALENDAR_ID, nCalendarId );
+            if ( StringUtils.isNotBlank( strSortedAttributeName ) )
+            {
+            	url.addParameter( Parameters.SORTED_ATTRIBUTE_NAME, strSortedAttributeName );
+            }
+            
+            if ( StringUtils.isNotBlank( strAscSort ) )
+            {
+            	url.addParameter( Parameters.SORTED_ASC, strAscSort );
+            }
 
-            boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
+            LocalizedPaginator paginator = new LocalizedPaginator( listEvents, _nItemsPerPage, url.getUrl(  ),
+                    Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
+            
+            model.put( Constants.MARK_CALENDAR, CalendarHome.findAgendaResource( nCalendarId, getPlugin(  ) ) );
+            model.put( Constants.MARK_PAGINATOR, paginator );
+            model.put( Constants.MARK_NB_ITEMS_PER_PAGE, Integer.toString( _nItemsPerPage ) );
+            model.put( Constants.MARK_EVENTS_LIST, paginator.getPageItems(  ) );
+            model.put( Constants.MARK_EVENTS_SORT_LIST, getSortEventList(  ) );
+            model.put( Constants.MARK_ROLES_LIST, RoleHome.getRolesList(  ) );
 
-            Collections.sort( listEvents, new AttributeComparator( strSortedAttributeName, bIsAscSort ) );
-        }
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_EVENT_LIST, getLocale(  ), model );
 
-        //paginator parameters
-        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                _nDefaultItemsPerPage );
-        
-        String strURL = AppPathService.getBaseUrl( request ) + JSP_EVENT_LIST2 + nCalendarId;
-        UrlItem url = new UrlItem( strURL );
-        url.addParameter( Constants.PARAMETER_CALENDAR_ID, nCalendarId );
-        if ( strSortedAttributeName != null )
-        {
-        	url.addParameter( Parameters.SORTED_ATTRIBUTE_NAME, strSortedAttributeName );
-        }
-        
-        if ( strAscSort != null )
-        {
-        	url.addParameter( Parameters.SORTED_ASC, strAscSort );
-        }
-
-        LocalizedPaginator paginator = new LocalizedPaginator( listEvents, _nItemsPerPage, url.getUrl(  ),
-                Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
-        
-        model.put( Constants.MARK_CALENDAR, CalendarHome.findAgendaResource( nCalendarId, getPlugin(  ) ) );
-        model.put( Constants.MARK_PAGINATOR, paginator );
-        model.put( Constants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( Constants.MARK_EVENTS_LIST, paginator.getPageItems(  ) );
-        model.put( Constants.MARK_EVENTS_SORT_LIST, getSortEventList(  ) );
-        model.put( Constants.MARK_ROLES_LIST, RoleHome.getRolesList(  ) );
-
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_EVENT_LIST, getLocale(  ), model );
-
-        return getAdminPage( template.getHtml(  ) );
+            strHtml = getAdminPage( template.getHtml(  ) );
+    	}
+    	else
+    	{
+    		strHtml = getManageCalendars( request );
+    	}
+        return strHtml;
     }
 
     /**
@@ -598,75 +658,79 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String getOccurrenceList( HttpServletRequest request )
     {
-        int nCalendarId = Integer.parseInt( request.getParameter( Constants.PARAMETER_CALENDAR_ID ) );
-        String strEventId = request.getParameter( Constants.PARAMETER_EVENT_ID );
-        int nIdEvent = Integer.parseInt( strEventId );
+    	String strHtml = StringUtils.EMPTY;
+    	String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
+    	String strEventId = request.getParameter( Constants.PARAMETER_EVENT_ID );
+    	if ( StringUtils.isNotBlank( strCalendarId ) && StringUtils.isNumeric( strCalendarId ) && 
+    			StringUtils.isNotBlank( strEventId ) && StringUtils.isNumeric( strEventId ) )
+    	{
+    		int nCalendarId = Integer.parseInt( strCalendarId );
+            int nEventId = Integer.parseInt( strEventId );
 
-        SimpleEvent event = CalendarHome.findEvent( nIdEvent, getPlugin(  ) );
-        int nDays = CalendarHome.getRepetitionDays( nIdEvent, getPlugin(  ) );
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
-        List<OccurrenceEvent> listOccurrences = null;
+            SimpleEvent event = _eventListService.getEvent( nEventId, getPlugin(  ) );
+            int nDays = _eventListService.getRepititionDays( nEventId, getPlugin(  ) );
+            Map<String, Object> model = new HashMap<String, Object>(  );
+            List<OccurrenceEvent> listOccurrences = null;
 
-        // SORT
-        String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
-        String strAscSort = null;
-        if ( strSortedAttributeName != null && strSortedAttributeName.equals( Constants.PARAMETER_DATE ) )
-        {
-        	strAscSort = request.getParameter( Parameters.SORTED_ASC );
+            // SORT
+            String strSortedAttributeName = request.getParameter( Parameters.SORTED_ATTRIBUTE_NAME );
+            String strAscSort = request.getParameter( Parameters.SORTED_ASC );
+            if ( StringUtils.isNotBlank( strSortedAttributeName ) )
+            {
+            	boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
+            	int nIsAscSort = bIsAscSort ? Constants.SORT_ASC : Constants.SORT_DESC;
+            	listOccurrences = _eventListService.getOccurrenceEvents( nCalendarId, nEventId, nIsAscSort, getPlugin(  ) );
+            	if ( !Constants.PARAMETER_DATE.equals( strSortedAttributeName ) )
+            	{
+            		Collections.sort( listOccurrences, new AttributeComparator( strSortedAttributeName, bIsAscSort ) );
+            	}
+            }
+            else
+            {
+            	listOccurrences = _eventListService.getOccurrenceEvents( nCalendarId, nEventId, Constants.SORT_ASC, getPlugin(  ) );
+            }
 
-            boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
-            int nIsAscSort = bIsAscSort? 1 : 0;
-            listOccurrences = CalendarHome.findOccurrencesList( nCalendarId, event.getId(  ), nIsAscSort, getPlugin(  ) );
-        }
-        else
-        {
-        	listOccurrences = CalendarHome.findOccurrencesList( nCalendarId, event.getId(  ), 1, getPlugin(  ) );
-        }
-        
-        if ( strSortedAttributeName != null )
-        {
-            strAscSort = request.getParameter( Parameters.SORTED_ASC );
+            //paginator parameters
+            _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
+            _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
+                    _nDefaultItemsPerPage );
+            
+            String strURL = AppPathService.getBaseUrl( request ) + JSP_OCCURRENCE_LIST + nCalendarId;
+            UrlItem url = new UrlItem( strURL );
+            url.addParameter( Constants.PARAMETER_EVENT_ID, event.getId(  ) );
+            if ( StringUtils.isNotBlank( strSortedAttributeName ) )
+            {
+            	url.addParameter( Parameters.SORTED_ATTRIBUTE_NAME, strSortedAttributeName );
+            }
+            
+            if ( StringUtils.isNotBlank( strAscSort ) )
+            {
+            	url.addParameter( Parameters.SORTED_ASC, strAscSort );
+            }
 
-            boolean bIsAscSort = Boolean.parseBoolean( strAscSort );
+            LocalizedPaginator paginator = new LocalizedPaginator( listOccurrences, _nItemsPerPage, url.getUrl(  ), 
+            		Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
 
-            Collections.sort( listOccurrences, new AttributeComparator( strSortedAttributeName, bIsAscSort ) );
-        }
+            model.put( Constants.MARK_EVENT, event );
+            model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
+            model.put( Constants.MARK_PAGINATOR, paginator );
+            model.put( Constants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
+            model.put( Constants.MARK_OCCURRENCES_LIST, paginator.getPageItems(  ) );
+            model.put( Constants.MARK_EVENTS_SORT_LIST, getSortEventList(  ) );
+            model.put( MARK_INTERVAL_LIST, getIntervalList( request ) );
+            model.put( MARK_NUMBER_DAYS, nDays );
+            model.put( MARK_EVENT_STATUS_LIST, getStatusList( request ) );
+            model.put( MARK_DEFAULT_STATUS, AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_STATUS_DEFAULT ) );
+            
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_OCCURRENCE_LIST, getLocale(  ), model );
 
-        //paginator parameters
-        _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
-        _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
-                _nDefaultItemsPerPage );
-        
-        String strURL = AppPathService.getBaseUrl( request ) + JSP_OCCURRENCE_LIST + nCalendarId;
-        UrlItem url = new UrlItem( strURL );
-        url.addParameter( Constants.PARAMETER_EVENT_ID, event.getId(  ) );
-        if ( strSortedAttributeName != null )
-        {
-        	url.addParameter( Parameters.SORTED_ATTRIBUTE_NAME, strSortedAttributeName );
-        }
-        
-        if ( strAscSort != null )
-        {
-        	url.addParameter( Parameters.SORTED_ASC, strAscSort );
-        }
-
-        LocalizedPaginator paginator = new LocalizedPaginator( listOccurrences, _nItemsPerPage, url.getUrl(  ), 
-        		Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale(  ) );
-
-        model.put( Constants.MARK_EVENT, event );
-        model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
-        model.put( Constants.MARK_PAGINATOR, paginator );
-        model.put( Constants.MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
-        model.put( Constants.MARK_OCCURRENCES_LIST, paginator.getPageItems(  ) );
-        model.put( Constants.MARK_EVENTS_SORT_LIST, getSortEventList(  ) );
-        model.put( MARK_INTERVAL_LIST, getIntervalList( request ) );
-        model.put( MARK_NUMBER_DAYS, nDays );
-        model.put( MARK_EVENT_STATUS_LIST, getStatusList( request ) );
-        model.put( MARK_DEFAULT_STATUS, AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_STATUS_DEFAULT ) );
-        
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_OCCURRENCE_LIST, getLocale(  ), model );
-
-        return getAdminPage( template.getHtml(  ) );
+            return getAdminPage( template.getHtml(  ) );
+    	}
+    	else
+    	{
+    		strHtml = getManageCalendars( request );
+    	}
+    	return strHtml;
     }
 
     /**
@@ -677,244 +741,257 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String doCreateEvent( HttpServletRequest request )
     {
-        //Retrieving parameters from form
-        int nCalendarId = Integer.parseInt( request.getParameter( Constants.PARAMETER_CALENDAR_ID ) );
-        int nPeriodicity = Integer.parseInt( request.getParameter( Constants.PARAMETER_PERIODICITY ) );
-        String strEventDateEnd = request.getParameter( Constants.PARAMETER_EVENT_DATE_END );
-        String strTimeStart = request.getParameter( Constants.PARAMETER_EVENT_TIME_START );
-        String strTimeEnd = request.getParameter( Constants.PARAMETER_EVENT_TIME_END );
-        String strOccurrence = request.getParameter( Constants.PARAMETER_OCCURRENCE );
-        String strEventTitle = request.getParameter( Constants.PARAMETER_EVENT_TITLE );
-        String strDate = request.getParameter( Constants.PARAMETER_EVENT_DATE );
-        String strNotify = request.getParameter( Constants.PARAMETER_NOTIFY );
+    	String strJspReturn = StringUtils.EMPTY;
+    	String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
+    	String strPeriodicity = request.getParameter( Constants.PARAMETER_PERIODICITY );
+    	if ( StringUtils.isNotBlank( strCalendarId ) && StringUtils.isNumeric( strCalendarId ) && 
+    			StringUtils.isNotBlank( strPeriodicity ) && StringUtils.isNumeric( strPeriodicity ) )
+    	{
+    		//Retrieving parameters from form
+            int nCalendarId = Integer.parseInt( strCalendarId );
+            int nPeriodicity = Integer.parseInt( strPeriodicity );
+            String strEventDateEnd = request.getParameter( Constants.PARAMETER_EVENT_DATE_END );
+            String strTimeStart = request.getParameter( Constants.PARAMETER_EVENT_TIME_START );
+            String strTimeEnd = request.getParameter( Constants.PARAMETER_EVENT_TIME_END );
+            String strOccurrence = request.getParameter( Constants.PARAMETER_OCCURRENCE );
+            String strEventTitle = request.getParameter( Constants.PARAMETER_EVENT_TITLE );
+            String strDate = request.getParameter( Constants.PARAMETER_EVENT_DATE );
+            String strNotify = request.getParameter( Constants.PARAMETER_NOTIFY );
 
-        //Retrieve the features of an event from form
-        String strDescription = request.getParameter( Constants.PARAMETER_DESCRIPTION );
-        String strEventTags = request.getParameter( Constants.PARAMETER_EVENT_TAGS ).trim(  );
-        String strLocationAddress = request.getParameter( Constants.PARAMETER_EVENT_LOCATION_ADDRESS ).trim(  );
-        String strLocationTown = request.getParameter( Constants.PARAMETER_LOCATION_TOWN ).trim(  );
-        String strLocation = request.getParameter( Constants.PARAMETER_LOCATION ).trim(  );
-        String strLocationZip = request.getParameter( Constants.PARAMETER_LOCATION_ZIP ).trim(  );
-        String strLinkUrl = request.getParameter( Constants.PARAMETER_EVENT_LINK_URL ).trim(  );
-        String strDocumentId = request.getParameter( Constants.PARAMETER_EVENT_DOCUMENT_ID ).trim(  );
-        String strPageUrl = request.getParameter( Constants.PARAMETER_EVENT_PAGE_URL ).trim(  );
-        String strTopEvent = request.getParameter( Constants.PARAMETER_EVENT_TOP_EVENT ).trim(  );
-        String strMapUrl = request.getParameter( Constants.PARAMETER_EVENT_MAP_URL ).trim(  );
-        
-        //Retrieving the excluded days
-        String[] arrayExcludedDays = request.getParameterValues( Constants.PARAMETER_EXCLUDED_DAYS );
+            //Retrieve the features of an event from form
+            String strDescription = request.getParameter( Constants.PARAMETER_DESCRIPTION );
+            String strEventTags = request.getParameter( Constants.PARAMETER_EVENT_TAGS ).trim(  );
+            String strLocationAddress = request.getParameter( Constants.PARAMETER_EVENT_LOCATION_ADDRESS ).trim(  );
+            String strLocationTown = request.getParameter( Constants.PARAMETER_LOCATION_TOWN ).trim(  );
+            String strLocation = request.getParameter( Constants.PARAMETER_LOCATION ).trim(  );
+            String strLocationZip = request.getParameter( Constants.PARAMETER_LOCATION_ZIP ).trim(  );
+            String strLinkUrl = request.getParameter( Constants.PARAMETER_EVENT_LINK_URL ).trim(  );
+            String strDocumentId = request.getParameter( Constants.PARAMETER_EVENT_DOCUMENT_ID ).trim(  );
+            String strPageUrl = request.getParameter( Constants.PARAMETER_EVENT_PAGE_URL ).trim(  );
+            String strTopEvent = request.getParameter( Constants.PARAMETER_EVENT_TOP_EVENT ).trim(  );
+            String strMapUrl = request.getParameter( Constants.PARAMETER_EVENT_MAP_URL ).trim(  );
+            
+            //Retrieving the excluded days
+            String[] arrayExcludedDays = request.getParameterValues( Constants.PARAMETER_EXCLUDED_DAYS );
 
-        MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        FileItem item = mRequest.getFile( Constants.PARAMETER_EVENT_IMAGE );
+            MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
+            FileItem item = mRequest.getFile( Constants.PARAMETER_EVENT_IMAGE );
 
-        String[] arrayCategory = request.getParameterValues( Constants.PARAMETER_CATEGORY );
+            String[] arrayCategory = request.getParameterValues( Constants.PARAMETER_CATEGORY );
 
-        //Categories
-        List<Category> listCategories = new ArrayList<Category>(  );
+            //Categories
+            List<Category> listCategories = new ArrayList<Category>(  );
 
-        if ( arrayCategory != null )
-        {
-            for ( String strIdCategory : arrayCategory )
+            if ( arrayCategory != null )
             {
-                Category category = CategoryHome.find( Integer.parseInt( strIdCategory ), getPlugin(  ) );
-
-                if ( category != null )
+                for ( String strIdCategory : arrayCategory )
                 {
-                    listCategories.add( category );
+                    Category category = CategoryHome.find( Integer.parseInt( strIdCategory ), getPlugin(  ) );
+
+                    if ( category != null )
+                    {
+                        listCategories.add( category );
+                    }
                 }
             }
-        }
 
-        String[] strTabEventTags = null;
+            String[] strTabEventTags = null;
 
-        // Mandatory field
-        if ( strDate.equals( "" ) || strEventTitle.equals( "" ) || strDescription.equals( "" ) )
-        {
-            return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
-        }
-
-        if ( ( strEventTags.length(  ) > 0 ) && !strEventTags.equals( "" ) )
-        {
-            //Test if there aren't special characters in tag list
-            boolean isAllowedExp = Pattern.matches( PROPERTY_TAGS_REGEXP, strEventTags );
-
-            if ( !isAllowedExp )
+            // Mandatory field
+            if ( StringUtils.isBlank( strDate ) || StringUtils.isBlank( strEventTitle ) || 
+            		StringUtils.isBlank( strDescription ) )
             {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_TAG, AdminMessage.TYPE_STOP );
+                return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
             }
 
-            strTabEventTags = strEventTags.split( "\\s" );
-        }
+            if ( StringUtils.isNotBlank( strEventTags ) && strEventTags.length(  ) > 0 )
+            {
+                //Test if there aren't special characters in tag list
+                boolean isAllowedExp = Pattern.matches( PROPERTY_TAGS_REGEXP, strEventTags );
 
-        //Convert the date in form to a java.util.Date object
-        Date dateEvent = DateUtil.formatDate( strDate, getLocale(  ) );
+                if ( !isAllowedExp )
+                {
+                    return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_TAG, AdminMessage.TYPE_STOP );
+                }
 
-        if ( ( dateEvent == null ) || !Utils.isValidDate( dateEvent ) )
-        {
-            return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATEFORMAT,
-                AdminMessage.TYPE_STOP );
-        }
+                strTabEventTags = strEventTags.split( "\\s" );
+            }
 
-        Date dateEndEvent = null;
+            //Convert the date in form to a java.util.Date object
+            Date dateEvent = DateUtil.formatDate( strDate, getLocale(  ) );
 
-        if ( !strEventDateEnd.equals( "" ) )
-        {
-            dateEndEvent = DateUtil.formatDate( strEventDateEnd, getLocale(  ) );
-
-            if ( ( dateEndEvent == null ) || !Utils.isValidDate( dateEndEvent ) )
+            if ( ( dateEvent == null ) || !Utils.isValidDate( dateEvent ) )
             {
                 return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATEFORMAT,
                     AdminMessage.TYPE_STOP );
             }
-        }
 
-        //the number of occurrence is 1 by default
-        int nOccurrence = 1;
+            Date dateEndEvent = null;
 
-        if ( ( strOccurrence.length(  ) > 0 ) && !strOccurrence.equals( "" ) )
-        {
-            try
+            if ( StringUtils.isNotBlank( strEventDateEnd ) )
             {
-                nOccurrence = Integer.parseInt( strOccurrence );
+                dateEndEvent = DateUtil.formatDate( strEventDateEnd, getLocale(  ) );
+
+                if ( ( dateEndEvent == null ) || !Utils.isValidDate( dateEndEvent ) )
+                {
+                    return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATEFORMAT,
+                        AdminMessage.TYPE_STOP );
+                }
             }
-            catch ( NumberFormatException e )
+
+            //the number of occurrence is 1 by default
+            int nOccurrence = 1;
+
+            if ( ( strOccurrence.length(  ) > 0 ) && !strOccurrence.equals( "" ) )
             {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_OCCURRENCE_NUMBER,
+                try
+                {
+                    nOccurrence = Integer.parseInt( strOccurrence );
+                }
+                catch ( NumberFormatException e )
+                {
+                    return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_OCCURRENCE_NUMBER,
+                        AdminMessage.TYPE_STOP );
+                }
+            }
+
+            int nDocumentId = -1;
+
+            if ( ( strDocumentId.length(  ) > 0 ) && !strDocumentId.equals( "" ) )
+            {
+                try
+                {
+                    nDocumentId = Integer.parseInt( strDocumentId );
+                }
+                catch ( NumberFormatException e )
+                {
+                    return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_OCCURRENCE_NUMBER,
+                        AdminMessage.TYPE_STOP );
+                }
+            }
+
+            if ( !Utils.checkTime( strTimeStart ) || !Utils.checkTime( strTimeEnd ) )
+            {
+                return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_TIMEFORMAT,
                     AdminMessage.TYPE_STOP );
             }
-        }
 
-        int nDocumentId = -1;
-
-        if ( ( strDocumentId.length(  ) > 0 ) && !strDocumentId.equals( "" ) )
-        {
-            try
+            //If a date end is chosen
+            if ( ( Integer.parseInt( request.getParameter( Constants.PARAMETER_RADIO_PERIODICITY ) ) == 1 ) &&
+                    !strEventDateEnd.equals( "" ) )
             {
-                nDocumentId = Integer.parseInt( strDocumentId );
+                if ( dateEndEvent.before( dateEvent ) )
+                {
+                    return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATE_END_BEFORE,
+                        AdminMessage.TYPE_STOP );
+                }
+                else
+                {
+                    nPeriodicity = 0;
+                    nOccurrence = Utils.getOccurrenceWithinTwoDates( dateEvent, dateEndEvent, arrayExcludedDays );
+                }
             }
-            catch ( NumberFormatException e )
+            else if ( ( Integer.parseInt( request.getParameter( Constants.PARAMETER_RADIO_PERIODICITY ) ) == 1 ) &&
+                    strEventDateEnd.equals( "" ) )
             {
-                return AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_OCCURRENCE_NUMBER,
+                return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATEFORMAT,
                     AdminMessage.TYPE_STOP );
             }
-        }
 
-        if ( !Utils.checkTime( strTimeStart ) || !Utils.checkTime( strTimeEnd ) )
-        {
-            return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_TIMEFORMAT,
-                AdminMessage.TYPE_STOP );
-        }
-
-        //If a date end is chosen
-        if ( ( Integer.parseInt( request.getParameter( Constants.PARAMETER_RADIO_PERIODICITY ) ) == 1 ) &&
-                !strEventDateEnd.equals( "" ) )
-        {
-            if ( dateEndEvent.before( dateEvent ) )
+            //If a date end is not chosen
+            if ( ( Integer.parseInt( request.getParameter( Constants.PARAMETER_RADIO_PERIODICITY ) ) == 0 ) &&
+                    strEventDateEnd.equals( "" ) )
             {
-                return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATE_END_BEFORE,
-                    AdminMessage.TYPE_STOP );
+                dateEndEvent = Utils.getDateForward( dateEvent, nPeriodicity, nOccurrence, arrayExcludedDays );
+                if ( dateEndEvent.before( dateEvent ) )
+                {
+                	nOccurrence = 0;
+                	dateEndEvent = dateEvent;
+                }
             }
-            else
+
+            SimpleEvent event = new SimpleEvent(  );
+            event.setDate( dateEvent );
+            event.setDateEnd( dateEndEvent );
+            event.setDateTimeStart( strTimeStart );
+            event.setDateTimeEnd( strTimeEnd );
+            event.setTitle( strEventTitle );
+            event.setOccurrence( nOccurrence );
+            event.setPeriodicity( nPeriodicity );
+            event.setDescription( strDescription );
+
+            if( item.getSize(  ) == 0 )
             {
-                nPeriodicity = 0;
-                nOccurrence = Utils.getOccurrenceWithinTwoDates( dateEvent, dateEndEvent, arrayExcludedDays );
+            	HttpSession session = request.getSession( true );
+        	    if( session.getAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_CONTENT_FILE ) != null && session.getAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_MIME_TYPE_FILE) != null  )
+        	    {
+        	    	ImageResource imageResource = new ImageResource(  );
+                    imageResource.setImage( ( byte[] ) session.getAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_CONTENT_FILE ) );
+                    imageResource.setMimeType( (String) session.getAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_MIME_TYPE_FILE ) );
+                    event.setImageResource( imageResource );
+                    session.removeAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_CONTENT_FILE );
+                    session.removeAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_MIME_TYPE_FILE );
+        	    }
             }
-        }
-        else if ( ( Integer.parseInt( request.getParameter( Constants.PARAMETER_RADIO_PERIODICITY ) ) == 1 ) &&
-                strEventDateEnd.equals( "" ) )
-        {
-            return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATEFORMAT,
-                AdminMessage.TYPE_STOP );
-        }
-
-        //If a date end is not chosen
-        if ( ( Integer.parseInt( request.getParameter( Constants.PARAMETER_RADIO_PERIODICITY ) ) == 0 ) &&
-                strEventDateEnd.equals( "" ) )
-        {
-            dateEndEvent = Utils.getDateForward( dateEvent, nPeriodicity, nOccurrence, arrayExcludedDays );
-            if ( dateEndEvent.before( dateEvent ) )
+            
+            if ( item.getSize(  ) >= 1 )
             {
-            	nOccurrence = 0;
-            	dateEndEvent = dateEvent;
-            }
-        }
-
-        SimpleEvent event = new SimpleEvent(  );
-        event.setDate( dateEvent );
-        event.setDateEnd( dateEndEvent );
-        event.setDateTimeStart( strTimeStart );
-        event.setDateTimeEnd( strTimeEnd );
-        event.setTitle( strEventTitle );
-        event.setOccurrence( nOccurrence );
-        event.setPeriodicity( nPeriodicity );
-        event.setDescription( strDescription );
-
-        if( item.getSize(  ) == 0 )
-        {
-        	HttpSession session = request.getSession( true );
-    	    if( session.getAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_CONTENT_FILE ) != null && session.getAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_MIME_TYPE_FILE) != null  )
-    	    {
-    	    	ImageResource imageResource = new ImageResource(  );
-                imageResource.setImage( ( byte[] ) session.getAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_CONTENT_FILE ) );
-                imageResource.setMimeType( (String) session.getAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_MIME_TYPE_FILE ) );
+                ImageResource imageResource = new ImageResource(  );
+                imageResource.setImage( item.get(  ) );
+                imageResource.setMimeType( item.getContentType(  ) );
                 event.setImageResource( imageResource );
-                session.removeAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_CONTENT_FILE );
-                session.removeAttribute( ATTRIBUTE_MODULE_DOCUMENT_TO_CALENDAR_MIME_TYPE_FILE );
-    	    }
-        }
-        
-        if ( item.getSize(  ) >= 1 )
-        {
-            ImageResource imageResource = new ImageResource(  );
-            imageResource.setImage( item.get(  ) );
-            imageResource.setMimeType( item.getContentType(  ) );
-            event.setImageResource( imageResource );
-        }
-
-        event.setTags( strTabEventTags );
-        event.setLocationAddress( strLocationAddress );
-        event.setLocation( strLocation );
-        event.setLocationTown( strLocationTown );
-        event.setLocationZip( strLocationZip );
-        event.setLinkUrl( strLinkUrl );
-        event.setPageUrl( strPageUrl );
-        event.setTopEvent( Integer.parseInt( strTopEvent ) );
-        event.setMapUrl( strMapUrl );
-        event.setDocumentId( nDocumentId );
-        event.setListCategories( listCategories );
-        event.setExcludedDays( arrayExcludedDays );
-
-        CalendarHome.createEvent( nCalendarId, event, getPlugin(  ), Constants.EMPTY_NULL );
-
-        List<OccurrenceEvent> listOccurencesEvent = CalendarHome.findOccurrencesList( nCalendarId, event.getId(  ), 1,
-                getPlugin(  ) );
-
-        for ( OccurrenceEvent occ : listOccurencesEvent )
-        {
-            IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
-                AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
-            CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_CREATE  );
-        }
-
-        /*IndexationService.addIndexerAction( Constants.EMPTY_STRING + nCalendarId
-                ,AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );*/
-        boolean isNotify = Boolean.parseBoolean( strNotify );
-
-        if ( isNotify )
-        {
-            int nSubscriber = CalendarSubscriberHome.findSubscriberNumber( nCalendarId, getPlugin(  ) );
-
-            if ( nSubscriber > 0 )
-            {
-                Collection<CalendarSubscriber> calendarSubscribers = CalendarSubscriberHome.findSubscribers( nCalendarId,
-                        getPlugin(  ) );
-
-                AgendaSubscriberService.getInstance(  )
-                                       .sendSubscriberMail( request, calendarSubscribers, event, nCalendarId );
             }
-        }
 
-        return AppPathService.getBaseUrl(request) + JSP_EVENT_LIST2 + nCalendarId;
+            event.setTags( strTabEventTags );
+            event.setLocationAddress( strLocationAddress );
+            event.setLocation( strLocation );
+            event.setLocationTown( strLocationTown );
+            event.setLocationZip( strLocationZip );
+            event.setLinkUrl( strLinkUrl );
+            event.setPageUrl( strPageUrl );
+            event.setTopEvent( Integer.parseInt( strTopEvent ) );
+            event.setMapUrl( strMapUrl );
+            event.setDocumentId( nDocumentId );
+            event.setListCategories( listCategories );
+            event.setExcludedDays( arrayExcludedDays );
+            event.setIdCalendar( nCalendarId );
+
+            _eventListService.doAddEvent( event, null, getPlugin(  ) );
+
+            List<OccurrenceEvent> listOccurencesEvent = _eventListService.getOccurrenceEvents( nCalendarId, event.getId(  ), Constants.SORT_ASC, 
+            		getPlugin(  ) );
+
+            for ( OccurrenceEvent occ : listOccurencesEvent )
+            {
+                IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
+                    AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );
+                CalendarIndexerUtils.addIndexerAction( occ.getId(  ), IndexerAction.TASK_CREATE  );
+            }
+
+            /*IndexationService.addIndexerAction( Constants.EMPTY_STRING + nCalendarId
+                    ,AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_CREATE );*/
+            boolean isNotify = Boolean.parseBoolean( strNotify );
+
+            if ( isNotify )
+            {
+                int nSubscriber = _agendaSubscriberService.getSubscriberNumber( nCalendarId, getPlugin(  ) );
+
+                if ( nSubscriber > 0 )
+                {
+                    Collection<CalendarSubscriber> calendarSubscribers = _agendaSubscriberService.getSubscribers( nCalendarId, getPlugin(  ) );
+                    _agendaSubscriberService.sendSubscriberMail( request, calendarSubscribers, event, nCalendarId );
+                }
+            }
+
+            strJspReturn = AppPathService.getBaseUrl( request ) + JSP_EVENT_LIST2 + nCalendarId;
+    	}
+    	else
+    	{
+    		strJspReturn = AdminMessageService.getMessageUrl( request, MESSAGE_INVALID_NUMBER_FORMAT, AdminMessage.TYPE_STOP );
+    	}
+    	return strJspReturn;
+    	
+        
     }
 
     /**
@@ -1209,25 +1286,26 @@ public class CalendarJspBean extends PluginAdminPageJspBean
             event.setImageResource( imageResource );
         }
 
-        CalendarHome.updateEvent( nCalendarId, event, bPeriociteModify, getPlugin(  ) );
+        _eventListService.doModifySimpleEvent( event, bPeriociteModify, null, getPlugin(  ) );
 
-        List<OccurrenceEvent> listOccurencesEvent = CalendarHome.findOccurrencesList( nCalendarId, event.getId(  ), 1,
-                getPlugin(  ) );
+        List<OccurrenceEvent> listOccurencesEvent = _eventListService.getOccurrenceEvents( nCalendarId, event.getId(  ), Constants.SORT_ASC, 
+        		getPlugin(  ) );
 
         for ( OccurrenceEvent occ : listOccurencesEvent )
         {
             //Update occurence
-            if ( occ.getDateTimeStart(  ).equals( Constants.EMPTY_STRING ) )
+            if ( StringUtils.isBlank( occ.getDateTimeStart(  ) ) )
             {
                 occ.setDateTimeStart( event.getDateTimeStart(  ) );
             }
 
-            if ( occ.getDateTimeEnd(  ).equals( Constants.EMPTY_STRING ) )
+            if ( StringUtils.isBlank( occ.getDateTimeEnd(  ) ) )
             {
                 occ.setDateTimeEnd( event.getDateTimeEnd(  ) );
             }
 
-            CalendarHome.updateOccurrence( occ, nCalendarId, getPlugin(  ) );
+            // FIXME : Usefull ?
+            //CalendarHome.updateOccurrence( occ, nCalendarId, getPlugin(  ) );
 
             // Index Occurrence
             IndexationService.addIndexerAction( Integer.toString( occ.getId(  ) ),
@@ -1286,7 +1364,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         occurrence.setDateTimeEnd( strTimeEnd );
         occurrence.setTitle( request.getParameter( Constants.PARAMETER_EVENT_TITLE ) );
 
-        CalendarHome.updateOccurrence( occurrence, nCalendarId, getPlugin(  ) );
+        _eventListService.doModifyOccurrenceEvent( occurrence, getPlugin(  ) );
 
         SimpleEvent event = CalendarHome.findEvent( occurrence.getEventId(  ), getPlugin(  ) );
         List<OccurrenceEvent> listOccurrenceEvent = CalendarHome.findOccurrencesList( event.getIdCalendar(  ),
@@ -1311,7 +1389,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
             event.setDateEnd( occurrence.getDate(  ) );
         }
 
-        CalendarHome.updateEvent( nCalendarId, event, false, getPlugin(  ) );
+        _eventListService.doModifySimpleEvent( event, false, null, getPlugin(  ) );
 
         // Incremental indexation - Modify
         IndexationService.addIndexerAction( Integer.toString( occurrence.getId(  ) ),
@@ -1366,7 +1444,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         event.setOccurrence( nOccurrence );
         event.setDateEnd( dateEndEvent );
         event.setPeriodicity( nPeriodicity );
-        CalendarHome.updateEvent( nCalendarId, event, true, getPlugin(  ) );
+        _eventListService.doModifySimpleEvent( event, true, null, getPlugin(  ) );
 
         List<OccurrenceEvent> listOccurencesEvent = CalendarHome.findOccurrencesList( nCalendarId, event.getId(  ), 1,
                 getPlugin(  ) );
@@ -1575,6 +1653,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      *
      * @return a refenceList
      */
+    /*
     private ReferenceList getReferenceListCategory( Collection<Category> collection )
     {
         ReferenceList list = new ReferenceList(  );
@@ -1593,6 +1672,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
 
         return list;
     }
+    */
 
     /**
      * Returns the confirmation to modify an event
@@ -1753,8 +1833,6 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         {
             _EventDescription = request.getParameter( Constants.PARAMETER_DESCRIPTION );
         }
-        int nEventId = Integer.parseInt( request.getParameter( Constants.PARAMETER_EVENT_ID ) );
-        Event event = CalendarHome.findEvent( nEventId, getPlugin(  ) );
 
         _mapParameters = mapParameters;
 
@@ -1865,7 +1943,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         }
 
         event.setOccurrence( nOccurrence );
-        CalendarHome.updateEvent( nCalendarId, event, false, PluginService.getPlugin( Constants.PLUGIN_NAME ) );
+        _eventListService.doModifySimpleEvent( event, false, null, getPlugin(  ) );
 
         // Go to the parent page          
         return JSP_OCCURRENCE_LIST2 + nCalendarId + "&" + Constants.PARAMETER_SORT_EVENTS + "=" +
@@ -2078,7 +2156,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         	int nIdOccurrenceEvent = Integer.parseInt( tableCBXOccurrence[i] );
         	OccurrenceEvent occurrence = CalendarHome.findOccurrence( nIdOccurrenceEvent, getPlugin(  ) );
         	occurrence.setStatus( strEventStatus );
-        	CalendarHome.updateOccurrence( occurrence, nCalendarId, getPlugin(  ) );
+        	_eventListService.doModifyOccurrenceEvent( occurrence, getPlugin(  ) );
             //Incremental indexation - Modify
             IndexationService.addIndexerAction( tableCBXOccurrence[i],
                 AppPropertiesService.getProperty( CalendarIndexer.PROPERTY_INDEXER_NAME ), IndexerAction.TASK_MODIFY );

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.MissingFormatArgumentException;
 import java.util.StringTokenizer;
 
@@ -171,7 +172,7 @@ public class CalendarPortletJspBean extends PortletJspBean
         String strIdPage = request.getParameter( PARAMETER_PAGE_ID );
         String strBaseUrl = AppPathService.getBaseUrl( request );
 
-        HashMap model = new HashMap(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( BOOKMARK_PORTLET_ID, strPortletId );
         model.put( BOOKMARK_PAGE_ID, strIdPage );
 

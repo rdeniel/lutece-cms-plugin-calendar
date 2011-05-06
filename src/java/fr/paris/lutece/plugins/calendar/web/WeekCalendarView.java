@@ -33,7 +33,15 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import fr.paris.lutece.plugins.calendar.business.Agenda;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -45,15 +53,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -86,7 +85,7 @@ public class WeekCalendarView implements CalendarView
             calendar.roll( Calendar.DAY_OF_WEEK, true );
         }
 
-        HashMap model = new HashMap(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( Constants.MARK_DAYS, sbDays.toString(  ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_WEEK, options.getLocale(  ), model );
@@ -113,7 +112,6 @@ public class WeekCalendarView implements CalendarView
             Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
             List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
             	.getSearchResults( agenda.getAgendaIds(  ), null, "", date, date, request, plugin );
-            List<Agenda> listAgendas = agenda.getAgendas(  );
             
             for ( Event event : listIndexedEvents )
             {

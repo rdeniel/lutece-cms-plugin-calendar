@@ -45,30 +45,23 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.misc.ChainedFilter;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.CachingWrapperFilter;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.util.Version;
 
 import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.plugins.calendar.web.Constants;
-import fr.paris.lutece.portal.business.page.Page;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.search.SearchResult;
-import fr.paris.lutece.portal.service.security.LuteceUser;
-import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
@@ -123,7 +116,6 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             //Calendar Id
             if ( arrayAgendaIds != null && arrayAgendaIds.length > 0 )
             {
-            	StringBuilder sbCalendar = new StringBuilder();
                 String strQueryCalendar = OPEN_PARENTHESIS;
                 int intMoreCalendar = 0;
 
@@ -284,6 +276,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
      * @param request The {@link HttpServletRequest}
      * @return The {@link Filter} by Lutece Role
      */
+    /*
     private Filter getFilterRoles( HttpServletRequest request )
     {
         Filter filterRole = null;
@@ -330,7 +323,8 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
 
         return filterRole;
     }
-
+	*/
+    
     /**
      * Convert the SearchItem list on SearchResult list
      * @param listSource The source list

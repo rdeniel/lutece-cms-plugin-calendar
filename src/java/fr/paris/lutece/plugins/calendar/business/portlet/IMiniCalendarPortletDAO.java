@@ -33,12 +33,8 @@
  */
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
-import fr.paris.lutece.plugins.calendar.service.AgendaResource;
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-
-import java.util.Date;
-import java.util.List;
 
 
 /**

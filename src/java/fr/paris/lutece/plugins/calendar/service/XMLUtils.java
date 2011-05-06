@@ -101,8 +101,6 @@ public final class XMLUtils
     /* Since version 3.0.0 */
     private static final String TAG_AGENDA_MONTH = "month";
     private static final String TAG_AGENDA_MONTH_LABEL = "month-label";
-    private static final String TAG_AGENDA_NEXT_MONTH_LABEL = "month-next-label";
-    private static final String TAG_AGENDA_ABOVE_MONTH_LABEL = "month-above-label";
     private static final String TAG_AGENDA_WEEKS = "weeks";
     private static final String TAG_AGENDA_WEEK = "week";
     private static final String TAG_AGENDA_DAY = "day";
@@ -151,7 +149,7 @@ public final class XMLUtils
     public static String getAgendaXml( String strAgenda, HttpServletRequest request )
     {
         Agenda agenda = Utils.getAgendaWithOccurrences( strAgenda, request );
-        List<SimpleEvent> listEvents = agenda.getEvents(  );
+        List<Event> listEvents = agenda.getEvents(  );
 
         return getXml( listEvents );
     }
@@ -165,7 +163,7 @@ public final class XMLUtils
      */
     public static String getRssXml( CalendarFilter filter )
     {
-        List<SimpleEvent> listEvents = CalendarHome.findEventsByFilter( filter,
+        List<Event> listEvents = CalendarHome.findEventsByFilter( filter,
                 PluginService.getPlugin( Constants.PLUGIN_NAME ) );
 
         return getXml( listEvents );
@@ -178,7 +176,7 @@ public final class XMLUtils
      * @param request request servlet request
      * @return the Xml code of the agenda content
      */
-    public static String getXml( List<SimpleEvent> listEvents )
+    public static String getXml( List<Event> listEvents )
     {
         if ( listEvents != null )
         {
@@ -188,7 +186,7 @@ public final class XMLUtils
             // Generate the XML code for the agendas :
             XmlUtil.beginElement( strXml, TAG_EVENTS );
 
-            Iterator i = listEvents.iterator(  );
+            Iterator<Event> i = listEvents.iterator(  );
 
             while ( i.hasNext(  ) )
             {
@@ -317,7 +315,7 @@ public final class XMLUtils
             {
                 transformer.clearParameters(  );
 
-                Iterator i = params.keySet(  ).iterator(  );
+                Iterator<String> i = params.keySet(  ).iterator(  );
 
                 while ( i.hasNext(  ) )
                 {

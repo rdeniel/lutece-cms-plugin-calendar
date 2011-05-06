@@ -33,6 +33,12 @@
  */
 package fr.paris.lutece.plugins.calendar.modules.text;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import fr.paris.lutece.plugins.calendar.business.Agenda;
 import fr.paris.lutece.plugins.calendar.business.SimpleAgenda;
 import fr.paris.lutece.plugins.calendar.business.SimpleEvent;
@@ -40,15 +46,6 @@ import fr.paris.lutece.plugins.calendar.service.AgendaLoader;
 import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 
 /**

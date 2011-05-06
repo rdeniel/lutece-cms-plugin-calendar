@@ -35,7 +35,8 @@ package fr.paris.lutece.plugins.calendar.business;
 
 public class OccurrenceEvent extends SimpleEvent
 {
-    private int _nEventId;
+	private static final long serialVersionUID = 4979315059166094219L;
+	private int _nEventId;
 
     /**
      * Default constructor

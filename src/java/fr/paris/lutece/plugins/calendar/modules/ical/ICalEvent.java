@@ -46,7 +46,9 @@ import java.util.Date;
  */
 public class ICalEvent implements Event
 {
-    // Constants
+	private static final long serialVersionUID = -5892714649982713744L;
+	
+	// Constants
     private static final int DATE_ONLY_LENGTH = 8;
     private static final int DATE_TIME_LENGTH = 15;
 

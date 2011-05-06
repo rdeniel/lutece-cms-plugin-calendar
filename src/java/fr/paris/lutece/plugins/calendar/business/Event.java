@@ -33,15 +33,16 @@
  */
 package fr.paris.lutece.plugins.calendar.business;
 
-import fr.paris.lutece.portal.service.image.ImageResource;
-
+import java.io.Serializable;
 import java.util.Date;
+
+import fr.paris.lutece.portal.service.image.ImageResource;
 
 
 /**
  * This interface describes the minimum implementation for events
  */
-public interface Event
+public interface Event extends Serializable
 {
     /**
      * Returns a date as an object java.util.Date

@@ -21,4 +21,29 @@
 	<property name="className" value="fr.paris.lutece.plugins.calendar.business.rss.CalendarResourceRss"/>
   </bean>
   
+  <!-- Calenadr Service -->
+  <bean id="calendar.calendarCacheKeyService" class="fr.paris.lutece.portal.service.cache.DefaultCacheKeyService" >
+	<property name="allowedParametersList">
+		<list>
+			<value>calendar</value>
+		</list>
+	</property>
+  </bean>
+  <bean id="calendar.calendarService" class="fr.paris.lutece.plugins.calendar.service.CalendarService">
+	<property name="calendarCacheKeyService" ref="calendar.calendarCacheKeyService" />
+  </bean>
+  
+  <!-- EventList Service -->
+  <bean id="calendar.eventListCacheKeyService" class="fr.paris.lutece.portal.service.cache.DefaultCacheKeyService" >
+	<property name="allowedParametersList">
+		<list>
+			<value>calendar</value>
+		</list>
+	</property>
+  </bean>
+  <bean id="calendar.eventListService" class="fr.paris.lutece.plugins.calendar.service.EventListService">
+	<property name="eventListCacheKeyService" ref="calendar.eventListCacheKeyService" />
+	<property name="calendarService" ref="calendar.calendarService" />
+  </bean>
+  
 </beans>

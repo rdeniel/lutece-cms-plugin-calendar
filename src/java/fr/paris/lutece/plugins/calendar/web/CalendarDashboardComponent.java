@@ -115,8 +115,8 @@ public class CalendarDashboardComponent extends DashboardComponent
      */
     private List<AgendaResource> getCalendarsList( AdminUser user, Plugin plugin )
     {
-    	List<AgendaResource> calendarsList = CalendarHome.findAgendaResourcesList( getPlugin(  ) );
-        return (List) AdminWorkgroupService.getAuthorizedCollection( calendarsList, user );
+    	List<AgendaResource> calendarsList = CalendarHome.findAgendaResourcesList( plugin );
+        return (List<AgendaResource>) AdminWorkgroupService.getAuthorizedCollection( calendarsList, user );
     }
     
     /**

@@ -33,15 +33,16 @@
  */
 package fr.paris.lutece.plugins.calendar.business;
 
-import fr.paris.lutece.plugins.calendar.service.Utils;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+
+import fr.paris.lutece.plugins.calendar.service.Utils;
 
 
 /**
@@ -49,11 +50,16 @@ import java.util.Set;
  */
 public class SimpleAgenda implements Agenda
 {
-    private String _strName;
+	private static final long serialVersionUID = -798521682637709581L;
+	private String _strName;
     private String _strKeyName;
-    private HashMap _mapDays = new HashMap(  );
-    private ArrayList _list = new ArrayList(  );
+    private Map<String, List<Event>> _mapDays = new HashMap<String, List<Event>>(  );
+    private List<Event> _list = new ArrayList<Event>(  );
 
+    public SimpleAgenda(  )
+    {
+    }
+    
     /**
      * Returns the name of the Agenda
      * @return The agenda's name
@@ -107,13 +113,13 @@ public class SimpleAgenda implements Agenda
      * @param strDate A date code
      * @return A list of events
      */
-    public List getEventsByDate( String strDate )
+    public List<Event> getEventsByDate( String strDate )
     {
-        List listEvents = null;
+        List<Event> listEvents = null;
 
         if ( hasEvents( strDate ) )
         {
-            listEvents = (List) _mapDays.get( strDate );
+            listEvents = (List<Event>) _mapDays.get( strDate );
         }
 
         return listEvents;
@@ -126,7 +132,7 @@ public class SimpleAgenda implements Agenda
     public void addEvent( Event event )
     {
         String strDate = Utils.getDate( event.getDate(  ) );
-        List listEvents = null;
+        List<Event> listEvents = null;
 
         if ( hasEvents( strDate ) )
         {
@@ -134,7 +140,7 @@ public class SimpleAgenda implements Agenda
         }
         else
         {
-            listEvents = new ArrayList(  );
+            listEvents = new ArrayList<Event>(  );
             _mapDays.put( strDate, listEvents );
         }
 
@@ -145,7 +151,7 @@ public class SimpleAgenda implements Agenda
      * Retrieves all events of the agenda
      * @return A list of events
      */
-    public List getEvents(  )
+    public List<Event> getEvents(  )
     {
         _list.clear(  );
 
@@ -170,16 +176,14 @@ public class SimpleAgenda implements Agenda
      * @param strDateEnd The end date
      * @return The list of evensts
      */
-    public List getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )
+    public List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )
     {
         _list.clear(  );
 
-        java.util.Calendar calendar = new GregorianCalendar(  );
-        calendar.getInstance( localeEnv );
+        java.util.Calendar calendar = new GregorianCalendar( localeEnv );
         calendar.setTime( dateBegin );
 
-        java.util.Calendar calendar1 = new GregorianCalendar(  );
-        calendar1.getInstance( localeEnv );
+        java.util.Calendar calendar1 = new GregorianCalendar( localeEnv );
         calendar1.setTime( dateEnd );
 
         while ( !Utils.getDate( calendar ).equals( Utils.getDate( calendar1 ) ) )

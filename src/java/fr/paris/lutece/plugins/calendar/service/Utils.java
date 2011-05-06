@@ -42,9 +42,11 @@ import fr.paris.lutece.plugins.calendar.web.Constants;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.SecurityService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
+import org.apache.commons.lang.StringUtils;
 import org.htmlparser.Parser;
 
 import org.htmlparser.lexer.Lexer;
@@ -687,11 +689,13 @@ public final class Utils
      */
     public static Agenda getAgendaWithEvents( String strAgenda, HttpServletRequest request )
     {
+    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
+        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
         Agenda agenda = null;
 
         if ( strAgenda != null )
         {
-            AgendaResource agendaResource = AgendaService.getInstance(  ).getAgendaResource( strAgenda );
+            AgendaResource agendaResource = calendarService.getAgendaResource( strAgenda );
             Agenda a = null;
 
             if ( agendaResource != null )
@@ -704,10 +708,10 @@ public final class Utils
                 // Check security access
                 String strRole = agendaResource.getRole(  );
 
-                if ( ( strRole != null ) && ( !strRole.equals( "" ) && ( request != null ) ) &&
-                        ( !strRole.equals( Constants.PROPERTY_ROLE_NONE ) ) )
+                if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
+                        ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                 {
-                    if ( SecurityService.getInstance(  ).isAuthenticationEnable(  ) )
+                    if ( SecurityService.isAuthenticationEnable(  ) )
                     {
                         if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
                         {
@@ -756,10 +760,10 @@ public final class Utils
                         // Check security access
                         String strRole = agendaResource.getRole(  );
 
-                        if ( ( strRole != null ) && ( !strRole.equals( "" ) && ( request != null ) ) &&
-                                ( !strRole.equals( Constants.PROPERTY_ROLE_NONE ) ) )
+                        if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
+                                ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                         {
-                            if ( SecurityService.getInstance(  ).isAuthenticationEnable(  ) )
+                            if ( SecurityService.isAuthenticationEnable(  ) )
                             {
                                 if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
                                 {
@@ -810,10 +814,10 @@ public final class Utils
                         // Check security access
                         String strRole = agendaResource.getRole(  );
 
-                        if ( ( strRole != null ) && ( !strRole.equals( "" ) && ( request != null ) ) &&
-                                ( !strRole.equals( Constants.PROPERTY_ROLE_NONE ) ) )
+                        if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
+                                ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                         {
-                            if ( SecurityService.getInstance(  ).isAuthenticationEnable(  ) )
+                            if ( SecurityService.isAuthenticationEnable(  ) )
                             {
                                 if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
                                 {
@@ -855,10 +859,10 @@ public final class Utils
                 // Check security access
                 String strRole = a.getRole(  );
 
-                if ( ( strRole != null ) && ( !strRole.equals( "" ) && ( request != null ) ) &&
-                        ( !strRole.equals( Constants.PROPERTY_ROLE_NONE ) ) )
+                if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
+                        ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                 {
-                    if ( SecurityService.getInstance(  ).isAuthenticationEnable(  ) )
+                    if ( SecurityService.isAuthenticationEnable(  ) )
                     {
                         if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
                         {
@@ -1034,7 +1038,10 @@ public final class Utils
     public static String[] getCalendarIds( HttpServletRequest request )
     {
     	String[] arrayCalendarIds = null;
-    	List<AgendaResource> listCalendar = getAgendaResourcesWithOccurrences(  );
+    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
+        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
+
+        List<AgendaResource> listCalendar = calendarService.getAgendaResources( request );
         List<String> listCalendarIds = new ArrayList<String>(  );
 
         for ( AgendaResource a : listCalendar )
@@ -1042,8 +1049,8 @@ public final class Utils
             // Check security access
             String strRole = a.getRole(  );
 
-            if ( ( strRole != null ) && ( !strRole.equals( Constants.EMPTY_STRING ) ) && 
-            		( !strRole.equals( Constants.PROPERTY_ROLE_NONE ) ) )
+            if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
+                    ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
             {
                 if ( SecurityService.isAuthenticationEnable(  ) )
                 {
@@ -1102,9 +1109,13 @@ public final class Utils
     	
     	for ( int i = 0; i < arrayExcludedDays.length; i++ )
     	{
-    		if ( nDayOfWeek == Integer.parseInt( arrayExcludedDays[i] ) )
+    		if ( StringUtils.isNotBlank( arrayExcludedDays[i] ) && StringUtils.isNumeric( arrayExcludedDays[i] ) )
     		{
-    			return true;
+    			int nExcludedDay = Integer.parseInt( arrayExcludedDays[i] );
+    			if ( nDayOfWeek == nExcludedDay )
+        		{
+        			return true;
+        		}
     		}
     	}
     	return false;

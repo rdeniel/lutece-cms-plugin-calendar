@@ -38,6 +38,7 @@ import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.RemovalListener;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -45,9 +46,10 @@ import java.util.Locale;
 /**
  * Calendar Removal Listener
  */
-public class AgendaResourceRoleRemovalListener implements RemovalListener
+public class AgendaResourceRoleRemovalListener implements Serializable, RemovalListener
 {
-    private static final String PROPERTY_ROLE_CANNOT_BE_REMOVED = "calendar.message.roleCannotBeRemoved";
+	private static final long serialVersionUID = -6930316871648304227L;
+	private static final String PROPERTY_ROLE_CANNOT_BE_REMOVED = "calendar.message.roleCannotBeRemoved";
 
     /**
     * Check if the object can be safely removed

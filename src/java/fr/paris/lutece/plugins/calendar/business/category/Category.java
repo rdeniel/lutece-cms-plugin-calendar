@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.calendar.business.category;
 
+import java.io.Serializable;
+
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
 
 
@@ -40,9 +42,11 @@ import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupResource;
  * This class defines the Category business object.
  *
  */
-public class Category implements AdminWorkgroupResource
+public class Category implements Serializable, AdminWorkgroupResource
 {
-    // Variables declarations
+	private static final long serialVersionUID = 8657038334615761790L;
+	
+	// Variables declarations
     private int _nId;
     private String _strName;
     private String _strDescription;

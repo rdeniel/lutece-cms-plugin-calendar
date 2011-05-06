@@ -38,12 +38,13 @@ import java.util.Date;
 import java.util.List;
 
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
-import fr.paris.lutece.plugins.calendar.service.AgendaService;
 import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
+import fr.paris.lutece.plugins.calendar.service.CalendarService;
 import fr.paris.lutece.plugins.calendar.web.Constants;
 import fr.paris.lutece.portal.business.portlet.Portlet;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 
@@ -171,6 +172,8 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      */
     public List<AgendaResource> findAgendasInPortlet( int nPortletId, Plugin plugin )
     {
+    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
+        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
         List<AgendaResource> listSelectedAgendas = new ArrayList<AgendaResource>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDAS_BY_PORTLET, plugin );
         daoUtil.setInt( 1, nPortletId );
@@ -178,8 +181,11 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
 
         while ( daoUtil.next(  ) )
         {
-            AgendaResource agendaResource = AgendaService.getInstance(  ).getAgendaResource( daoUtil.getString( 1 ) );
-            listSelectedAgendas.add( agendaResource );
+            AgendaResource agendaResource = calendarService.getAgendaResource( daoUtil.getString( 1 ) );
+            if ( agendaResource != null )
+            {
+            	listSelectedAgendas.add( agendaResource );
+            }
         }
 
         daoUtil.free(  );
@@ -197,6 +203,8 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      */
     public List<AgendaResource> findAgendaBetween( int nPortletId, Date dateBegin, Date dateEnd, Plugin plugin )
     {
+    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
+        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
         List<AgendaResource> listSelectedAgendas = new ArrayList<AgendaResource>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDAS_BY_PORTLET_BY_DATE, plugin );
         daoUtil.setInt( 1, nPortletId );
@@ -204,8 +212,11 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
 
         while ( daoUtil.next(  ) )
         {
-            AgendaResource agendaResource = AgendaService.getInstance(  ).getAgendaResource( daoUtil.getString( 1 ) );
-            listSelectedAgendas.add( agendaResource );
+            AgendaResource agendaResource = calendarService.getAgendaResource( daoUtil.getString( 1 ) );
+            if ( agendaResource != null )
+            {
+            	listSelectedAgendas.add( agendaResource );
+            }
         }
 
         daoUtil.free(  );

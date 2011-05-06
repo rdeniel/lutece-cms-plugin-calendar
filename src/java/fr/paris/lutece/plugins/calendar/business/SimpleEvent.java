@@ -43,11 +43,13 @@ import java.util.Date;
 
 
 /**
- *
+ * SimpleEvent
  */
 public class SimpleEvent implements Event
 {
-    // Variables declarations
+	private static final long serialVersionUID = -1675274063314004181L;
+	
+	// Variables declarations
     private int _nId;
     private Date _dateEvent;
     private Date _dateEnd;

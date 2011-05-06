@@ -33,7 +33,13 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import fr.paris.lutece.plugins.calendar.business.Agenda;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -44,13 +50,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -71,7 +70,7 @@ public class DayCalendarView implements CalendarView
      */
     public String getCalendarView( String strDate, MultiAgenda agenda, CalendarUserOptions options, HttpServletRequest request )
     {
-        HashMap<String, Object> dayModel = new HashMap<String, Object>(  );
+        Map<String, Object> dayModel = new HashMap<String, Object>(  );
         StringBuffer sbEvents = new StringBuffer(  );
 
         if ( agenda.hasEvents( strDate ) )
@@ -80,12 +79,11 @@ public class DayCalendarView implements CalendarView
             Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
             List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
             	.getSearchResults( agenda.getAgendaIds(  ), null, "", date, date, request, plugin );
-            List<Agenda> listAgendas = agenda.getAgendas(  );
             
             for ( Event event : listIndexedEvents )
             {
             	MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar(  ) ) );
-            	HashMap<String, Object> eventModel = new HashMap<String, Object>(  );
+            	Map<String, Object> eventModel = new HashMap<String, Object>(  );
                 HtmlUtils.fillEventTemplate( eventModel, multiAgendaEvent, strDate );
 
                 HtmlTemplate tEvent = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY_EVENT, options.getLocale(  ),

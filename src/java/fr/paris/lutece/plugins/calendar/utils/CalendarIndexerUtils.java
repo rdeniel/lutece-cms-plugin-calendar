@@ -21,22 +21,22 @@ public class CalendarIndexerUtils
      */
     public static void addIndexerAction( int nIdResource, int nIdTask )
     {
-        ResourceEvent event = new ResourceEvent();
+        ResourceEvent event = new ResourceEvent(  );
         event.setIdResource( String.valueOf( nIdResource ) );
         event.setTypeResource( CONSTANT_TYPE_RESOURCE );
-        switch (nIdTask)
+        switch ( nIdTask )
         {
-        case IndexerAction.TASK_CREATE:
-        	ResourceEventManager.fireAddedResource( event );
-        	break;
-        case IndexerAction.TASK_MODIFY:
-        	ResourceEventManager.fireUpdatedResource( event );
-        	break;
-        case IndexerAction.TASK_DELETE:
-        	ResourceEventManager.fireDeletedResource( event );
-        	break;
-        default:
-        	break;
+	        case IndexerAction.TASK_CREATE:
+	        	ResourceEventManager.fireAddedResource( event );
+	        	break;
+	        case IndexerAction.TASK_MODIFY:
+	        	ResourceEventManager.fireUpdatedResource( event );
+	        	break;
+	        case IndexerAction.TASK_DELETE:
+	        	ResourceEventManager.fireDeletedResource( event );
+	        	break;
+	        default:
+	        	break;
         }
     }
 }

@@ -65,13 +65,12 @@ public interface ICalendarDAO
 
     /**
      * Insert a new event in the table calendar_events.
-     * @param nAgendaId The agenda id
      * @param event The event
      * @param plugin The Plugin using this data access service
      * @param strUserLogin user login
      * @throws fr.paris.lutece.portal.service.util.AppException An AppException error
      */
-    void insertEvent( int nAgendaId, SimpleEvent event, Plugin plugin, String strUserLogin )
+    void insertEvent( SimpleEvent event, Plugin plugin, String strUserLogin )
         throws AppException;
 
     /**
@@ -140,12 +139,11 @@ public interface ICalendarDAO
      * Update the event in the table calendar_event
      *
      * @param event The reference of SimpleEvent
-     * @param nAgendaId The identifier of the agenda
      * @param plugin The Plugin using this data access service
      * @param boolean 1 if periodicite is to Update, 0 if not
      * @throws fr.paris.lutece.portal.service.util.AppException An AppException
      */
-    void storeEvent( int nAgendaId, SimpleEvent event, Plugin plugin, boolean periodiciteUpdated )
+    void storeEvent( SimpleEvent event, Plugin plugin, boolean periodiciteUpdated )
         throws AppException;
 
     /**
@@ -199,10 +197,9 @@ public interface ICalendarDAO
      * Update the occurrence in the table calendar_events_occurrences
      *
      * @param occurrence The reference of OccurrenceEvent
-     * @param nAgendaId The identifier of the agenda
      * @param plugin The Plugin using this data access service
      */
-    void storeOccurrence( OccurrenceEvent occurrence, int nAgendaId, Plugin plugin );
+    void storeOccurrence( OccurrenceEvent occurrence, Plugin plugin );
 
     /**
      * Delete an Event from the table calendar_events_occurrences
@@ -252,7 +249,7 @@ public interface ICalendarDAO
      * @param plugin The plugin
      * @param filter The CalendarFilter Object
      */
-    List<SimpleEvent> selectByFilter( CalendarFilter filter, Plugin plugin );
+    List<Event> selectByFilter( CalendarFilter filter, Plugin plugin );
 
     /**
      * Load the list of top Events
@@ -284,4 +281,11 @@ public interface ICalendarDAO
      * @return the list of events
      */
     List<SimpleEvent> selectEventsList( int nAgendaId, int nSortEvents, int nNextDays, Plugin plugin );
+    
+    /**
+     * Get the list of calendar IDs
+     * @param plugin {@link Plugin}
+     * @return the list of calendar ids
+     */
+    List<Integer> selectCalendarIds( Plugin plugin );
 }

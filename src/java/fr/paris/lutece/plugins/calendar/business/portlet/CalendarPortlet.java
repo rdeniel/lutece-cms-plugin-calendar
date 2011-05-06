@@ -47,7 +47,8 @@ import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
-import fr.paris.lutece.plugins.calendar.service.AgendaService;
+import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
+import fr.paris.lutece.plugins.calendar.service.CalendarService;
 import fr.paris.lutece.plugins.calendar.service.EventImageResourceService;
 import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.plugins.calendar.service.XMLUtils;
@@ -57,6 +58,7 @@ import fr.paris.lutece.portal.business.portlet.Portlet;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.SecurityService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
 
@@ -135,10 +137,10 @@ public class CalendarPortlet extends Portlet
             if ( agendaResource != null )
             {
                 // Check security access
-                String strRole = AgendaService.getInstance(  ).getAgendaResource( agendaResource.getId(  ) ).getRole(  );
+                String strRole = agendaResource.getRole(  );
 
-                if ( ( strRole != null ) && ( !strRole.equals( "" ) ) && ( request != null ) &&
-                        ( !strRole.equals( Constants.PROPERTY_ROLE_NONE ) ) )
+                if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
+                        ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                 {
                     if ( SecurityService.isAuthenticationEnable(  ) )
                     {

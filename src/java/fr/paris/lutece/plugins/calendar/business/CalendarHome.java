@@ -108,31 +108,28 @@ public class CalendarHome
 
     /**
      * Insert a new event in the table calendar_events.
-     * @param nAgendaId The agenda id
      * @param event the event
      * @param plugin The Plugin using this data access service
      * @param strUserLogin user login
      * @throws fr.paris.lutece.portal.service.util.AppException AppException
      */
-    public static void createEvent( int nAgendaId, SimpleEvent event, Plugin plugin, String strUserLogin )
+    public static void createEvent( SimpleEvent event, Plugin plugin, String strUserLogin )
         throws AppException
     {
-        _dao.insertEvent( nAgendaId, event, plugin, strUserLogin );
+        _dao.insertEvent( event, plugin, strUserLogin );
     }
 
     /**
      * Update the event in the table calendar_event
-     * @param nAgendaId The agenda id
      * @param strTitle The title of the event
      * @param event The reference of SimpleEvent
      * @param strDate the old event date
      * @param plugin The Plugin using this data access service
      * @throws fr.paris.lutece.portal.service.util.AppException Exception thrown if an error is detected
      */
-    public static void updateEvent( int nAgendaId, SimpleEvent event, boolean bPeriodiciteUpdated, Plugin plugin )
-        throws AppException
+    public static void updateEvent( SimpleEvent event, boolean bPeriodiciteUpdated, Plugin plugin )
     {
-        _dao.storeEvent( nAgendaId, event, plugin, bPeriodiciteUpdated );
+        _dao.storeEvent( event, plugin, bPeriodiciteUpdated );
     }
 
     /**
@@ -237,18 +234,14 @@ public class CalendarHome
     }
 
     /**
-     * Update the event in the table calendar_event
-     * @param nAgendaId The agenda id
-     * @param strTitle The title of the event
-     * @param event The reference of SimpleEvent
-     * @param strDate the old event date
+     * Update the occurrence in the table calendar_events_occurrences
+     *
+     * @param occurrence The reference of OccurrenceEvent
      * @param plugin The Plugin using this data access service
-     * @throws fr.paris.lutece.portal.service.util.AppException Exception thrown if an error is detected
      */
-    public static void updateOccurrence( OccurrenceEvent occurrence, int nAgendaId, Plugin plugin )
-        throws AppException
+    public static void updateOccurrence( OccurrenceEvent occurrence, Plugin plugin )
     {
-        _dao.storeOccurrence( occurrence, nAgendaId, plugin );
+        _dao.storeOccurrence( occurrence, plugin );
     }
 
     /**
@@ -300,7 +293,7 @@ public class CalendarHome
      * @param plugin The plugin
      * @param filter The CalendarFilter Object
      */
-    public static List<SimpleEvent> findEventsByFilter( CalendarFilter filter, Plugin plugin )
+    public static List<Event> findEventsByFilter( CalendarFilter filter, Plugin plugin )
     {
         return _dao.selectByFilter( filter, plugin );
     }
@@ -336,5 +329,15 @@ public class CalendarHome
     public static List<SimpleEvent> findEventsList( int nAgendaId, int nSortEvents, int nNextDays, Plugin plugin )
     {
     	return _dao.selectEventsList( nAgendaId, nSortEvents, nNextDays, plugin );
+    }
+
+    /**
+     * Get the list of calendar IDs
+     * @param plugin {@link Plugin}
+     * @return the list of calendar ids
+     */
+    public static List<Integer> findCalendarIds( Plugin plugin )
+    {
+    	return _dao.selectCalendarIds( plugin );
     }
 }

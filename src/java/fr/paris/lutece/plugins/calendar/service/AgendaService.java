@@ -46,6 +46,7 @@ import fr.paris.lutece.portal.service.resource.ResourceService;
 
 /**
  * This class provides agenda access services : loading, access to configuration parameters
+ * @deprecated Use {@link CalendarService} Instead
  */
 public final class AgendaService extends ResourceService
 {
@@ -75,6 +76,7 @@ public final class AgendaService extends ResourceService
      * Returns the instance of the singleton
      *
      * @return The instance of the singleton
+     * @deprecated Use CalendarService Instead
      */
     public static AgendaService getInstance(  )
     {
@@ -94,6 +96,7 @@ public final class AgendaService extends ResourceService
      * Load and deliver an agenda by its key name
      * @param strAgendaKeyName The agenda key name
      * @return An Agenda object
+     * @deprecated Use CalendarService Instead
      */
     public AgendaResource getAgendaResource( String strAgendaKeyName )
     {
@@ -104,6 +107,7 @@ public final class AgendaService extends ResourceService
      * Build the advanced parameters management
      * @param user the current user
      * @return The model for the advanced parameters
+     * @deprecated Use CalendarService Instead
      */
     public Map<String, Object> getManageAdvancedParameters( AdminUser user )
     {

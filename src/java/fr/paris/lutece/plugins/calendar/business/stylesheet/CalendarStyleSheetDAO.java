@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.calendar.business.stylesheet;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.portal.business.stylesheet.StyleSheet;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
@@ -219,12 +221,11 @@ public final class CalendarStyleSheetDAO implements ICalendarStyleSheetDAO
      */
     public String selectExtension( int nId, Plugin plugin )
     {
-        StyleSheet stylesheet = null;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_EXTENSION, plugin );
         daoUtil.setInt( 1, nId );
         daoUtil.executeQuery(  );
 
-        String strExtension = "";
+        String strExtension = StringUtils.EMPTY;
 
         if ( daoUtil.next(  ) )
         {

@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.calendar.business;
 
-import fr.paris.lutece.plugins.calendar.service.Utils;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import fr.paris.lutece.plugins.calendar.service.Utils;
 
 
 /**
@@ -47,10 +47,15 @@ import java.util.Locale;
  */
 public class MultiAgenda implements Agenda
 {
-    private String _strName;
+	private static final long serialVersionUID = 564170210812312845L;
+	private String _strName;
     private String _strKeyName;
-    private ArrayList _listAgendas = new ArrayList(  );
+    private List<Agenda> _listAgendas = new ArrayList<Agenda>(  );
 
+    public MultiAgenda(  )
+    {
+    }
+    
     /**
      * Indicates if the agenda gets events for a given date
      * @param strDate A date code
@@ -76,9 +81,9 @@ public class MultiAgenda implements Agenda
      * @param strDate A date code
      * @return A list of events
      */
-    public List getEventsByDate( String strDate )
+    public List<Event> getEventsByDate( String strDate )
     {
-        ArrayList list = new ArrayList(  );
+        List<Event> list = new ArrayList<Event>(  );
         List<Event> listEvents = getEvents(  );
 
         for ( Event event : listEvents )
@@ -96,9 +101,9 @@ public class MultiAgenda implements Agenda
      * Retrieves all events of the agenda
      * @return A list of events
      */
-    public List getEvents(  )
+    public List<Event> getEvents(  )
     {
-        ArrayList list = new ArrayList(  );
+        List<Event> list = new ArrayList<Event>(  );
 
         for ( int i = 0; i < _listAgendas.size(  ); i++ )
         {
@@ -166,45 +171,21 @@ public class MultiAgenda implements Agenda
      * Gets agendas
      * @return A list that contain all agendas
      */
-    public List getAgendas(  )
+    public List<Agenda> getAgendas(  )
     {
         return _listAgendas;
     }
 
-    //Inclusive
     /**
      * Fetches the events present between two dates
      * @param strDateBegin The start date
      * @param strDateEnd The end date
      * @return The events
      */
-    public List getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )
+    public List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )
     {
-        // TODO implementer locale
-        /**
         List<Event> listEvents = getEvents(  );
-        ArrayList list = new ArrayList(  );
-        
-        Calendar calendar = new GregorianCalendar(  );
-        calendar.set( Utils.getYear( strDateBegin ), Utils.getMonth( strDateBegin ), Utils.getDay( strDateBegin ) );
-        Calendar calendar1 = new GregorianCalendar(  );
-        calendar1.set( Utils.getYear( strDateEnd ), Utils.getMonth( strDateEnd ), Utils.getDay( strDateEnd ) );
-        while (calendar.DATE != calendar1.DATE)
-        {
-         for ( Event event : listEvents )
-        {
-            //if eventDate>=DateBegin && eventDate<=DateEnd
-            if ( event.getDate(  ).equals( Utils.getDate(calendar) ))
-            {
-                list.add( event );
-            }
-        }
-         calendar.add( Calendar.DATE, 1 );
-        }
-          return list;
-          **/
-        List<Event> listEvents = getEvents(  );
-        ArrayList list = new ArrayList(  );
+        List<Event> list = new ArrayList<Event>(  );
 
         java.util.Calendar calendar = new GregorianCalendar(  );
         calendar.setTime( dateBegin );

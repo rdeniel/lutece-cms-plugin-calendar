@@ -58,13 +58,13 @@ import fr.paris.lutece.util.url.UrlItem;
  */
 public class CategoryService implements ImageResourceProvider
 {
-    private static CategoryService _singleton = new CategoryService(  );
+    private static CategoryService _singleton;
     private static final String IMAGE_RESOURCE_TYPE_ID = "icon_category";
 
     /**
      * Creates a new instance of CategoryService
      */
-    CategoryService(  )
+    private CategoryService(  )
     {
         ImageResourceManager.registerProvider( this );
     }
@@ -76,6 +76,10 @@ public class CategoryService implements ImageResourceProvider
      */
     public static CategoryService getInstance(  )
     {
+    	if ( _singleton == null )
+    	{
+    		_singleton = new CategoryService(  );
+    	}
         return _singleton;
     }
 
@@ -98,6 +102,11 @@ public class CategoryService implements ImageResourceProvider
     public String getResourceTypeId(  )
     {
         return IMAGE_RESOURCE_TYPE_ID;
+    }
+    
+    public Collection<Category> getCategories( Plugin plugin )
+    {
+    	return CategoryHome.findAll( plugin );
     }
 
     /**

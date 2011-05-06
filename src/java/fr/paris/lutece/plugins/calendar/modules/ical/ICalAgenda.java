@@ -33,23 +33,23 @@
  */
 package fr.paris.lutece.plugins.calendar.modules.ical;
 
-import fr.paris.lutece.plugins.calendar.business.Agenda;
-import fr.paris.lutece.plugins.calendar.business.Event;
-import fr.paris.lutece.plugins.calendar.service.Utils;
-import fr.paris.lutece.plugins.calendar.web.Constants;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
-
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.Property;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.Property;
+import fr.paris.lutece.plugins.calendar.business.Agenda;
+import fr.paris.lutece.plugins.calendar.business.Event;
+import fr.paris.lutece.plugins.calendar.service.Utils;
+import fr.paris.lutece.plugins.calendar.web.Constants;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 
 /**
@@ -58,11 +58,17 @@ import java.util.Set;
  */
 public class ICalAgenda implements Agenda
 {
-    private String _strName;
+	private static final long serialVersionUID = 331412235577651908L;
+	private String _strName;
     private String _strKeyName;
-    private HashMap _mapDays = new HashMap(  );
-    private ArrayList _list = new ArrayList(  );
+    private Map<String, List<Event>> _mapDays = new HashMap<String, List<Event>>(  );
+    private List<Event> _list = new ArrayList<Event>(  );
 
+    public ICalAgenda(  )
+    {
+    	
+    }
+    
     /**
      * Returns the name of the Agenda
      * @return The agenda's name
@@ -116,13 +122,13 @@ public class ICalAgenda implements Agenda
      * @param strDate A date code
      * @return A list of events
      */
-    public List getEventsByDate( String strDate )
+    public List<Event> getEventsByDate( String strDate )
     {
-        List listEvents = null;
+        List<Event> listEvents = null;
 
         if ( hasEvents( strDate ) )
         {
-            listEvents = (List) _mapDays.get( strDate );
+            listEvents = (List<Event>) _mapDays.get( strDate );
         }
 
         return listEvents;
@@ -132,7 +138,7 @@ public class ICalAgenda implements Agenda
      * Retrieves all events of the agenda
      * @return A list of events
      */
-    public List getEvents(  )
+    public List<Event> getEvents(  )
     {
         _list.clear(  );
 
@@ -234,7 +240,7 @@ public class ICalAgenda implements Agenda
     public void addEvent( Event event )
     {
         String strDate = Utils.getDate( event.getDate(  ) );
-        List listEvents = null;
+        List<Event> listEvents = null;
 
         if ( hasEvents( strDate ) )
         {
@@ -242,7 +248,7 @@ public class ICalAgenda implements Agenda
         }
         else
         {
-            listEvents = new ArrayList(  );
+            listEvents = new ArrayList<Event>(  );
             _mapDays.put( strDate, listEvents );
         }
 
@@ -255,7 +261,7 @@ public class ICalAgenda implements Agenda
      * @param strDateEnd The end date
      * @return The list of events
      */
-    public List getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )
+    public List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )
     {
         // TODO implementer locale   
         _list.clear(  );

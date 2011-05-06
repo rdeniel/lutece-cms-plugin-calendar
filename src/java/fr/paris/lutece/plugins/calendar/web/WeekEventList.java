@@ -33,7 +33,15 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import fr.paris.lutece.plugins.calendar.business.Agenda;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -45,15 +53,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**

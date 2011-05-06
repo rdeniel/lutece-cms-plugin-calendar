@@ -33,8 +33,11 @@
  */
 package fr.paris.lutece.plugins.calendar.service.daemon;
 
-import fr.paris.lutece.plugins.calendar.service.AgendaService;
+import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
+import fr.paris.lutece.plugins.calendar.service.CalendarService;
+import fr.paris.lutece.plugins.calendar.web.Constants;
 import fr.paris.lutece.portal.service.daemon.Daemon;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
 /**
@@ -50,8 +53,10 @@ public class ResetAgendaCacheDeamon extends Daemon
      */
     public void run(  )
     {
-        int nCacheSize = AgendaService.getInstance(  ).getCacheSize(  );
-        AgendaService.getInstance(  ).resetCache(  );
+    	CalendarService agendaService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
+        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
+        int nCacheSize = agendaService.getCacheSize(  );
+        agendaService.resetCache(  );
         setLastRunLogs( "\nRSS Agenda cache cleared : " + nCacheSize + " objects removed" );
     }
 }

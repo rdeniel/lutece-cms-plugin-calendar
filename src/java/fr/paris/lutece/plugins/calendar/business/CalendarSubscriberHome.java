@@ -118,7 +118,7 @@ public final class CalendarSubscriberHome
      * @param plugin the plugin
      * @return a collection of objects Subscriber
      */
-    public static List findAllSubsriber( Plugin plugin )
+    public static List<CalendarSubscriber> findAllSubsriber( Plugin plugin )
     {
         return _dao.selectAll( plugin );
     }
@@ -195,7 +195,7 @@ public final class CalendarSubscriberHome
      * @param plugin the plugin
      * @return a collection of subscribers
      */
-    public static List getSubscribersList( Plugin plugin )
+    public static List<CalendarSubscriber> getSubscribersList( Plugin plugin )
     {
         return _dao.selectSubscribersList( plugin );
     }

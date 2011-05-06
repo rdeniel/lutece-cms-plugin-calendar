@@ -40,6 +40,8 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.calendar.business.category.Category;
 import fr.paris.lutece.plugins.calendar.business.category.CategoryHome;
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
@@ -111,6 +113,7 @@ public class CalendarDAO implements ICalendarDAO
 			" WHERE a.id_agenda = ? AND b.user_login = ? ORDER BY a.event_date ";
     private static final String SQL_QUERY_INSERT_EVENT_USER = " INSERT INTO calendar_events_users ( id_event, user_login ) VALUES ( ?, ? ) ";
     private static final String SQL_QUERY_DELETE_EVENT_USER = " DELETE FROM calendar_events_users WHERE id_event = ? ";
+    private static final String SQL_QUERY_SELECT_AGENDA_IDS = " SELECT id_agenda FROM calendar_agendas ORDER BY id_agenda ASC ";
     
     // ImageResource queries
     private static final String SQL_QUERY_SELECT_RESOURCE_IMAGE = " SELECT feature_image, image_mime_type FROM calendar_events_features WHERE id_event = ? ";
@@ -132,6 +135,8 @@ public class CalendarDAO implements ICalendarDAO
     private static final String SQL_FILTER_ID_END = ") ";
     private static final String SQL_ORDER_BY_EVENTS = " ORDER BY a.event_date";
     private static final String SQL_FILTER_CALENDAR_ID = " a.id_agenda = ? ";
+    private static final String SQL_FILTER_ASC = " ASC ";
+    private static final String SQL_FILTER_DESC = " DESC ";
 
     //hasOccurrenceEvent
     private static final String SQL_QUERY_HAS_EVENT = "SELECT id_occurrence FROM calendar_events_occurrences WHERE occurrence_date = ?";
@@ -202,17 +207,16 @@ public class CalendarDAO implements ICalendarDAO
 
     /**
      * Insert a new event in the table calendar_events.
-     * @param nAgendaId The agenda id
      * @param event The event to be inserted
      * @param plugin The Plugin using this data access service
      * @param strUserLogin user login
      */
-    public void insertEvent( int nAgendaId, SimpleEvent event, Plugin plugin, String strUserLogin )
+    public void insertEvent( SimpleEvent event, Plugin plugin, String strUserLogin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_EVENT, plugin );
         event.setId( getNewPrimaryKey( plugin, SQL_QUERY_NEW_PK_EVENTS ) );
         daoUtil.setInt( 1, event.getId(  ) );
-        daoUtil.setInt( 2, nAgendaId );
+        daoUtil.setInt( 2, event.getIdCalendar(  ) );
         daoUtil.setDate( 3, new java.sql.Date( event.getDate(  ).getTime(  ) ) );
         daoUtil.setDate( 4, new java.sql.Date( event.getDateEnd(  ).getTime(  ) ) );
         daoUtil.setString( 5, event.getDateTimeStart(  ) );
@@ -240,13 +244,13 @@ public class CalendarDAO implements ICalendarDAO
         daoUtil.free(  );
 
         //Occurrence storage on database 
-        insertOccurrence( nAgendaId, event, plugin );
+        insertOccurrence( event, plugin );
         //Feature storage on database
         insertFeature( plugin, event );
         //Link the event with selected categories
         insertLinkCategories( event.getListCategories(  ), event.getId(  ), plugin );
         
-        if ( strUserLogin != null )
+        if ( StringUtils.isNotBlank( strUserLogin ) )
         {
         	daoUtil = new DAOUtil( SQL_QUERY_INSERT_EVENT_USER, plugin );
         	
@@ -264,10 +268,10 @@ public class CalendarDAO implements ICalendarDAO
      * @param nAgendaId The identifier of the agenda
      * @param plugin The Plugin using this data access service
      */
-    public void storeEvent( int nAgendaId, SimpleEvent event, Plugin plugin, boolean bPeriodiciteUpdated )
+    public void storeEvent( SimpleEvent event, Plugin plugin, boolean bPeriodiciteUpdated )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_EVENT, plugin );
-        daoUtil.setInt( 1, nAgendaId );
+        daoUtil.setInt( 1, event.getIdCalendar(  ) );
         daoUtil.setDate( 2, new java.sql.Date( event.getDate(  ).getTime(  ) ) );
 
         if ( event.getDateEnd(  ) != null )
@@ -305,8 +309,8 @@ public class CalendarDAO implements ICalendarDAO
 
         if ( bPeriodiciteUpdated )
         {
-            deleteAllOccurrence( nAgendaId, event.getId(  ), plugin );
-            insertOccurrence( nAgendaId, event, plugin );
+            deleteAllOccurrence( event.getIdCalendar(  ), event.getId(  ), plugin );
+            insertOccurrence( event, plugin );
         }
 
         //and so do the features
@@ -538,12 +542,11 @@ public class CalendarDAO implements ICalendarDAO
 
     /**
      * Insert a new set of occurrence in the table calendar_events_occurrences.
-     * @param nAgendaId The agenda id
      * @param event The event to be inserted
      * @param plugin The Plugin using this data access service
      * @param arrayExcludedDays list of excluded days
      */
-    public void insertOccurrence( int nAgendaId, SimpleEvent event, Plugin plugin  )
+    public void insertOccurrence( SimpleEvent event, Plugin plugin  )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_OCCURRENCE, plugin );
 
@@ -557,10 +560,6 @@ public class CalendarDAO implements ICalendarDAO
 
         //Set the occurrence default status
         String strDefaultStatus = AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_DEFAULT_STATUS );
-        if ( event.getStatus(  ) == Constants.EMPTY_NULL || event.getStatus(  ).equals( Constants.EMPTY_STRING ) )
-        {
-        	event.setStatus( strDefaultStatus );
-        }
 
         while ( index < event.getOccurrence(  ) )
         {
@@ -576,12 +575,12 @@ public class CalendarDAO implements ICalendarDAO
         		nIdOccurrence = getNewPrimaryKey( plugin, SQL_QUERY_NEW_PK_OCCURRENCE );
                 daoUtil.setInt( 1, nIdOccurrence );
                 daoUtil.setInt( 2, event.getId(  ) );
-                daoUtil.setInt( 3, nAgendaId );
+                daoUtil.setInt( 3, event.getIdCalendar(  ) );
                 daoUtil.setDate( 4, date );
                 daoUtil.setString( 5, event.getDateTimeStart(  ) );
                 daoUtil.setString( 6, event.getDateTimeEnd(  ) );
                 daoUtil.setString( 7, event.getTitle(  ) );
-                daoUtil.setString( 8, event.getStatus(  ) );
+                daoUtil.setString( 8, StringUtils.isNotBlank( event.getStatus(  ) ) ? event.getStatus(  ) : strDefaultStatus );
                 daoUtil.executeUpdate(  );
                 index++;
         	}
@@ -597,10 +596,9 @@ public class CalendarDAO implements ICalendarDAO
      * Update the occurrence in the table calendar_events_occurrences
      *
      * @param occurrence The reference of OccurrenceEvent
-     * @param nAgendaId The identifier of the agenda
      * @param plugin The Plugin using this data access service
      */
-    public void storeOccurrence( OccurrenceEvent occurrence, int nAgendaId, Plugin plugin )
+    public void storeOccurrence( OccurrenceEvent occurrence, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_OCCURRENCE, plugin );
         daoUtil.setDate( 1, new java.sql.Date( occurrence.getDate(  ).getTime(  ) ) );
@@ -613,7 +611,7 @@ public class CalendarDAO implements ICalendarDAO
         daoUtil.free(  );
 
         Date newDateEvent = selectOccurrenceDateMin( occurrence.getEventId(  ), plugin );
-        updateDateEvent( occurrence.getEventId(  ), nAgendaId, plugin, newDateEvent );
+        updateDateEvent( occurrence.getEventId(  ), occurrence.getIdCalendar(  ), plugin, newDateEvent );
     }
 
     /**
@@ -1163,9 +1161,9 @@ public class CalendarDAO implements ICalendarDAO
      * @param plugin The plugin
      * @param filter The CalendarFilter Object
      */
-    public List<SimpleEvent> selectByFilter( CalendarFilter filter, Plugin plugin )
+    public List<Event> selectByFilter( CalendarFilter filter, Plugin plugin )
     {
-        List<SimpleEvent> eventList = new ArrayList<SimpleEvent>(  );
+        List<Event> eventList = new ArrayList<Event>(  );
         DAOUtil daoUtil = getDaoFromFilter( SQL_QUERY_SELECT_BY_FILTER, filter, plugin);
         daoUtil.executeQuery(  );
 
@@ -1200,67 +1198,79 @@ public class CalendarDAO implements ICalendarDAO
      */
     private DAOUtil getDaoFromFilter( String strQuerySelect, CalendarFilter filter, Plugin plugin )
     {
-        String strSQL = strQuerySelect;
-        String strWhere = "";
-        strWhere += ( ( filter.containsCalendarCriteria(  ) ) ? SQL_FILTER_CALENDAR : "" );
+        StringBuffer sbSQL = new StringBuffer( strQuerySelect );
+        StringBuffer sbWhere = new StringBuffer( ( filter.containsCalendarCriteria(  ) ) ? SQL_FILTER_CALENDAR : StringUtils.EMPTY );
 
         if ( filter.containsCategoriesCriteria(  ) )
         {
-            String strCategories = SQL_FILTER_CATEGORIES_BEGIN;
+        	StringBuffer sbCategories = new StringBuffer( SQL_FILTER_CATEGORIES_BEGIN );
 
             for ( int i = 0; i < filter.getCategoriesId(  ).length; i++ )
             {
-                strCategories += SQL_FILTER_CATEGORIES;
+            	sbCategories.append( SQL_FILTER_CATEGORIES );
 
                 if ( ( i + 1 ) < filter.getCategoriesId(  ).length )
                 {
-                    strCategories += SQL_FILTER_CATEGORIES_OR;
+                	sbCategories.append( SQL_FILTER_CATEGORIES_OR );
                 }
             }
 
-            strCategories += SQL_FILTER_CATEGORIES_END;
-            strWhere += ( ( ( !strWhere.equals( "" ) ) ? SQL_FILTER_AND : "" ) + strCategories );
+            sbCategories.append( SQL_FILTER_CATEGORIES_END );
+            if ( StringUtils.isNotBlank( sbWhere.toString(  ) ) )
+            {
+            	sbWhere.append( SQL_FILTER_AND );
+            }
+            sbWhere.append( sbCategories.toString(  ) );
         }
 
         if ( filter.containsIdsCriteria(  ) )
         {
-            String strIds = SQL_FILTER_ID_BEGIN;
+        	StringBuffer sbIds = new StringBuffer( SQL_FILTER_ID_BEGIN );
 
             for ( int i = 0; i < filter.getIds(  ).length; i++ )
             {
-                strIds += SQL_FILTER_ID;
+            	sbIds.append( SQL_FILTER_ID );
 
                 if ( ( i + 1 ) < filter.getIds(  ).length )
                 {
-                    strIds += SQL_FILTER_ID_OR;
+                	sbIds.append( SQL_FILTER_ID_OR );
                 }
             }
 
-            strIds += SQL_FILTER_ID_END;
-            strWhere += ( ( ( !strWhere.equals( "" ) ) ? SQL_FILTER_AND : "" ) + strIds );
+            sbIds.append( SQL_FILTER_ID_END );
+            if ( StringUtils.isNotBlank( sbWhere.toString(  ) ) )
+            {
+            	sbWhere.append( SQL_FILTER_AND );
+            }
+            sbWhere.append( sbIds.toString(  ) );
         }
 
         if ( filter.containsCalendarIdsCriteria(  ) )
         {
-            String strCalendarIds = SQL_FILTER_ID_BEGIN;
+        	StringBuffer sbCalendarIds = new StringBuffer( SQL_FILTER_ID_BEGIN );
 
             for ( int i = 0; i < filter.getCalendarIds(  ).length; i++ )
             {
-                strCalendarIds += SQL_FILTER_CALENDAR_ID;
+            	sbCalendarIds.append( SQL_FILTER_CALENDAR_ID );
 
                 if ( ( i + 1 ) < filter.getCalendarIds(  ).length )
                 {
-                    strCalendarIds += SQL_FILTER_ID_OR;
+                	sbCalendarIds.append( SQL_FILTER_ID_OR );
                 }
             }
 
-            strCalendarIds += SQL_FILTER_ID_END;
-            strWhere += ( ( ( !strWhere.equals( "" ) ) ? SQL_FILTER_AND : "" ) + strCalendarIds );
+            sbCalendarIds.append( SQL_FILTER_ID_END );
+            if ( StringUtils.isNotBlank( sbWhere.toString(  ) ) )
+            {
+            	sbWhere.append( SQL_FILTER_AND );
+            }
+            sbWhere.append( sbCalendarIds.toString(  ) );
         }
 
-        if ( !strWhere.equals( "" ) )
+        if ( StringUtils.isNotBlank( sbWhere.toString(  ) ) )
         {
-            strSQL += ( SQL_FILTER_WHERE_CLAUSE + strWhere );
+        	sbSQL.append( SQL_FILTER_WHERE_CLAUSE );
+        	sbSQL.append( sbWhere.toString(  ) );
         }
 
         int nSortEvents = filter.containsSortCriteria(  ) ? filter.getSortEvents(  ) : 0;
@@ -1268,17 +1278,18 @@ public class CalendarDAO implements ICalendarDAO
 
         if ( nSortEvents == 1 )
         {
-            strSortEvents = " ASC";
+            strSortEvents = SQL_FILTER_ASC;
         }
         else
         {
-            strSortEvents = " DESC";
+            strSortEvents = SQL_FILTER_DESC;
         }
 
-        strSQL += ( SQL_ORDER_BY_EVENTS + strSortEvents );
-        AppLogService.debug( "Sql query filter : " + strSQL );
+        sbSQL.append( SQL_ORDER_BY_EVENTS );
+        sbSQL.append( strSortEvents );
+        AppLogService.debug( "Sql query filter : " + sbSQL.toString(  ) );
 
-        DAOUtil daoUtil = new DAOUtil( strSQL, plugin );
+        DAOUtil daoUtil = new DAOUtil( sbSQL.toString(  ), plugin );
         int nIndex = 1;
 
         if ( filter.containsCategoriesCriteria(  ) )
@@ -1495,5 +1506,24 @@ public class CalendarDAO implements ICalendarDAO
         daoUtil.free(  );
 
         return eventList;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Integer> selectCalendarIds( Plugin plugin )
+    {
+    	List<Integer> listIds = new ArrayList<Integer>(  );
+    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDA_IDS, plugin );
+        daoUtil.executeQuery(  );
+
+        while ( daoUtil.next(  ) )
+        {
+            listIds.add( daoUtil.getInt( 1 ) );
+        }
+
+        daoUtil.free(  );
+
+        return listIds;
     }
 }

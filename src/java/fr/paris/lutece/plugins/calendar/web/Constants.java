@@ -142,6 +142,8 @@ public final class Constants
     public static final String PROPERTY_EVENT_STATUS_TENTATIVE = "calendar.event.status.tentative";
     public static final String PROPERTY_EVENT_STATUS_LIST = "calendar.event.status.list";
     public static final String PROPERTY_EVENT_STATUS_DEFAULT = "calendar.event.status.default";
+    public static final String PROPERTY_CONFIRM_UNSUBSCRIPTION_ALERT_MESSAGE = "calendar.siteMessage.unsubscription.message";
+    public static final String PROPERTY_CONFIRM_UNSUBSCRIPTION_TITLE_MESSAGE = "calendar.siteMessage.unsubscription.title";
 
     // Properties for page titles
     public static final String PROPERTY_PAGE_TITLE_MANAGE_EVENTS = "calendar.calendar_manage_events.pageTitle";
@@ -166,6 +168,7 @@ public final class Constants
     public static final String PROPERTY_EVENTS_PER_PAGE = "calendar.eventsPerPage";
     public static final String PROPERTY_SORT_EVENTS = "calendar.modify_calendar.sortEvents";
     public static final String PROPERTY_PAGE_RSS_TITLE = "calendar.rss.title";
+    public static final String PROPERTY_WEBMASTER_EMAIL = "email.webmaster";
 
     //Parameters for Back Office
     public static final String PARAMETER_PLUGIN_NAME = "plugin_name";
@@ -297,6 +300,11 @@ public final class Constants
     public static final String AMPERSAND = "&";
     public static final String EQUAL = "=";
     public static final String INTERROGATION_MARK = "?";
+    public static final String INDENT = "-";
+    public static final String BEAN_CALENDAR_CALENDARSERVICE = "calendar.calendarService";
+    public static final String BEAN_CALENDAR_EVENTLISTSERVICE = "calendar.eventListService";
+    public static final int SORT_ASC = 1;
+    public static final int SORT_DESC = 0;
 
     // Properties suffix
     public static final String SUFFIX_NAME = ".name";
@@ -317,6 +325,26 @@ public final class Constants
     public static final String VIEW_DAY = "day";
     public static final String VIEW_WEEK = "week";
     public static final String VIEW_MONTH = "month";
+    
+    // Actions
+    public static final String ACTION_MANAGE_EVENTS = "manage_events";
+    public static final String ACTION_ADD_EVENT = "add_event";
+    public static final String ACTION_MODIFY_EVENT = "modify_event";
+    public static final String ACTION_REMOVE_EVENT = "remove_event";
+    public static final String ACTION_DO_CREATE_EVENT = "do_create_event";
+    public static final String ACTION_DO_MODIFY_EVENT = "do_modify_event";
+    public static final String ACTION_DO_REMOVE_EVENT = "do_remove_event";
+    public static final String ACTION_GET_SUBSCRIPTION_PAGE = "get_subscribe_page";
+    public static final String ACTION_GET_FRIEND_EMAIL_PAGE = "get_friend_email_page";
+    public static final String ACTION_GET_DOWNLOAD_PAGE = "get_download_page";
+    public static final String ACTION_SEND_FRIEND_EMAIL = "send_friend";
+    public static final String ACTION_VERIFY_SUBSCRIBE = "verify_subscribe";
+    public static final String ACTION_CONFIRM_UNSUBSCRIBE = "confirm_unsubscribe";
+    public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
+    public static final String ACTION_SEARCH = "search";
+    public static final String ACTION_DO_SEARCH = "do_search";
+    public static final String ACTION_SHOW_RESULT = "show_result";
+    public static final String ACTION_RSS = "rss";
 
     // CSS Styles
     public static final String STYLE_CLASS_VIEW_MONTH_DAY = "calendar-view-month-day";
@@ -327,21 +355,6 @@ public final class Constants
     public static final String STYLE_CLASS_SUFFIX_OFF = "-off";
     public static final String STYLE_CLASS_SUFFIX_EVENT = "-event";
     public static final String STYLE_CLASS_SELECTED_DAY = "selected-day";  
-
-    // Actions
-    public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
-    public static final String ACTION_GET_SUBSCRIPTION_PAGE = "get_subscribe_page";
-    public static final String ACTION_GET_FRIEND_EMAIL_PAGE = "get_friend_email_page";
-    public static final String ACTION_GET_DOWNLOAD_PAGE = "get_download_page";
-    public static final String ACTION_SUBSCRIBE = "subscribe";
-    public static final String ACTION_SEND_FRIEND_EMAIL = "send_friend";
-    public static final String ACTION_CONFIRM_UNSUBSCRIBE = "confirm_unsubscribe";
-    public static final String ACTION_SEARCH = "search";
-    public static final String ACTION_DO_SEARCH = "do_search";
-    public static final String ACTION_SHOW_RESULT = "show_result";
-    public static final String ACTION_RSS = "rss";
-    public static final String ACTION_GET_RSS = "get_rss";
-    public static final String ACTION_VERIFY_SUBSCRIBE = "verify_subscribe";
 
     // Indexer fileds
     public static final String FIELD_CALENDAR_ID = "calendar_id";

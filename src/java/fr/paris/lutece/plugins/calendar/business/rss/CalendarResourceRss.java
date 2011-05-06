@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.calendar.business.CalendarFilter;
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
-import fr.paris.lutece.plugins.calendar.business.SimpleEvent;
+import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
 import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
 import fr.paris.lutece.plugins.calendar.web.Constants;
@@ -126,11 +126,11 @@ public class CalendarResourceRss extends ResourceRss
 		resource.setLink( AGENDA_LINK );
 		
 		CalendarFilter filter = new CalendarFilter (  );
-		List<SimpleEvent> listEvent = CalendarHome.findEventsByFilter( filter, pluginCalendar );
+		List<Event> listEvent = CalendarHome.findEventsByFilter( filter, pluginCalendar );
 		List<IFeedResourceItem> listItems = new ArrayList<IFeedResourceItem>(  );
 		
 		//Description of  the events
-		for ( SimpleEvent simpleEvent : listEvent )
+		for ( Event simpleEvent : listEvent )
 		{
 			IFeedResourceItem item = new FeedResourceItem(  );
             

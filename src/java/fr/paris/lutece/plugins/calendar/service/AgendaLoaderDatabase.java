@@ -67,7 +67,7 @@ public class AgendaLoaderDatabase implements ResourceLoader
      * Gets all the agenda resources from the database
      * @return A collection of agenda resource
      */
-    public Collection getResources(  )
+    public Collection<AgendaResource> getResources(  )
     {
         if ( _plugin == null )
         {

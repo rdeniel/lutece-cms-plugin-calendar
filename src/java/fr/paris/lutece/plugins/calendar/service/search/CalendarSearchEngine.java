@@ -33,14 +33,12 @@
  */
 package fr.paris.lutece.plugins.calendar.service.search;
 
-import fr.paris.lutece.portal.service.search.SearchResult;
-
 import java.util.Date;
 import java.util.List;
 
-import javax.security.auth.Subject;
-
 import javax.servlet.http.HttpServletRequest;
+
+import fr.paris.lutece.portal.service.search.SearchResult;
 
 
 /**

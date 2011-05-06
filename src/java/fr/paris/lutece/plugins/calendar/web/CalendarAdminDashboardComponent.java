@@ -33,15 +33,19 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.calendar.service.AgendaService;
+import fr.paris.lutece.plugins.calendar.business.parameter.CalendarParameterHome;
+import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
 import fr.paris.lutece.plugins.calendar.service.CalendarResourceIdService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.dashboard.admin.AdminDashboardComponent;
+import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
@@ -66,7 +70,9 @@ public class CalendarAdminDashboardComponent extends AdminDashboardComponent
 		if ( RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, 
         		RBAC.WILDCARD_RESOURCES_ID,	CalendarResourceIdService.PERMISSION_MANAGE, user ) )
 		{
-			Map<String, Object> model = AgendaService.getInstance(  ).getManageAdvancedParameters( user );
+			Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
+			Map<String, Object> model = new HashMap<String, Object>(  );
+	    	model.put( Constants.MARK_CALENDAR_PARAMETERS, CalendarParameterHome.findAll( plugin ) );
 			HtmlTemplate template = new HtmlTemplate(  );
 			template = AppTemplateService.getTemplate( TEMPLATE_ADMIN_DASHBOARD, user.getLocale(  ), model );
 			return template.getHtml(  );

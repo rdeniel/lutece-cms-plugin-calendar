@@ -31,68 +31,68 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.calendar.business;
+package fr.paris.lutece.plugins.calendar.service.cache;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import fr.paris.lutece.portal.service.cache.AbstractCacheableService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 
 /**
- *  This interface describes the minimum implementation for agendas
+ * EventListCacheService
  */
-public interface Agenda extends Serializable
+public final class EventListCacheService extends AbstractCacheableService
 {
-    /**
-     * Indicates if the agenda gets events for a given date
-     * @param strDate A date code
-     * @return True if there is events, otherwise false
-     */
-    boolean hasEvents( String strDate );
+	// CONSTANTS
+	private static final String SERVICE_NAME = "Calendar Event List Cache Service";
+    
+    // VARIABLES
+    private static EventListCacheService _singleton;
 
     /**
-     * Retrieves events for a given date
-     * @param strDate A date code
-     * @return A list of events
+     * Private constructor
      */
-    List<Event> getEventsByDate( String strDate );
-
+    private EventListCacheService(  )
+    {
+    }
+    
     /**
-     * Retrieves events for a given date
-     * @return A list of events
-     * @param strDateBegin The start date
-     * @param strDateEnd The end date
+     * Get the instance of CalendarCacheService
+     * @return an instance of CalendarCacheService
      */
-    List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv );
-
+    public static EventListCacheService getInstance(  )
+    {
+    	if ( _singleton == null )
+    	{
+    		_singleton = new EventListCacheService(  );
+    	}
+    	return _singleton;
+    }
+    
     /**
-     * Retrieves all events of the agenda
-     * @return A list of events
+     * Get the service name
+     * @return the service name
      */
-    List<Event> getEvents(  );
-
+    public String getName(  )
+    {
+        return SERVICE_NAME;
+    }
+    
     /**
-     * Returns the name of the Agenda
-     * @return The agenda's name
+     * Remove the cache by a key
+     * @param strKey the cache key
      */
-    String getName(  );
-
-    /**
-     * Sets the name of the Agenda
-     * @param strName The agenda's name
-     */
-    void setName( String strName );
-
-    /**
-     * Returns the key of the Agenda
-     * @return The agenda's key
-     */
-    String getKeyName(  );
-
-    /**
-     * Sets the key of the Agenda
-     * @param strKeyName The agenda's key name
-     */
-    void setKeyName( String strKeyName );
+    public void removeCache( String strKey )
+    {
+        try
+        {
+            if ( isCacheEnable(  ) && ( getCache(  ) != null ) )
+            {
+                getCache(  ).remove( strKey );
+            }
+        }
+        catch ( IllegalStateException e )
+        {
+            AppLogService.error( e.getMessage(  ), e );
+        }
+    }
 }

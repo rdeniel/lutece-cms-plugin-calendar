@@ -45,7 +45,6 @@ public class CalendarPlugin extends PluginDefaultImplementation
      */
     public void init(  )
     {
-        // Initialize the AgendaResource service
-        AgendaService.getInstance(  ).init(  );
+    	AgendaResource.init(  );
     }
 }

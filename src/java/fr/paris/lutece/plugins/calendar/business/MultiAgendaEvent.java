@@ -39,7 +39,8 @@ package fr.paris.lutece.plugins.calendar.business;
  */
 public class MultiAgendaEvent extends SimpleEvent
 {
-    private String _strAgenda;
+	private static final long serialVersionUID = -393590470795401942L;
+	private String _strAgenda;
 
     /**
      * Constructor

@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringEscapeUtils;
+
 import fr.paris.lutece.plugins.calendar.business.Agenda;
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.SimpleEvent;
@@ -53,13 +61,6 @@ import fr.paris.lutece.portal.web.insert.InsertServiceJspBean;
 import fr.paris.lutece.portal.web.insert.InsertServiceSelectionBean;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
-
-import org.apache.commons.lang.StringEscapeUtils;
-
-import java.util.Collection;
-import java.util.HashMap;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -138,7 +139,7 @@ public class CalendarServiceJspBean extends InsertServiceJspBean implements Inse
 
         aResource = AdminWorkgroupService.getAuthorizedCollection( aResource, user );
 
-        HashMap<String, Object> model = getDefaultModel(  );
+        Map<String, Object> model = getDefaultModel(  );
 
         model.put( Constants.MARK_CALENDARS_LIST, aResource );
 
@@ -208,7 +209,7 @@ public class CalendarServiceJspBean extends InsertServiceJspBean implements Inse
 
         Agenda agenda = Utils.getAgendaWithOccurrences( strCalendarId, request );
 
-        HashMap<String, Object> model = getDefaultModel(  );
+        Map<String, Object> model = getDefaultModel(  );
 
         model.put( Constants.MARK_OCCURRENCES_LIST, agenda.getEvents(  ) );
         model.put( Constants.MARK_CALENDAR_ID, strCalendarId );
@@ -264,7 +265,7 @@ public class CalendarServiceJspBean extends InsertServiceJspBean implements Inse
      *
      * @return The default model
      */
-    private HashMap<String, Object> getDefaultModel(  )
+    private Map<String, Object> getDefaultModel(  )
     {
         HashMap<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_INPUT, _input );

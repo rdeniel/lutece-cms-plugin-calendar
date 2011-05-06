@@ -81,10 +81,10 @@ public class AgendaLoaderProperties implements ResourceLoader
      * Get the agenda represented by property files
      * @return Return the agenda resources
      */
-    public Collection getResources(  )
+    public Collection<AgendaResource> getResources(  )
     {
         String strRootDirectory = AppPathService.getWebAppPath(  );
-        ArrayList listPages = new ArrayList(  );
+        List<AgendaResource> listPages = new ArrayList<AgendaResource>(  );
 
         try
         {

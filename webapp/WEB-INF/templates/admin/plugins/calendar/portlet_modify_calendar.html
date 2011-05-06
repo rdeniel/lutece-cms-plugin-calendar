@@ -1,83 +1,39 @@
-  <!-- main calendar program -->
-  <script type="text/javascript" src="${base_url}js/jscalendar/calendar.js"></script>
-
-  <!-- language for the calendar -->
-  <script type="text/javascript" src="${base_url}js/jscalendar/lang/calendar-${locale}.js"></script>
-
-  <!-- the following script defines the Calendar.setup helper function, which makes
-       adding a calendar a matter of 1 or 2 lines of code. -->
-  <script type="text/javascript" src="${base_url}js/jscalendar/calendar-setup.js"></script>
-
-<#macro setupCal field button>
-<script type="text/javascript">
-    Calendar.setup({
-    inputField     :    "${field}",      // id of the input field
-    ifFormat       :    "%d/%m/%Y",       // format of the input field
-    showsTime      :    false,            // will display a time selector
-    button         :    "${button}",   // trigger for the calendar (button ID)
-    singleClick    :    true,           // double-click mode
-    step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-    });
-</script>
-</#macro>
-   <#escape x as x?html>
-    <fieldset>
-        <legend>#i18n{calendar.portlet_modify_calendar.labelPeriodicity}</legend>
-        <br/>            
-     
-                    <p>
-                          <input class="radio" name="periodicity" value="1"  <#if time_span="FALSE">checked="checked"</#if>type="radio"><b> #i18n{calendar.portlet_modify_calendar.labelPeriodicityInterval}</b>
-                    <br/>
-                    #i18n{calendar.portlet_modify_calendar.labelFrom}
-                    <input type="text" id="date_begin" name="date_begin" value="<#if date_begin?exists && date_begin?trim != "">${date_begin[6..7]}/${date_begin[4..5]}/${date_begin[0..3]}</#if>" size="10" maxlength="10" />			
-                    <input type="button" class="button" type="reset" id="button_begin" value="..." />
-                    #i18n{calendar.portlet_modify_calendar.labelTo}
-                    <input type="text" id="date_end" name="date_end" value="<#if date_end?exists && date_end?trim != "">${date_end[6..7]}/${date_end[4..5]}/${date_end[0..3]}</#if>" size="10" maxlength="10" />		
-                    <input type="button" class="button" type="reset" id="button_end" value="..." />
-                    </p>
-                    <b>#i18n{calendar.portlet_modify_calendar.labelOr}</b>
-                    <p>
-                    
-                <b><input class="radio" name="periodicity" value="0" <#if time_span="TRUE">checked="checked"</#if> type="radio" />#i18n{calendar.portlet_modify_calendar.labelPeriodicity}</b>
-                    <br/>
-                <@combo name="number_days" default_value="${number_days}" items=interval_list />#i18n{calendar.portlet_modify_calendar.labelStartingNow}
-              </p>
-        
-    </fieldset>
-</p>
-<p>
-    <fieldset>  
-        <legend align=top>#i18n{calendar.portlet_modify_calendar.labelChoiceAgenda}</legend>
-        <tr>
-            <div>
-                <b>#i18n{calendar.portlet_modify_calendar.labelDatabaseAgenda}:</b>
-            </div>
-        </tr>
-        <tr>   
-            <div>
-                <#list authorized_agenda_list as agenda>
-                <div>
-                    <input type="checkbox" name="cbx_agenda_${agenda.id}" class="checkbox" ${selected_agenda_id_list?seq_contains(agenda.id)?string("checked=\"checked\"", "")}
-                           />
-                           
-                           ${agenda.id}
-                           
-                           
-                           ${agenda.name}
-                       </div>
-                </#list>
-                
-            </div>
-        </tr>
-        <tr>
-            <td>
-                <b>#i18n{calendar.portlet_modify_calendar.labelTextFileAgenda}:</b>
-                <input type="text" id="text_agendas" name="text_agendas" value="<#if text_agendas?exists>${text_agendas}</#if>" size="40" maxlength="255" />	     
-            </td>
-            <br/>
-            #i18n{calendar.portlet_modify_calendar.labelSummaryFile}
-        </tr>
-    </fieldset>
-    </#escape>
-    <@setupCal field="date_begin" button="button_begin" />
-    <@setupCal field="date_end" button="button_end" />
+<#escape x as x?html>
+<fieldset>
+	<legend>#i18n{calendar.portlet_modify_calendar.labelPeriodicity}</legend>
+	<br/>            
+	<p>
+		<input class="radio" name="periodicity" value="1"  <#if time_span="FALSE">checked="checked"</#if>type="radio"><b> #i18n{calendar.portlet_modify_calendar.labelPeriodicityInterval}</b>
+		<br/>
+		#i18n{calendar.portlet_modify_calendar.labelFrom}
+		<input type="text" id="date_begin" name="date_begin" value="<#if date_begin?exists && date_begin?trim != "">${date_begin[6..7]}/${date_begin[4..5]}/${date_begin[0..3]}</#if>" size="10" maxlength="10" />
+		#i18n{calendar.portlet_modify_calendar.labelTo}
+		<input type="text" id="date_end" name="date_end" value="<#if date_end?exists && date_end?trim != "">${date_end[6..7]}/${date_end[4..5]}/${date_end[0..3]}</#if>" size="10" maxlength="10" />		
+	</p>
+	<b>#i18n{calendar.portlet_modify_calendar.labelOr}</b>
+	<p>                
+		<b><input class="radio" name="periodicity" value="0" <#if time_span="TRUE">checked="checked"</#if> type="radio" />#i18n{calendar.portlet_modify_calendar.labelPeriodicity}</b>
+		<br/>
+		<@combo name="number_days" default_value="${number_days}" items=interval_list />#i18n{calendar.portlet_modify_calendar.labelStartingNow}
+	</p>
+</fieldset>
+<fieldset>
+	<legend align=top>#i18n{calendar.portlet_modify_calendar.labelChoiceAgenda}</legend>
+	<p>
+		<b>#i18n{calendar.portlet_modify_calendar.labelDatabaseAgenda}:</b>
+		<br />
+		<#list authorized_agenda_list as agenda>
+			<input type="checkbox" name="cbx_agenda_${agenda.id}" class="checkbox" ${selected_agenda_id_list?seq_contains(agenda.id)?string("checked=\"checked\"", "")} />                           
+			${agenda.id}
+			${agenda.name}
+			<br />
+		</#list>
+	</p>
+	<p>
+		<b>#i18n{calendar.portlet_modify_calendar.labelTextFileAgenda}:</b>
+		<input type="text" id="text_agendas" name="text_agendas" value="<#if text_agendas?exists>${text_agendas}</#if>" size="40" maxlength="255" />
+		<br/>
+		#i18n{calendar.portlet_modify_calendar.labelSummaryFile}
+	</p>
+</fieldset>
+</#escape>

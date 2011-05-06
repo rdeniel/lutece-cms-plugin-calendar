@@ -33,7 +33,15 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import fr.paris.lutece.plugins.calendar.business.Agenda;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -45,15 +53,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -78,7 +77,7 @@ public class MonthCalendarView implements CalendarView
      */
     public String getCalendarView( String strDate, MultiAgenda agenda, CalendarUserOptions options, HttpServletRequest request )
     {
-        HashMap model = new HashMap(  );
+        Map<String, Object> model = new HashMap<String, Object>(  );
         HtmlTemplate tEmptyDay = AppTemplateService.getTemplate( TEMPLATE_VIEW_EMPTY_DAY );
 
         Calendar calendar = new GregorianCalendar(  );
@@ -150,7 +149,7 @@ public class MonthCalendarView implements CalendarView
      */
     private String getDay( Calendar calendar, MultiAgenda agenda, CalendarUserOptions options, HttpServletRequest request )
     {
-        HashMap<String, Object> dayModel = new HashMap<String, Object>(  );
+        Map<String, Object> dayModel = new HashMap<String, Object>(  );
         StringBuffer sbEvents = new StringBuffer(  );
         String strDate = Utils.getDate( calendar );
 
@@ -164,7 +163,7 @@ public class MonthCalendarView implements CalendarView
             for ( Event event : listIndexedEvents )
             {
     			MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar(  ) ) );
-            	HashMap<String, Object> eventModel = new HashMap<String, Object>(  );
+            	Map<String, Object> eventModel = new HashMap<String, Object>(  );
                 HtmlUtils.fillEventTemplate( eventModel, multiAgendaEvent, strDate );
                 eventModel.put( Constants.MARK_JSP_URL,
                     AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );

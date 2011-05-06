@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.calendar.service;
 
+import java.io.Serializable;
+
 import fr.paris.lutece.plugins.calendar.business.Agenda;
 import fr.paris.lutece.portal.service.resource.Resource;
 import fr.paris.lutece.portal.service.role.RoleRemovalListenerService;
@@ -44,9 +46,10 @@ import fr.paris.lutece.portal.service.workgroup.WorkgroupRemovalListenerService;
 /**
  *  This class describes an agenda resource
  */
-public class AgendaResource implements Resource, AdminWorkgroupResource
+public class AgendaResource implements Serializable, Resource, AdminWorkgroupResource
 {
-    private static AgendaResourceWorkgroupRemovalListener _listenerWorkgroup;
+	private static final long serialVersionUID = 5430301763071821176L;
+	private static AgendaResourceWorkgroupRemovalListener _listenerWorkgroup;
     private static AgendaResourceRoleRemovalListener _listenerRole;
 
     // Variables declarations
