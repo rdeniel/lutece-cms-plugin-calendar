@@ -7,7 +7,7 @@
     <#list calendar_list as calendar>
     	<tr>
     		<td>
-                <a href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}" class="admin-menu">
+                <a href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="admin-menu">
                     <img src="${calendar.eventImage}" alt="${calendar.eventImage}" title="${calendar.eventImage}" /> ${calendar.name}
                 </a>
                 <ul>
@@ -17,7 +17,7 @@
                 			<#if ( nb_event <= nb_events_max )>
 	                			<li>
 	                				-
-	                				<a href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&calendar_id=${calendar.id}&event_id=${event.id}">
+	                				<a href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&amp;calendar_id=${calendar.id}&event_id=${event.id}">
 					                    ${event.title} (${event.date?date})
 					                </a>
 	                			</li>
@@ -25,7 +25,7 @@
                 			<#else>
                 				<li>
                 					-
-	                				<a href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}">
+	                				<a href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
 	                					#i18n{calendar.dashboard.etc}
 	                				</a>
 	                			</li>
@@ -36,12 +36,12 @@
                 </ul>
             </td>
             <td>
-            	<a href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}">
+            	<a href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
            			<img src="images/admin/skin/actions/calendar_add.png" title="#i18n{calendar.dashboard.addEvent}" alt="#i18n{calendar.dashboard.addEvent}" />
            		</a>
             </td>
             <td>
-            	<a href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}">
+            	<a href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
            			<img src="images/admin/skin/actions/subscriber.png" title="#i18n{calendar.dashboard.nbSubscribers}" alt="#i18n{calendar.dashboard.nbSubscribers}">
            		</a>
            		(${nb_subscribers_list[calendar.id]})

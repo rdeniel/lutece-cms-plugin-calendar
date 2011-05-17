@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
 import fr.paris.lutece.portal.business.portlet.Portlet;
-import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 
@@ -111,12 +110,11 @@ public final class MiniCalendarPortletDAO implements IMiniCalendarPortletDAO
 
     /**
      * Define top events are displayed or not
-     * @param plugin The plugin
      * @return true if shows top event else false
      */
-    public boolean showTopEvent( Plugin plugin )
+    public boolean showTopEvent(  )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_TOP_EVENT, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_TOP_EVENT );
         daoUtil.executeQuery(  );
 
         boolean bTopEvent = false;
@@ -137,9 +135,9 @@ public final class MiniCalendarPortletDAO implements IMiniCalendarPortletDAO
      * @param top_event The top_event
      * @return true if shows top event else false
      */
-    public void updateTopEvent( Plugin plugin, boolean top_event )
+    public void updateTopEvent( boolean top_event )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_TOP_EVENT, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_TOP_EVENT );
         daoUtil.setBoolean( 1, top_event );
         daoUtil.executeUpdate(  );
     }

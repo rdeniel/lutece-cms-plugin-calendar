@@ -156,7 +156,7 @@ public class MiniCalendarPortletJspBean extends PortletJspBean
         // Get the plugin for the portlet
         Plugin plugin = PluginService.getPlugin( portlet.getPluginName(  ) );
 
-        boolean top_event = MiniCalendarPortletHome.showTopEvent( plugin );
+        boolean top_event = MiniCalendarPortletHome.showTopEvent(  );
 
         model.put( MARK_TOP_EVENT, top_event );
         model.put( MARK_BASE_URL, strBaseUrl );
@@ -209,10 +209,7 @@ public class MiniCalendarPortletJspBean extends PortletJspBean
             top_event = Boolean.TRUE;
         }
 
-        // Get the plugin for the portlet
-        Plugin plugin = PluginService.getPlugin( portlet.getPluginName(  ) );
-
-        MiniCalendarPortletHome.updateTopEvent( plugin, top_event );
+        MiniCalendarPortletHome.updateTopEvent( top_event );
 
         return getPageUrl( portlet.getPageId(  ) );
     }

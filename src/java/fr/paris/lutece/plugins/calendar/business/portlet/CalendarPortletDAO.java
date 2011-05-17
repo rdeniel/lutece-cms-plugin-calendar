@@ -42,8 +42,6 @@ import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
 import fr.paris.lutece.plugins.calendar.service.CalendarService;
 import fr.paris.lutece.plugins.calendar.web.Constants;
 import fr.paris.lutece.portal.business.portlet.Portlet;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
@@ -55,15 +53,15 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
 {
     // Constants
     private static final String SQL_QUERY_SELECT = "SELECT id_portlet FROM core_portlet WHERE id_portlet = ?";
-    private static final String SQL_QUERY_SELECT_AGENDAS_BY_PORTLET = "select code_agenda_name from calendar_portlet where id_portlet=?";
-    private static final String SQL_QUERY_INSERT_AGENDA = "INSERT INTO calendar_portlet( id_portlet, code_agenda_name, date_begin, date_end  ) VALUES ( ?, ?, ?, ? )";
-    private static final String SQL_QUERY_INSERT_AGENDA_DAYS = "INSERT INTO calendar_portlet( id_portlet, code_agenda_name, number_days ,date_begin , date_end) VALUES ( ?,?,?,?,?)";
-    private static final String SQL_QUERY_DELETE_AGENDA = " DELETE FROM calendar_portlet WHERE id_portlet = ? AND code_agenda_name=? ";
-    private static final String SQL_QUERY_DELETE = "DELETE FROM calendar_portlet WHERE id_portlet=? ";
-    private static final String SQL_QUERY_SELECT_AGENDAS_BY_PORTLET_BY_DATE = "select date_begin,date_end from calendar_portlet where id_portlet=?";
-    private static final String SQL_QUERY_BEGIN_DATE_BY_PORTLET = "SELECT date_begin FROM calendar_portlet where id_portlet=?";
-    private static final String SQL_QUERY_END_DATE_BY_PORTLET = "SELECT date_end FROM calendar_portlet where id_portlet=?";
-    private static final String SQL_QUERY_NUMBER_DAYS_BY_PORTLET = "SELECT number_days FROM calendar_portlet WHERE id_portlet=?";
+    private static final String SQL_QUERY_SELECT_AGENDAS_BY_PORTLET = "select code_agenda_name from calendar_portlet where id_portlet = ?";
+    private static final String SQL_QUERY_INSERT_AGENDA = "INSERT INTO calendar_portlet( id_portlet, code_agenda_name, date_begin, date_end ) VALUES ( ?,?,?,? )";
+    private static final String SQL_QUERY_INSERT_AGENDA_DAYS = "INSERT INTO calendar_portlet( id_portlet, code_agenda_name, number_days ,date_begin , date_end ) VALUES ( ?,?,?,?,? )";
+    private static final String SQL_QUERY_DELETE_AGENDA = " DELETE FROM calendar_portlet WHERE id_portlet = ? AND code_agenda_name = ?";
+    private static final String SQL_QUERY_DELETE = "DELETE FROM calendar_portlet WHERE id_portlet = ?";
+    private static final String SQL_QUERY_SELECT_AGENDAS_BY_PORTLET_BY_DATE = "SELECT date_begin,date_end FROM calendar_portlet WHERE id_portlet = ?";
+    private static final String SQL_QUERY_BEGIN_DATE_BY_PORTLET = "SELECT date_begin FROM calendar_portlet where id_portlet = ?";
+    private static final String SQL_QUERY_END_DATE_BY_PORTLET = "SELECT date_end FROM calendar_portlet where id_portlet = ?";
+    private static final String SQL_QUERY_NUMBER_DAYS_BY_PORTLET = "SELECT number_days FROM calendar_portlet WHERE id_portlet = ?";
 
     ///////////////////////////////////////////////////////////////////////////////////////
     //Access methods to data
@@ -84,8 +82,7 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      */
     public void delete( int nPortletId  )
     {
-    	Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -134,11 +131,10 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      * @param dDateBegin The beginning date
      * @param dDateEnd The end date
      * @param nPortletId The identifier of the portlet.
-     * @param plugin Plugin
      */
-    public void insertAgendaInterval( int nPortletId, String strAgendaId, String dDateBegin, String dDateEnd, Plugin plugin )
+    public void insertAgendaInterval( int nPortletId, String strAgendaId, String dDateBegin, String dDateEnd )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_AGENDA, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_AGENDA );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.setString( 2, strAgendaId );
         daoUtil.setString( 3, dDateBegin );
@@ -152,11 +148,10 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      * De-associate a agenda from a given portlet.
      * @param strAgendaId The identifier of an agenda
      * @param nPortletId The identifier of the portlet.
-     * @param plugin Plugin
      */
-    public void removeAgenda( int nPortletId, String strAgendaId, Plugin plugin )
+    public void removeAgenda( int nPortletId, String strAgendaId )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_AGENDA, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_AGENDA );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.setString( 2, strAgendaId );
 
@@ -167,15 +162,14 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
     /**
      * Returns all the sendings associated with a given portlet.
      * @param nPortletId the identifier of the portlet.
-     * @param plugin Plugin
      * @return a list of unfiltered agenda resources
      */
-    public List<AgendaResource> findAgendasInPortlet( int nPortletId, Plugin plugin )
+    public List<AgendaResource> findAgendasInPortlet( int nPortletId )
     {
     	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
         		Constants.BEAN_CALENDAR_CALENDARSERVICE );
         List<AgendaResource> listSelectedAgendas = new ArrayList<AgendaResource>(  );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDAS_BY_PORTLET, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDAS_BY_PORTLET );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.executeQuery(  );
 
@@ -198,15 +192,14 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      * @param nPortletId The id of the portlet
      * @param dateBegin The start date of the events display
      * @param dateEnd The end date of the event display
-     * @param plugin Plugin
      * @return The list of agenda
      */
-    public List<AgendaResource> findAgendaBetween( int nPortletId, Date dateBegin, Date dateEnd, Plugin plugin )
+    public List<AgendaResource> findAgendaBetween( int nPortletId, Date dateBegin, Date dateEnd )
     {
     	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
         		Constants.BEAN_CALENDAR_CALENDARSERVICE );
         List<AgendaResource> listSelectedAgendas = new ArrayList<AgendaResource>(  );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDAS_BY_PORTLET_BY_DATE, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDAS_BY_PORTLET_BY_DATE );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.executeQuery(  );
 
@@ -227,13 +220,12 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
     /**
      * Returns the beginning date when the events will be displayed
      * @param nPortletId The id of the portlet
-     * @param plugin Plugin
      * @return The start date
      */
-    public Date getBeginDate( int nPortletId, Plugin plugin )
+    public Date getBeginDate( int nPortletId )
     {
         Date dateBegin = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_BEGIN_DATE_BY_PORTLET, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_BEGIN_DATE_BY_PORTLET );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.executeQuery(  );
 
@@ -258,13 +250,12 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
     /**
      * Returns the end date of the events display
      * @param nPortletId The id of the portlet
-     * @param plugin Plugin
      * @return The end date of event display
      */
-    public Date getEndDate( int nPortletId, Plugin plugin )
+    public Date getEndDate( int nPortletId )
     {
         Date dateEnd = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_END_DATE_BY_PORTLET, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_END_DATE_BY_PORTLET );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.executeQuery(  );
 
@@ -289,13 +280,12 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
     /**
      * Fetches the number of future days during which the events of the agenda will be displayed
      * @param nPortletId The id of the portlet
-     * @param plugin Plugin
      * @return The number of days
      */
-    public int getRepetitionDays( int nPortletId, Plugin plugin )
+    public int getRepetitionDays( int nPortletId )
     {
         int nNumberDays = 0;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NUMBER_DAYS_BY_PORTLET, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NUMBER_DAYS_BY_PORTLET );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.executeQuery(  );
 
@@ -314,11 +304,10 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      * @param nPortletId The id of the portlet
      * @param strAgendaId The id of the agenda
      * @param nDays The number of days the events will be displayed
-     * @param plugin Plugin
      */
-    public void insertCalendar( int nPortletId, String strAgendaId, int nDays, Plugin plugin )
+    public void insertCalendar( int nPortletId, String strAgendaId, int nDays )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_AGENDA_DAYS, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_AGENDA_DAYS );
         daoUtil.setInt( 1, nPortletId );
         daoUtil.setString( 2, strAgendaId );
         daoUtil.setInt( 3, nDays );

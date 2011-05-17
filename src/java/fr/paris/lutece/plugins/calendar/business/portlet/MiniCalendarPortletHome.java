@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.calendar.business.portlet;
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
 import fr.paris.lutece.portal.business.portlet.PortletHome;
 import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
-import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
@@ -103,22 +102,20 @@ public class MiniCalendarPortletHome extends PortletHome
 
     /**
      * Define top events are displayed or not
-     * @param plugin The plugin
      * @return true if shows top event else false
      */
-    public static boolean showTopEvent( Plugin plugin )
+    public static boolean showTopEvent(  )
     {
-        return _dao.showTopEvent( plugin );
+        return _dao.showTopEvent(  );
     }
 
     /**
      * Define top events are displayed or not
-     * @param plugin The plugin
      * @param top_event The top_event
      * @return true if shows top event else false
      */
-    public static void updateTopEvent( Plugin plugin, boolean top_event )
+    public static void updateTopEvent( boolean top_event )
     {
-        _dao.updateTopEvent( plugin, top_event );
+        _dao.updateTopEvent( top_event );
     }
 }

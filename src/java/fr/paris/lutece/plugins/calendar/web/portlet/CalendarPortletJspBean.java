@@ -179,9 +179,9 @@ public class CalendarPortletJspBean extends PortletJspBean
         // Get the plugin for the portlet
         Plugin plugin = PluginService.getPlugin( portlet.getPluginName(  ) );
         
-        String strBeginDate = Utils.getDate( CalendarPortletHome.getBeginDate( nPortletId, plugin ) );
-        String strEndDate = Utils.getDate( CalendarPortletHome.getEndDate( nPortletId, plugin ) );
-        int nDays = CalendarPortletHome.getRepetitionDays( nPortletId, plugin );
+        String strBeginDate = Utils.getDate( CalendarPortletHome.getBeginDate( nPortletId ) );
+        String strEndDate = Utils.getDate( CalendarPortletHome.getEndDate( nPortletId ) );
+        int nDays = CalendarPortletHome.getRepetitionDays( nPortletId );
 
         // Get the list of authorized calendars depending on workgroup
         List<AgendaResource> listCalendar = CalendarHome.findAgendaResourcesList( plugin );
@@ -190,7 +190,7 @@ public class CalendarPortletJspBean extends PortletJspBean
                 getUser(  ) );
 
         //Add other agendas
-        List<AgendaResource> listSelectedAgendas = CalendarPortletHome.findAgendasInPortlet( nPortletId, plugin );
+        List<AgendaResource> listSelectedAgendas = CalendarPortletHome.findAgendasInPortlet( nPortletId );
 
         //List all non database agendas
         String strFileAgendas = "";
@@ -383,18 +383,16 @@ public class CalendarPortletJspBean extends PortletJspBean
         //Delete all agendas in portlet
         CalendarPortletHome.removeAllAgendas( nPortletId );
 
-        // Get the plugin for the portlet
-        Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME);
         // Add the chosen agendas
         for ( String strAgendaId : listChosenAgendas )
         {
             if ( bIntervalPeriodicity )
             {
-                CalendarPortletHome.insertAgendaInterval( nPortletId, strAgendaId, strDateBegin, strDateEnd, plugin );
+                CalendarPortletHome.insertAgendaInterval( nPortletId, strAgendaId, strDateBegin, strDateEnd );
             }
             else
             {
-                CalendarPortletHome.insertCalendar( nPortletId, strAgendaId, nDays, plugin );
+                CalendarPortletHome.insertCalendar( nPortletId, strAgendaId, nDays );
             }
         }
     }

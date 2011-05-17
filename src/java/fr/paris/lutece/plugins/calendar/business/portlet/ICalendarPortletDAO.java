@@ -38,7 +38,6 @@ import java.util.List;
 
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
-import fr.paris.lutece.portal.service.plugin.Plugin;
 
 
 /**
@@ -52,66 +51,58 @@ public interface ICalendarPortletDAO extends IPortletInterfaceDAO
      * @param dDateBegin The beginning date
      * @param dDateEnd The end date
      * @param nPortletId the identifier of the portlet.
-     * @param plugin Plugin
      */
-    void insertAgendaInterval( int nPortletId, String strAgendaId, String dDateBegin, String dDateEnd, Plugin plugin );
+    void insertAgendaInterval( int nPortletId, String strAgendaId, String dDateBegin, String dDateEnd );
 
     /**
      * De-associate an agenda from a given portlet.
      * @param strAgendaId The identifier of an agenda resource
      * @param nPortletId the identifier of the portlet.
-     * @param plugin Plugin
      */
-    void removeAgenda( int nPortletId, String strAgendaId, Plugin plugin);
+    void removeAgenda( int nPortletId, String strAgendaId );
 
     /**
      * Returns all the agendas associated with a given portlet.
      * @param nPortletId the identifier of the portlet.
-     * @param plugin Plugin
      * @return a list of unfiltered agenda resources.
      */
-    List<AgendaResource> findAgendasInPortlet( int nPortletId, Plugin plugin );
+    List<AgendaResource> findAgendasInPortlet( int nPortletId );
 
     /**
      * Finds the agenda which has events between the start and the end date
      * @param nPortletId The id of the portlet
      * @param dateBegin The starting date
      * @param dateEnd The finishing date
-     * @param plugin Plugin
      * @return The agenda
      */
-    List<AgendaResource> findAgendaBetween( int nPortletId, Date dateBegin, Date dateEnd, Plugin plugin );
+    List<AgendaResource> findAgendaBetween( int nPortletId, Date dateBegin, Date dateEnd );
 
     /**
      * The beginning date of event display
      * @param nPortletId The id of the portlet
-     * @param plugin Plugin
      * @return The beginning date
      */
-    Date getBeginDate( int nPortletId, Plugin plugin );
+    Date getBeginDate( int nPortletId );
 
     /**
      * The finishing date of the event display
      * @param nPortletId The id of the portlet
-     * @param plugin Plugin
      * @return The finishing date
      */
-    Date getEndDate( int nPortletId, Plugin plugin );
+    Date getEndDate( int nPortletId );
 
     /**
      * Returns the number of following days the event should be displayed
      * @param nPortletId The id of the portlet
-     * @param plugin Plugin
      * @return The number of days
      */
-    int getRepetitionDays( int nPortletId, Plugin plugin );
+    int getRepetitionDays( int nPortletId );
 
     /**
      * Inserts a calendar which will be displayed for the future n days
      * @param nPortletId The id of the portlet
      * @param strAgendaId The id of the calendar
      * @param nDays The number of days the events are displayed
-     * @param plugin Plugin
      */
-    void insertCalendar( int nPortletId, String strAgendaId, int nDays, Plugin plugin );
+    void insertCalendar( int nPortletId, String strAgendaId, int nDays );
 }

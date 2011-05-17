@@ -1,9 +1,4 @@
 --
--- Dumping data for table calendar_mini_portlet
---
-INSERT INTO calendar_mini_portlet(top_event) VALUES(0);
-
---
 -- Dumping data for table calendar_export_stylesheets
 --
 INSERT INTO calendar_export_stylesheets(id_stylesheet,description,file_name,source,extension)

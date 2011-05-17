@@ -47,8 +47,6 @@ import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
-import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
-import fr.paris.lutece.plugins.calendar.service.CalendarService;
 import fr.paris.lutece.plugins.calendar.service.EventImageResourceService;
 import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.plugins.calendar.service.XMLUtils;
@@ -58,7 +56,6 @@ import fr.paris.lutece.portal.business.portlet.Portlet;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.SecurityService;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
 
@@ -128,7 +125,7 @@ public class CalendarPortlet extends Portlet
         XmlUtil.beginElement( strXml, TAG_CALENDAR_FILTERED_LIST );
 
         // fetch all the calendars related to the specified portlet
-        List<AgendaResource> listAgendasInPortlet = CalendarPortletHome.findAgendasInPortlet( this.getId(  ), plugin );
+        List<AgendaResource> listAgendasInPortlet = CalendarPortletHome.findAgendasInPortlet( this.getId(  ) );
         List<AgendaResource> listAuthorizedAgenda = new ArrayList<AgendaResource>(  );
 
         // Filter to find whether user is identified and authorized to view the agenda on the front office
@@ -168,8 +165,8 @@ public class CalendarPortlet extends Portlet
             String strAgendaDesc = agendaResource.getAgenda(  ).getName(  );
             
             // Retrieve the indexed events
-            Date dateBegin = CalendarPortletHome.getBeginDate( this.getId(  ), plugin ); 
-            Date dateEnd = CalendarPortletHome.getEndDate( this.getId(  ), plugin );
+            Date dateBegin = CalendarPortletHome.getBeginDate( this.getId(  ) ); 
+            Date dateEnd = CalendarPortletHome.getEndDate( this.getId(  ) );
             String[] arrayAgendaIds = { strAgendaId };
             List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
             	.getSearchResults( arrayAgendaIds, null, StringUtils.EMPTY, dateBegin, dateEnd, request, plugin );

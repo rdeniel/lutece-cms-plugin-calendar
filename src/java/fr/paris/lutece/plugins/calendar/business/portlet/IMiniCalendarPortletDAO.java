@@ -34,7 +34,6 @@
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
-import fr.paris.lutece.portal.service.plugin.Plugin;
 
 
 /**
@@ -44,16 +43,14 @@ public interface IMiniCalendarPortletDAO extends IPortletInterfaceDAO
 {
     /**
      * Define top events are displayed or not
-     * @param plugin The plugin
      * @return true if shows top event else false
      */
-    public boolean showTopEvent( Plugin plugin );
+    public boolean showTopEvent(  );
 
     /**
      * Define top events are displayed or not
-     * @param plugin The plugin
      * @param top_event The top_event
      * @return true if shows top event else false
      */
-    public void updateTopEvent( Plugin plugin, boolean top_event );
+    public void updateTopEvent( boolean top_event );
 }

@@ -33,15 +33,14 @@
  */
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
+import java.util.Date;
+import java.util.List;
+
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
 import fr.paris.lutece.portal.business.portlet.PortletHome;
 import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
-import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-
-import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -111,22 +110,20 @@ public class CalendarPortletHome extends PortletHome
      * @param strDateBegin The beginning date
      * @param strDateEnd The end date
      * @param nPortletId The identifier of the portlet.
-     * @param plugin Plugin
      */
-    public static void insertAgendaInterval( int nPortletId, String strAgendaId, String strDateBegin, String strDateEnd, Plugin plugin )
+    public static void insertAgendaInterval( int nPortletId, String strAgendaId, String strDateBegin, String strDateEnd )
     {
-        _dao.insertAgendaInterval( nPortletId, strAgendaId, strDateBegin, strDateEnd, plugin );
+        _dao.insertAgendaInterval( nPortletId, strAgendaId, strDateBegin, strDateEnd );
     }
 
     /**
      * De-associate an agenda from a given portlet.
      * @param nPortletId the identifier of the portlet.
      * @param strAgenda the identifier of the agenda
-     * @param plugin Plugin
      */
-    public static void removeAgenda( int nPortletId, String strAgenda, Plugin plugin )
+    public static void removeAgenda( int nPortletId, String strAgenda )
     {
-        _dao.removeAgenda( nPortletId, strAgenda, plugin );
+        _dao.removeAgenda( nPortletId, strAgenda );
     }
 
     /**
@@ -141,12 +138,11 @@ public class CalendarPortletHome extends PortletHome
     /**
      * Returns all the agenda associated with a given portlet.
      * @param nPortletId the identifier of the portlet.
-     * @param plugin Plugin
      * @return a list of agenda resources unfiltered
      */
-    public static List<AgendaResource> findAgendasInPortlet( int nPortletId, Plugin plugin )
+    public static List<AgendaResource> findAgendasInPortlet( int nPortletId )
     {
-        return _dao.findAgendasInPortlet( nPortletId, plugin );
+        return _dao.findAgendasInPortlet( nPortletId );
     }
 
     /**
@@ -155,11 +151,10 @@ public class CalendarPortletHome extends PortletHome
      * @param dateBegin The start date
      * @param dateEnd The end date
      * @param nPortletId the identifier of the portlet.
-     * @param plugin Plugin
      */
-    public static List<AgendaResource> findAgendaBetween( int nPortletId, Date dateBegin, Date dateEnd, Plugin plugin )
+    public static List<AgendaResource> findAgendaBetween( int nPortletId, Date dateBegin, Date dateEnd )
     {
-        return _dao.findAgendaBetween( nPortletId, dateBegin, dateEnd, plugin );
+        return _dao.findAgendaBetween( nPortletId, dateBegin, dateEnd );
     }
 
     /**
@@ -167,43 +162,39 @@ public class CalendarPortletHome extends PortletHome
      * @param strAgendaId The id of the agenda
      * @param nDays The number of days
      * @param nPortletId the identifier of the portlet.
-     * @param plugin Plugin
      */
-    public static void insertCalendar( int nPortletId, String strAgendaId, int nDays, Plugin plugin )
+    public static void insertCalendar( int nPortletId, String strAgendaId, int nDays )
     {
-        _dao.insertCalendar( nPortletId, strAgendaId, nDays, plugin );
+        _dao.insertCalendar( nPortletId, strAgendaId, nDays );
     }
 
     /**
      * Returns the beginning date of the display of corresponding events
      * @param nPortletId The id portlet
-     * @param plugin Plugin
      * @return Returns the start date
      */
-    public static Date getBeginDate( int nPortletId, Plugin plugin )
+    public static Date getBeginDate( int nPortletId )
     {
-        return _dao.getBeginDate( nPortletId, plugin );
+        return _dao.getBeginDate( nPortletId );
     }
 
     /**
      * Returns the last date of the display
      * @param nPortletId The id of the portlet
-     * @param plugin Plugin
      * @return The End date of the portlet display
      */
-    public static Date getEndDate( int nPortletId, Plugin plugin )
+    public static Date getEndDate( int nPortletId )
     {
-        return _dao.getEndDate( nPortletId, plugin );
+        return _dao.getEndDate( nPortletId );
     }
 
     /**
      * Returns the number of days within which the events will occur
      * @param nPortletId The id of the portlet
-     * @param plugin Plugin
      * @return Returns the number of days
      */
-    public static int getRepetitionDays( int nPortletId, Plugin plugin )
+    public static int getRepetitionDays( int nPortletId )
     {
-        return _dao.getRepetitionDays( nPortletId, plugin );
+        return _dao.getRepetitionDays( nPortletId );
     }
 }

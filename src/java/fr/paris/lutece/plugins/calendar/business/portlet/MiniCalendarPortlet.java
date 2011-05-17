@@ -158,7 +158,7 @@ public class MiniCalendarPortlet extends Portlet
         //Top event section            
         Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
 
-        boolean top_event = MiniCalendarPortletHome.showTopEvent( plugin );
+        boolean top_event = MiniCalendarPortletHome.showTopEvent(  );
 
         if ( top_event )
         {
