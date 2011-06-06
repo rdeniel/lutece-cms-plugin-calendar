@@ -129,9 +129,21 @@ public class CalendarIndexer implements SearchIndexer
             urlEvent.addParameter( Constants.PARAMETER_EVENT_ID, occurrence.getEventId(  ) );
             urlEvent.addParameter( Constants.PARAM_AGENDA, strAgenda );
 
-            org.apache.lucene.document.Document docSubject = getDocument( occurrence, sRoleKey, urlEvent.getUrl(  ),
-                    strAgenda );
-            IndexationService.write( docSubject );
+            org.apache.lucene.document.Document docSubject = null;
+            try
+            {
+            	docSubject = getDocument( occurrence, sRoleKey, urlEvent.getUrl(  ),
+            			strAgenda );
+            }
+            catch ( Exception e )
+            {
+            	String strMessage = "Agenda ID : " + strAgenda + " - Occurrence ID : " + occurrence.getId(  );
+            	IndexationService.error( this, e, strMessage );
+            }
+            if ( docSubject != null )
+            {
+            	IndexationService.write( docSubject );
+            }
         }
     }
 
