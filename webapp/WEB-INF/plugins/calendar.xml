@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<plug-in>
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?><plug-in>
 
     <!-- Plugin Informations -->
     <name>calendar</name>
     <class>fr.paris.lutece.plugins.calendar.service.CalendarPlugin</class>
     <version>3.0.2</version>
-    <documentation></documentation>
-    <installation></installation>
-    <changes></changes>
-    <user-guide></user-guide>
+    <documentation/>
+    <installation/>
+    <changes/>
+    <user-guide/>
     <description>calendar.plugin.description</description>
     <provider>calendar.plugin.provider</provider>
     <provider-url>http://lutece.paris.fr</provider-url>
@@ -16,7 +15,7 @@
     <copyright>Copyright 2001-2011 Mairie de Paris</copyright>
     <core-version-dependency>
         <min-core-version>2.3.0</min-core-version>
-        <max-core-version></max-core-version>
+        <max-core-version/>
     </core-version-dependency>
 
     <!-- if the plugin must have a connection pool with parameter : 1 - yes, 0 - no -->
@@ -70,10 +69,10 @@
             <!-- optional entries -->
             <portlet-create-script-template>/admin/portlet/script_create_portlet.html</portlet-create-script-template>
             <portlet-modify-script-template>/admin/portlet/script_modify_portlet.html</portlet-modify-script-template>
-            <portlet-create-specific-template></portlet-create-specific-template>
+            <portlet-create-specific-template/>
             <portlet-modify-specific-template>/admin/plugins/calendar/portlet_modify_calendar.html</portlet-modify-specific-template>
-            <portlet-create-specific-form-template></portlet-create-specific-form-template>
-            <portlet-modify-specific-form-template></portlet-modify-specific-form-template>
+            <portlet-create-specific-form-template/>
+            <portlet-modify-specific-form-template/>
         </portlet>
         <portlet>
             <portlet-class>fr.paris.lutece.plugins.calendar.business.portlet.MiniCalendarPortletHome</portlet-class>
@@ -86,10 +85,10 @@
             <!-- optional entries -->
             <portlet-create-script-template>/admin/portlet/script_create_portlet.html</portlet-create-script-template>
             <portlet-modify-script-template>/admin/portlet/script_modify_portlet.html</portlet-modify-script-template>
-            <portlet-create-specific-template></portlet-create-specific-template>
+            <portlet-create-specific-template/>
             <portlet-modify-specific-template>/admin/plugins/calendar/portlet_modify_mini_calendar.html</portlet-modify-specific-template>
-            <portlet-create-specific-form-template></portlet-create-specific-form-template>
-            <portlet-modify-specific-form-template></portlet-modify-specific-form-template>
+            <portlet-create-specific-form-template/>
+            <portlet-modify-specific-form-template/>
         </portlet>
     </portlets>
 
