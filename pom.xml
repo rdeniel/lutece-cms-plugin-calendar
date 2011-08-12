@@ -50,7 +50,9 @@
 	</dependencies>
 
 	<properties>
+		<componentName>calendar</componentName>
 		<jiraProjectName>CALENDAR</jiraProjectName>
+		<jiraComponentId>10152</jiraComponentId>
 	</properties>
     <scm>
         <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-calendar</connection>
