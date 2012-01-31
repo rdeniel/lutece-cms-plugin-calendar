@@ -61,9 +61,8 @@
 				<xsl:text disable-output-escaping="yes">
 						<![CDATA[&nbsp;]]>
 				</xsl:text>
-			<a href="jsp/site/Portal.jsp?date={week-shortcut-date-start}">
+			<a href="jsp/site/Portal.jsp?page_id={$page-id}&amp;date={week-shortcut-date-start}&amp;date_end={week-shortcut-date-end}">
 			<xsl:value-of select="week-shortcut-label" disable-output-escaping="yes" /></a>				
-			 
 		<br/>
 	</xsl:template>
 
@@ -85,12 +84,15 @@
 	
 	<xsl:template match="events">
 		<br/>
-		[<xsl:value-of select="date" /> ]
 		<xsl:apply-templates select="event" /> 
 	</xsl:template>
 	
 	<xsl:template match="event">
 	<div>
+		[<xsl:value-of select="date" />
+		<xsl:if test="date-end != ''">
+			-&#160;<xsl:value-of select="date-end" />
+		</xsl:if>]
 		<span class = "calendar-event-list-header">
 			<xsl:value-of select="event-title" /> 
 		</span>

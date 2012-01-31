@@ -58,6 +58,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.calendar.business.Agenda;
 import fr.paris.lutece.plugins.calendar.business.CalendarFilter;
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
@@ -433,11 +435,11 @@ public final class XMLUtils
         Date dateEndWeek = null;
 
         Calendar calendarToday = new GregorianCalendar(  );
-        Calendar calendarFirstDay = new GregorianCalendar(  );
+        Calendar calendarFirstDay = Calendar.getInstance(  );
         Calendar calendarLastDay = new GregorianCalendar(  );
 
         calendarFirstDay = calendarToday;
-        calendarFirstDay.add( Calendar.DATE, Calendar.MONDAY - nDayOfWeek );
+        calendarFirstDay.set( Calendar.DAY_OF_WEEK, Calendar.MONDAY );
         calendarLastDay = (GregorianCalendar) calendarFirstDay.clone(  );
         calendarLastDay.add( Calendar.DATE, 6 );
         dateBeginWeek = calendarFirstDay.getTime(  );
@@ -503,6 +505,11 @@ public final class XMLUtils
 
                 //put parameters in the url
                 UrlItem urlDay = new UrlItem( strBaseUrl );
+                String strPageId = request.getParameter( Constants.PARAMETER_PAGE_ID );
+                if ( StringUtils.isNotBlank( strPageId ) && StringUtils.isNumeric( strPageId ) )
+                {
+                	urlDay.addParameter( Constants.PARAMETER_PAGE_ID, strPageId );
+                }
                 urlDay.addParameter( Constants.PARAMETER_DATE, 
                 		DateUtil.getDateString( calendar.getTime(  ), local ) );
 
@@ -566,23 +573,23 @@ public final class XMLUtils
      */
     private static String getDayClass( Calendar calendar )
     {
-        String strClass = Constants.STYLE_CLASS_SMALLMONTH_DAY;
+        StringBuilder sbClass = new StringBuilder( Constants.STYLE_CLASS_SMALLMONTH_DAY );
         String strDate = Utils.getDate( calendar );
         String strToday = Utils.getDateToday(  );
 
         if ( Utils.isDayOff( calendar ) )
         {
-            strClass += Constants.STYLE_CLASS_SUFFIX_OFF;
+            sbClass.append( Constants.STYLE_CLASS_SUFFIX_OFF );
         }
         else if ( strDate.compareTo( strToday ) < 0 )
         {
-            strClass += Constants.STYLE_CLASS_SUFFIX_OLD;
+            sbClass.append( Constants.STYLE_CLASS_SUFFIX_OLD );
         }
         else if ( strDate.equals( strToday ) )
         {
-            strClass += Constants.STYLE_CLASS_SUFFIX_TODAY;
+            sbClass.append( Constants.STYLE_CLASS_SUFFIX_TODAY );
         }
 
-        return strClass;
+        return sbClass.toString(  );
     }
 }

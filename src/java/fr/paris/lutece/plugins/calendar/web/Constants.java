@@ -202,6 +202,7 @@ public final class Constants
     public static final String PARAMETER_MONTH = "month";
     public static final String PARAMETER_NEXT = "next";
     public static final String PARAMETER_PREV = "prev";
+    public static final String PARAMETER_PAGE_ID = "page_id";
 
     //Common parameters for back and front office
     public static final String PARAMETER_EVENT_DATE = "event_date";
