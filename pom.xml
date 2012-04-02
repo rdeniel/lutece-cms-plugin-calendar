@@ -10,7 +10,7 @@
 	<groupId>fr.paris.lutece.plugins</groupId>
 	<artifactId>plugin-calendar</artifactId>
 	<packaging>lutece-plugin</packaging>
-	<version>3.0.3</version>
+	<version>3.0.4-SNAPSHOT</version>
 	<name>Lutece calendar plugin</name>
 
 	<repositories>
@@ -55,8 +55,8 @@
 		<jiraComponentId>10152</jiraComponentId>
 	</properties>
     <scm>
-        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/tags/plugin-calendar-3.0.3</connection>
-        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/tags/plugin-calendar-3.0.3</developerConnection>
-        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/tags/plugin-calendar-3.0.3</url>
+        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-calendar</connection>
+        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-calendar</developerConnection>
+        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/trunk/plugins/cms/plugin-calendar</url>
     </scm>
 </project>
