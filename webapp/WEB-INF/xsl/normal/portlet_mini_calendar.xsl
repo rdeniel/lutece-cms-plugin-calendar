@@ -7,7 +7,15 @@
 		<link rel="stylesheet"  href="css/plugins/calendar/calendar.css" type="text/css"  media="screen" />
 		
 		<xsl:apply-templates select="top-events" />
-		<div class="portlet-background-content -lutece-border-radius-bottom span-6 calendar-mini">
+		
+	<xsl:variable name="device_class">
+	<xsl:choose>
+		<xsl:when test="string(display-on-small-device)='0'">hide-for-small</xsl:when>
+		<xsl:otherwise></xsl:otherwise>
+	</xsl:choose>
+	</xsl:variable>
+
+		<div class="portlet-background-content {$device_class} -lutece-border-radius-bottom span-6 calendar-mini">
 			<xsl:apply-templates select="month" />
 			<xsl:text disable-output-escaping="yes">
 				</xsl:text>

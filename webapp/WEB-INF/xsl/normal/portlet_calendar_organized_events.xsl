@@ -5,7 +5,15 @@
 	<xsl:variable name="portlet-id" select="portlet/portlet-id" />
 
 	<xsl:template match="portlet">
-		<div class="append-bottom" >
+	
+	<xsl:variable name="device_class">
+	<xsl:choose>
+		<xsl:when test="string(display-on-small-device)='0'">hide-for-small</xsl:when>
+		<xsl:otherwise></xsl:otherwise>
+	</xsl:choose>
+	</xsl:variable>
+
+		<div class="{$device_class} append-bottom" >
 			<div class="portlet-background-content -lutece-border-radius-bottom span-6 calendar-mini calendar-search-float-left">
 				<xsl:apply-templates select="month" />
 				<xsl:text disable-output-escaping="yes">
