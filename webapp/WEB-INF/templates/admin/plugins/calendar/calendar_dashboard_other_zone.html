@@ -1,16 +1,21 @@
 <div class="content-box">
-	<h2>
-	    <img src="${icon}" width="24" height="24" align="middle"/>
-	    <a href="${url}" >
-	        #i18n{calendar.dashboard.calendarsList}
-	    </a>
-	    <a class="top" href="jsp/admin/AdminMenu.jsp#top">
-            <img alt="#i18n{calendar.dashboard.top}" src="images/admin/skin/sign-up.png">
-        </a>
-	    <a class="top" href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar">
-	    	<img src="images/admin/skin/plugins/calendar/action/add.png" title="#i18n{calendar.dashboard.addCalendar}" alt="#i18n{calendar.dashboard.addCalendar}" />
-	    </a>
-    </h2>
-    <br />
-    <#include "calendar_dashboard.html" />
+<h2 class="clearfix">
+<img src="${icon}"/>&nbsp;
+<a href="${url}" >#i18n{calendar.dashboard.calendarsList}</a>
+<div class="btn-toolbar pull-right">
+		<div class="btn-group">
+			<div class="btn btn-info">
+				<a href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar" title="#i18n{calendar.dashboard.addCalendar}">
+				<i class="icon-plus-sign icon-white"></i>
+				</a>
+			</div>
+			<div class="btn btn-info">
+				<a href="jsp/admin/AdminMenu.jsp#top" title="#i18n{calendar.dashboard.top}">
+				<i class="icon-circle-arrow-up icon-white"></i>
+				</a>
+			</div>
+		</div>
+</div>
+</h2>
+<#include "calendar_dashboard.html" />
 </div>
