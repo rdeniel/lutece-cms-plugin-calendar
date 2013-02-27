@@ -1,31 +1,56 @@
-<div id="content-box-actions">
-    <form method="post"  action="jsp/admin/plugins/calendar/style/CreateStyleSheet.jsp" >
-        <p>
-            <input type="submit" class="button bt-toolbar" value="#i18n{calendar.manage_stylesheets.buttonAdd}" />
-        </p>
-    </form>
-</div>
-<div class="content-box" >
-    <h2 class="content-box-header">#i18n{calendar.manage_stylesheets.title}</h2>
-    <table>
-        <tr>
-            <th width="40%" >
-            	#i18n{calendar.manage_stylesheets.columnName}
-            	<@sort jsp_url="jsp/admin/plugins/calendar/style/ManageStyleSheets.jsp" attribute="description" />
-            </th>
-            <th width="60%" >
-            	#i18n{calendar.manage_stylesheets.columnFilename}
-            	<@sort jsp_url="jsp/admin/plugins/calendar/style/ManageStyleSheets.jsp" attribute="file" />
-            </th>
-        </tr>            
-        <#list stylesheet_list as stylesheet >
-        <tr>
-            <td width="40%">
-                <a href="jsp/admin/plugins/calendar/style/ModifyStyleSheet.jsp?stylesheet_id=${stylesheet.id}" class="bullet-link">${stylesheet.description}</a>
-            </td>
-            <td width="60%">${stylesheet.file}</td>
-        </tr>
-        </#list>
-        
-    </table>
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="nav nav-tabs">
+            <li>
+                <a href="jsp/admin/plugins/calendar/ManageAdvancedParameters.jsp">#i18n{calendar.advanced_parameters.dashboard}</a>
+            </li>
+            <li>
+                <a href="jsp/admin/plugins/calendar/ManageCalendarCategory.jsp" >
+                    #i18n{calendar.adminFeature.category_management.description}
+                </a>
+            </li>
+            <li class="active">
+                <a href="jsp/admin/plugins/calendar/style/ManageExportStyleSheets.jsp"  title="null" >
+                    #i18n{calendar.adminFeature.calendar_management_export_stylesheet.description}
+                </a>
+            </li>
+        </ul>
+        <fieldset>
+            <legend>
+                #i18n{calendar.manage_stylesheets.title}
+                <form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/calendar/style/CreateStyleSheet.jsp" >
+                    <button class="btn btn-primary btn-small" type="submit" >
+                        <i class="icon-plus icon-white" ></i>
+                        <span class="hidden-phone" >#i18n{calendar.manage_stylesheets.buttonAdd}</span>
+                    </button>
+                </form>
+            </legend>
+            <table class="table table-striped table-condensed">
+                <tr>
+                    <th>
+                        #i18n{calendar.manage_stylesheets.columnName}
+                        <@sort jsp_url="jsp/admin/plugins/calendar/style/ManageExportStyleSheets.jsp" attribute="description" />
+                    </th>
+                    <th>
+                        #i18n{calendar.manage_stylesheets.columnFilename}
+                        <@sort jsp_url="jsp/admin/plugins/calendar/style/ManageExportStyleSheets.jsp" attribute="file" />
+                    </th>
+                    <th>#i18n{calendar.manage_category.columnTitleActions}</th>
+                </tr>            
+                <#list stylesheet_list as stylesheet >
+                <tr>
+                    <td>${stylesheet.description}</td>
+                    <td>${stylesheet.file}</td>
+                    <td>
+                        <a class="btn btn-primary btn-small" href="jsp/admin/plugins/calendar/style/ModifyStyleSheet.jsp?stylesheet_id=${stylesheet.id}"  title="null" >
+                            <i class="icon-edit icon-white"></i>
+                        </a>
+
+                    </td>
+                </tr>
+                </#list>
+
+            </table>
+        </fieldset> 
+    </div>
 </div>

@@ -1,19 +1,29 @@
-    <table class="calendar-smallmonth">
+<table class="table-condensed table-bordered table-striped">
+    <thead>
         <tr>
-            <th class="calendar-smallmonth" colspan="7">
-            	<a class="left" href="${jsp_url}?page=calendar&amp;date=${previous}&amp;view=month">&lt;&lt;</a>
-				<a href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=month">${month_label}</a>
-				<a class="right" href="${jsp_url}?page=calendar&amp;date=${next}&amp;view=month">&gt;&gt;</a>
+            <th colspan="7">
+                <a class="btn pull-left" href="${jsp_url}?page=calendar&amp;date=${previous}&amp;view=month">
+					<i class="icon-chevron-left"></i>
+                </a>
+                <strong>
+				${date?date("yyyyMMdd")?string("MMMM")}
+				</strong>
+                <a class="btn pull-right" href="${jsp_url}?page=calendar&amp;date=${next}&amp;view=month">
+                    <i class="icon-chevron-right"></i>
+                </a>
             </th>
         </tr>
         <tr>
-            <th class="calendar-smallmonth">#i18n{calendar.shortlabel.monday}</th>
-            <th class="calendar-smallmonth">#i18n{calendar.shortlabel.tuesday}</th>
-            <th class="calendar-smallmonth">#i18n{calendar.shortlabel.wednesday}</th>
-            <th class="calendar-smallmonth">#i18n{calendar.shortlabel.thursday}</th>
-            <th class="calendar-smallmonth">#i18n{calendar.shortlabel.friday}</th>
-            <th class="calendar-smallmonth">#i18n{calendar.shortlabel.saturday}</th>
-            <th class="calendar-smallmonth">#i18n{calendar.shortlabel.sunday}</th>
+            <th>#i18n{calendar.shortlabel.monday}</th>
+            <th>#i18n{calendar.shortlabel.tuesday}</th>
+            <th>#i18n{calendar.shortlabel.wednesday}</th>
+            <th>#i18n{calendar.shortlabel.thursday}</th>
+            <th>#i18n{calendar.shortlabel.friday}</th>
+            <th>#i18n{calendar.shortlabel.saturday}</th>
+            <th>#i18n{calendar.shortlabel.sunday}</th>
         </tr>
+    </thead>
+    <tbody>
         ${weeks}
-    </table>
+    </tbody>
+</table>

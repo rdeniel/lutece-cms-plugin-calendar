@@ -1,27 +1,32 @@
-<div id="content" class="span-15 prepend-1 append-1 append-bottom">
-	<table width="100%" class="-lutece-border-radius append-bottom">
-		<tr>
-			<th align="center" width="5%">
-				<a href="${jsp_url}?page=calendar&amp;date=${previous}"><img src="images/local/skin/plugins/calendar/previous.png" alt="Previous" border="0" /></a>
-			</th>
-			<th align="center" width="90%">
-				<a href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=day"><img src="images/local/skin/plugins/calendar/viewday.png" alt="View Day" border="0" /></a>
-				<a href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=week"><img src="images/local/skin/plugins/calendar/viewweek.png" alt="View Week" border="0" /></a>
-				<a href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=month"><img src="images/local/skin/plugins/calendar/viewmonth.png" alt="View Month" border="0" /></a>
-			</th>
-			<th align="center" width="5%">
-				<a href="${jsp_url}?page=calendar&amp;date=${next}"><img src="images/local/skin/plugins/calendar/next.png" alt="Next" border="0" /></a>
-			</th>
-		</tr>
-	</table>
-	<div class="portlet -lutece-border-radius append-bottom">
-		<h3>${title}</h3><br />
-		<div>${view_calendar}</div>
+<div class="row">
+	<div class="span9">
+		<p>
+			<a class="btn btn-mini" href="${jsp_url}?page=calendar&amp;date=${previous}" title="#i18n{portal.util.labelPrevious}" >
+				<i class="icon-chevron-left"></i>
+			</a>
+			<a class="btn btn-mini" href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=day" title="#i18n{calendar.interval.day.description}" >
+				<i class="icon-calendar"></i>1
+			</a>
+			<a class="btn btn-mini" href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=week" title="#i18n{calendar.interval.week.description}" >
+				<i class="icon-calendar"></i>7
+			</a>
+			<a class="btn btn-mini" href="${jsp_url}?page=calendar&amp;date=${date}&amp;view=month" title="#i18n{calendar.interval.month.description}" >
+				<i class="icon-calendar"></i>30
+			</a>
+			<a class="btn btn-mini" href="${jsp_url}?page=calendar&amp;date=${next}" title=""#i18n{portal.util.labelNext}" >
+				<i class="icon-chevron-right"></i>
+			</a>
+		</p>	
+		<div class="row">
+			<div class="span8">
+				<h3>${title}</h3>
+				${view_calendar}
+				${event_list}
+			</div>
+		</div>
 	</div>
-	${event_list}
-</div>
-
-<div id="sidebar" class="span-6 append-1 append-bottom last">
-	${small_month_calendar}
-	${legend}
+	<div class="span2">
+		${small_month_calendar}
+		${legend}
+	</div>
 </div>

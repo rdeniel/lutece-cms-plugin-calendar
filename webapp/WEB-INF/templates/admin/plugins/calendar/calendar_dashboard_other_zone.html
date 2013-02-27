@@ -1,21 +1,21 @@
-<div class="content-box">
-<h2 class="clearfix">
-<img src="${icon}"/>&nbsp;
-<a href="${url}" >#i18n{calendar.dashboard.calendarsList}</a>
-<div class="btn-toolbar pull-right">
-		<div class="btn-group">
-			<div class="btn btn-info">
-				<a href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar" title="#i18n{calendar.dashboard.addCalendar}">
-				<i class="icon-plus-sign icon-white"></i>
-				</a>
-			</div>
-			<div class="btn btn-info">
-				<a href="jsp/admin/AdminMenu.jsp#top" title="#i18n{calendar.dashboard.top}">
-				<i class="icon-circle-arrow-up icon-white"></i>
-				</a>
-			</div>
+<div class="row-fluid">
+    <div class="span12">
+		<div class="well well-small">
+			<fieldset>
+				<legend>
+					<img src="${icon}" >
+					<a href="${url}" >#i18n{calendar.dashboard.calendarsList}</a>
+					<a class="pull-right spaced" href="jsp/admin/AdminMenu.jsp#top" title="#i18n{calendar.dashboard.top}">
+						<i class="icon-arrow-up"></i>
+					</a>
+					<!--
+					<a class="btn btn-small btn-primary pull-right" href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar" title="#i18n{calendar.dashboard.addCalendar}">
+						<i class="icon-plus icon-white"></i>
+					</a>
+					-->
+				</legend>
+				<#include "calendar_dashboard.html" />
+			</fieldset>	
 		</div>
-</div>
-</h2>
-<#include "calendar_dashboard.html" />
+    </div>
 </div>

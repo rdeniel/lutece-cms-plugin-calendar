@@ -1,92 +1,100 @@
-<div id="content-box-actions">
-	<form method="post"  action="jsp/admin/plugins/calendar/CreateEvent.jsp">
-		<p>
-	        <input type="hidden" name="calendar_id" value="${calendar.id}" /> 
-	        <input type="hidden" name="plugin_name" value="calendar" />   
-	        <input type="submit" value="#i18n{calendar.modify_calendar.buttonCreate}" class="button bt-toolbar" />
-        </p>
-    </form>  
-</div>
-<div class="content-box">	
-    
-    <h2 class="content-box-header">#i18n{calendar.modify_calendar.titleEventsList}</h2>
-    <@paginationAdmin paginator=paginator combo=1 />
-    <table>
-        <tr>
-            <th>
-            	#i18n{calendar.modify_calendar.columnEventDate}
-            	<@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="date&calendar_id=${calendar_id}" />
-            </th>
-            <th>
-            	#i18n{calendar.modify_calendar.columnEventTimeStart}
-            	<@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="dateTimeStart&calendar_id=${calendar_id}" />
-            </th>
-            <th>
-            	#i18n{calendar.modify_calendar.columnEventTimeEnd}
-            	<@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="dateTimeEnd&calendar_id=${calendar_id}" />
-            </th>
-            <th>
-            	#i18n{calendar.modify_calendar.columnEventTitle}
-            	<@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="title&calendar_id=${calendar_id}" />
-            </th>
-            <th>
-            	#i18n{calendar.modify_calendar.columnEventPeriodicity}
-            	<@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="periodicity&calendar_id=${calendar_id}" />
-            </th>
-            <th>
-            	#i18n{calendar.modify_calendar.columnEventOccurrence}
-            	<@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="occurrence&calendar_id=${calendar_id}" />
-            </th>
-            <th>#i18n{calendar.modify_calendar.columnEventActions}</th>
-        </tr>                
-        <#list event_list as event >
-        <tr>
-            <td>
-                <a href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&calendar_id=${calendar.id}&event_id=${event.id}" class="bullet-link">
-                    ${event.date?date}
-                </a>                        
-            </td>
-            <td>
-                <#if event.dateTimeStart?exists>
-                ${event.dateTimeStart}
-                </#if>
-            </td>
-            <td>
-                <#if event.dateTimeEnd?exists>
-                ${event.dateTimeEnd}
-                </#if>
-            </td>
-            <td>
-                ${event.title}
-            </td>
-             <td>                  
-                <#switch event.periodicity>
-				  <#case 1>
-				    #i18n{calendar.interval.periodicity.day.description}
-				    <#break>
-				  <#case 7>
-				    #i18n{calendar.interval.periodicity.week.description}
-				    <#break>				  
-				  <#case 30>
-				     #i18n{calendar.interval.periodicity.month.description}
-				    <#break>
-				  <#default>
-				     #i18n{calendar.interval.periodicity.day.description}				  
-				</#switch>                
-            </td>
-             <td>
-                ${event.occurrence}
-            </td>
-            <td>    
-            	<a href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}">
-                    <img src="images/admin/skin/actions/manage_calendar.png" alt="#i18n{calendar.modify_calendar.actionOccurenceList}" title="#i18n{calendar.modify_calendar.actionOccurenceList}" />
-                </a>            
-                <a href="jsp/admin/plugins/calendar/RemoveEvent.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}">
-                    <img src="images/admin/skin/actions/delete.png" alt="#i18n{calendar.modify_calendar.actionDeleteEvent}" title="#i18n{calendar.modify_calendar.actionDeleteEvent}" />
-                </a>
-            </td>
-        </tr>
-        </#list>
-    </table>
-    <@paginationAdmin paginator=paginator />
+<div class="row-fluid">	
+    <div class="span12">	
+        <fieldset>
+            <legend>#i18n{calendar.modify_calendar.titleEventsList}
+                <form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/calendar/CreateEvent.jsp">
+                    <input type="hidden" name="calendar_id" value="${calendar.id}" /> 
+                    <input type="hidden" name="plugin_name" value="calendar" />   
+                    <button class="btn btn-primary btn-small pull-right" type="submit" >
+                        <i class="icon-plus icon-white" ></i>
+                        <span class="hidden-phone" >#i18n{calendar.modify_calendar.buttonCreate}</span>
+                    </button>
+                </form> 
+            </legend>
+            <@paginationAdmin paginator=paginator combo=1 />
+            <table class="table table-striped table-condensed">
+                <tr>
+					 <th>
+                        #i18n{calendar.modify_calendar.columnEventTitle}
+                        <@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="title&calendar_id=${calendar_id}" />
+                    </th>
+                    <th>
+                        #i18n{calendar.modify_calendar.columnEventDate}
+                        <@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="date&calendar_id=${calendar_id}" />
+                    </th>
+                    <th>
+                        #i18n{calendar.modify_calendar.columnEventTimeStart}
+                        <@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="dateTimeStart&calendar_id=${calendar_id}" />
+                    </th>
+                    <th>
+                        #i18n{calendar.modify_calendar.columnEventTimeEnd}
+                        <@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="dateTimeEnd&calendar_id=${calendar_id}" />
+                    </th>
+                   
+                    <th>
+                        #i18n{calendar.modify_calendar.columnEventPeriodicity}
+                        <@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="periodicity&calendar_id=${calendar_id}" />
+                    </th>
+                    <th>
+                        #i18n{calendar.modify_calendar.columnEventOccurrence}
+                        <@sort jsp_url="jsp/admin/plugins/calendar/EventList.jsp" attribute="occurrence&calendar_id=${calendar_id}" />
+                    </th>
+                    <th>#i18n{calendar.modify_calendar.columnEventActions}</th>
+                </tr>                
+                <#list event_list as event >
+                <tr>
+					<td>
+                       <strong>${event.title}</strong>
+					</td>
+					<td>	
+						<i class="icon-calendar"></i>&nbsp;${event.date?date} 
+					</td>
+					<td>					
+						<#if event.dateTimeStart?exists>
+						<i class="icon-time"></i>&nbsp;${event.dateTimeStart}
+                        </#if>
+                    </td>
+                    <td>
+                        <#if event.dateTimeEnd?exists>
+                        ${event.dateTimeEnd}
+                        </#if>
+                    </td>
+                   
+                    <td>                  
+                        <#switch event.periodicity>
+                        <#case 1>
+                        #i18n{calendar.interval.periodicity.day.description}
+                        <#break>
+                        <#case 7>
+                        #i18n{calendar.interval.periodicity.week.description}
+                        <#break>				  
+                        <#case 30>
+                        #i18n{calendar.interval.periodicity.month.description}
+                        <#break>
+                        <#default>
+                        #i18n{calendar.interval.periodicity.day.description}				  
+                        </#switch>                
+                    </td>
+                    <td>
+                        ${event.occurrence}
+                    </td>
+                    <td> 
+                        <a class="btn btn-primary btn-small" href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&calendar_id=${calendar.id}&event_id=${event.id}"  title="null" >
+                            <i class="icon-edit icon-white"></i>
+                        </a>
+
+                        <a class="btn btn-primary btn-small" href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}"  title="#i18n{calendar.modify_calendar.actionOccurenceList}" >
+                            <i class="icon-calendar icon-white"></i>
+                        </a>
+
+                        <a class="btn btn-danger btn-small" href="jsp/admin/plugins/calendar/RemoveEvent.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}"  title="#i18n{calendar.modify_calendar.actionDeleteEvent}" >
+                            <i class="icon-trash icon-white"></i>
+                        </a>
+
+                    </td>
+                </tr>
+                </#list>
+            </table>
+            <@paginationAdmin paginator=paginator />
+    </div>
 </div>

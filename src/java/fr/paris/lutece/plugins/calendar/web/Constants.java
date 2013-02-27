@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 
 /**
  * This class provides contants for the calendar plugin.
@@ -348,14 +350,14 @@ public final class Constants
     public static final String ACTION_RSS = "rss";
 
     // CSS Styles
-    public static final String STYLE_CLASS_VIEW_MONTH_DAY = "calendar-view-month-day";
-    public static final String STYLE_CLASS_VIEW_WEEK_DAY = "calendar-view-week-day";
-    public static final String STYLE_CLASS_SMALLMONTH_DAY = "calendar-smallmonth-day";
-    public static final String STYLE_CLASS_SUFFIX_OLD = "-old";
-    public static final String STYLE_CLASS_SUFFIX_TODAY = "-today";
-    public static final String STYLE_CLASS_SUFFIX_OFF = "-off";
-    public static final String STYLE_CLASS_SUFFIX_EVENT = "-event";
-    public static final String STYLE_CLASS_SELECTED_DAY = "selected-day";  
+    public static final String STYLE_CLASS_VIEW_MONTH_DAY = AppPropertiesService.getProperty("calendar.style.month.day");
+    public static final String STYLE_CLASS_VIEW_WEEK_DAY = AppPropertiesService.getProperty("calendar.style.week.day");
+    public static final String STYLE_CLASS_SMALLMONTH_DAY = AppPropertiesService.getProperty("calendar.style.smallmonth.day");
+    public static final String STYLE_CLASS_SUFFIX_OLD = AppPropertiesService.getProperty("calendar.style.suffix.old");
+    public static final String STYLE_CLASS_SUFFIX_TODAY = AppPropertiesService.getProperty("calendar.style.suffix.today");
+    public static final String STYLE_CLASS_SUFFIX_OFF = AppPropertiesService.getProperty("calendar.style.suffix.off");
+    public static final String STYLE_CLASS_SUFFIX_EVENT = AppPropertiesService.getProperty("calendar.style.suffix.event");
+    public static final String STYLE_CLASS_SELECTED_DAY = AppPropertiesService.getProperty("calendar.style.selected.day");
 
     // Indexer fileds
     public static final String FIELD_CALENDAR_ID = "calendar_id";

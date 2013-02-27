@@ -4,22 +4,21 @@
 	<xsl:variable name="url"><xsl:value-of select="portlet/url"/></xsl:variable>
     <xsl:variable name="page-id"><xsl:value-of select="portlet/page-id"/></xsl:variable>
 	<xsl:template match="portlet">
-		<link rel="stylesheet"  href="css/plugins/calendar/calendar.css" type="text/css"  media="screen" />
-		
-		<xsl:apply-templates select="top-events" />
-		
-	<xsl:variable name="device_class">
-	<xsl:choose>
-		<xsl:when test="string(display-on-small-device)='0'">hidden-phone</xsl:when>
-		<xsl:otherwise></xsl:otherwise>
-	</xsl:choose>
-	</xsl:variable>
+		<xsl:variable name="device_class">
+			<xsl:choose>
+				<xsl:when test="string(display-on-small-device)='0'">hidden-phone</xsl:when>
+				<xsl:otherwise></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
-		<div class="portlet-background-content {$device_class} -lutece-border-radius-bottom span-6 calendar-mini">
-			<xsl:apply-templates select="month" />
-			<xsl:text disable-output-escaping="yes">
-				</xsl:text>
-			<xsl:apply-templates select="events" />
+		<div class="portlet {$device_class}">
+			<div class="span4">
+				<xsl:apply-templates select="month" />
+				<xsl:apply-templates select="events" />
+			</div>
+			<div class="span7">
+				<xsl:apply-templates select="top-events" />&#160;
+			</div>
 		</div>   					
 	</xsl:template>
 
@@ -65,22 +64,18 @@
 	</xsl:template>
 	
 	<xsl:template match="week-shortcut">	
-			<img height="16" border="0"  width="16" title="Agenda" alt="Agenda" src="images/local/skin/plugins/calendar/mini_calendar.png"/>		
-				<xsl:text disable-output-escaping="yes">
-						<![CDATA[&nbsp;]]>
-				</xsl:text>
 			<a href="jsp/site/Portal.jsp?page_id={$page-id}&amp;date={week-shortcut-date-start}&amp;date_end={week-shortcut-date-end}">
-			<xsl:value-of select="week-shortcut-label" disable-output-escaping="yes" /></a>				
-		<br/>
+				<i class="icon-calendar">&#160;</i>&#160;<xsl:value-of select="week-shortcut-label" disable-output-escaping="yes" />
+			</a>				
+			<br/>
 	</xsl:template>
 
 	<xsl:template match="top-events">	
-	<div class="span-15" >
 	<div id="top-event" class="galleryview">
 		<xsl:apply-templates select="top-event"/>
 	</div>
-	</div>
 	</xsl:template>
+	
 	<xsl:template match="top-event">
 		<div class="panel">
 			<img src="image?resource_type=image_event&amp;id={event-id}" /> 
@@ -96,23 +91,17 @@
 	</xsl:template>
 	
 	<xsl:template match="event">
-	<div>
 		[<xsl:value-of select="date" />
 		<xsl:if test="date-end != ''">
 			-&#160;<xsl:value-of select="date-end" />
 		</xsl:if>]
-		<span class = "calendar-event-list-header">
-			<xsl:value-of select="event-title" /> 
-		</span>
 		<xsl:if test="not(event-datetime-begin='')">
-			-
-			<xsl:value-of select="event-datetime-begin" /> 
+		-
+		<xsl:value-of select="event-datetime-begin" /> :
 		</xsl:if> 
-		:
 		<a href="jsp/site/Portal.jsp?page=calendar&amp;action=show_result&amp;event_id={event-id}" target="_blank">
-		 	<xsl:value-of select="event-description" /> 
+		 	<xsl:value-of select="event-title" /> 
 		</a>
-	</div>
 	</xsl:template>
 	
 </xsl:stylesheet>

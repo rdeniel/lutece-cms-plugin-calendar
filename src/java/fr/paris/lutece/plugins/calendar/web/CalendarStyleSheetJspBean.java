@@ -112,6 +112,9 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
     private static final String TEMPLATE_MODIFY_STYLESHEET = "admin/plugins/calendar/modify_stylesheet.html";
     private static final String TEMPLATE_STYLE_SELECT_OPTION = "admin/plugins/calendar/style_select_option.html";
 
+     // JSP
+    private static final String JSP_URL_STYLESHEET_LIST = "jsp/admin/plugins/calendar/style/ManageExportStyleSheets.jsp";
+
     // Properties
     private static final String PROPERTY_PATH_XSL = "path.stylesheet";
     private static final String PROPERTY_STYLESHEETS_PER_PAGE = "paginator.stylesheet.itemsPerPage";
@@ -267,7 +270,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         //localStyleSheetFile( stylesheet );
 
         //Displays the list of the stylesheet files
-        return getHomeUrl( request );
+        return AppPathService.getBaseUrl( request ) + JSP_URL_STYLESHEET_LIST;
     }
 
     /**
@@ -443,8 +446,8 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         // Recreate the local file
         //localStyleSheetFile( stylesheet );
 
-        // Displays the management stylesheet page
-        return getHomeUrl( request );
+        //Displays the list of the stylesheet files
+        return AppPathService.getBaseUrl( request ) + JSP_URL_STYLESHEET_LIST;
     }
 
     /**

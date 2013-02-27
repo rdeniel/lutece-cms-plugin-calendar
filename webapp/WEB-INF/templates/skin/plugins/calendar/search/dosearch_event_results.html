@@ -1,275 +1,181 @@
 <#-- Number of items per page selector - Radio List implementation -->
 <#macro NbItemsPerPageSelectorRadioList nb_items_per_page>
 	<#list [ "5" , "10" , "20" , "50" ] as nb>
-	<#if nb = nb_items_per_page > 
-	<input value="${nb}" id="items_per_page${nb}" name="items_per_page" class="radio" type="radio" checked /><label for="items_per_page${nb}">${nb}</label>
-	<#else>
-	<input value="${nb}" id="items_per_page${nb}" name="items_per_page" class="radio" type="radio" /><label for="items_per_page${nb}">${nb}</label>
-	</#if>
+		<label class="radio inline" for="items_per_page${nb}">
+			<input value="${nb}" id="items_per_page${nb}" name="items_per_page" class="radio" type="radio" <#if nb = nb_items_per_page >checked</#if>> ${nb}
+		</label>
 	</#list>
 </#macro>
-
-<script type="text/javascript">
-	function displayId(baliseId)
-	{
-		if (document.getElementById && document.getElementById(baliseId) != null) {
-			document.getElementById(baliseId).style.visibility='visible';
-			document.getElementById(baliseId).style.display='block';
-		}
-	}
-	
-	function hideId(baliseId) {
-		if (document.getElementById && document.getElementById(baliseId) != null) {
-	   		document.getElementById(baliseId).style.visibility='hidden';
-	    	document.getElementById(baliseId).style.display='none';
-		}
-	}
-</script>
-
 <#escape x as x?html>
-<div id="content" class="span-15 prepend-1 append-1 append-bottom" >
-	
-	<div class="portlet -lutece-border-radius append-bottom">
-	
-    <h2>#i18n{calendar.search.event.title }</h2>
-		       
-    <form method="post" name="search_event" id="searchForm" action="jsp/site/Portal.jsp">		
-        <p>
-            <label for="event_search">#i18n{calendar.search.event.label.search}</label>
-            <input type="text" id="event_search" name="query" value="<#if query?has_content>${query}</#if>" size="60" maxlength="120" />
-            &nbsp;
-            <input type="submit" value="#i18n{calendar.search.event.button.search}" tabindex="10" class="button" />      
-        </p>
-        <div>
-			<#-- Number of documents per page selector -->
-			#i18n{portal.search.search_results.labelNbDocsPerPage}<br />
-			<@NbItemsPerPageSelectorRadioList nb_items_per_page />
+<div class="row">
+	<div class="span9">
+		<fieldset>
+		<legend>#i18n{calendar.search.event.title}</legend>
+			<div class="well well-small">
+				<form class="form" method="post" name="search_event" id="searchForm" action="jsp/site/Portal.jsp">		
+				<input type="hidden" name="page" value="calendar" > 
+				<input type="hidden" name="action" value="do_search" >
+				<label for="event_search">#i18n{calendar.search.event.label.search}</label>
+				<div class="input-append">	
+					<input type="text" id="event_search" name="query" value="<#if query?has_content>${query}</#if>" class="span3" maxlength="120" />
+					<button class="btn" type="submit" title="#i18n{calendar.search.event.button.search}">
+						<i class="icon-search"></i>
+					</button>      
+				</div>	
+				<#-- Number of documents per page selector -->
+				#i18n{portal.search.search_results.labelNbDocsPerPage}
+				<@NbItemsPerPageSelectorRadioList nb_items_per_page />
+				<p>
+				<button class="btn" type="button" id="advparam">
+					<i id="ico" class="icon-chevron-down"></i>&nbsp;#i18n{portal.util.labelMore}...
+				</button>
+				</p>
+				<div id="advanced_parameters">
+					<#if calendar_list?has_content>
+						<h4>#i18n{calendar.search.event.label.calendar_choice}</h4>     
+						<#list calendar_list as agenda >
+							<label class="checkbox inline">
+								<input class="checkbox" type="checkbox" name="calendar_id" <#if agenda.isChecked()> checked="checked"</#if> value="${agenda.code}" />
+								${agenda.name}&nbsp;
+							</label>
+						 </#list>
+					</#if>
+					<#if category_list?has_content>
+						<h4>#i18n{calendar.create_event.category}</h4>
+						<#list category_list as category >
+						<label class="checkbox inline">
+							<input class="checkbox" type="checkbox" name="category" <#if category.isChecked()> checked="checked"</#if> value="${category.code}">
+							${category.name}&nbsp;
+						</label>
+						</#list>
+					</#if>
+					<h4>#i18n{calendar.search.event.label.criteria}</h4>
+					<label class="radio inline" for="radio_0">
+						<input type="radio" class="radio radio_" name="period" value="0" id="radio_0"<#if period?exists> <#if period ="0" > checked="checked"</#if></#if>>
+						#i18n{calendar.search.event.label.period_none}
+					</label>
+					<label class="radio inline" for="radio_1">
+						<input type="radio" class="radio radio_" name="period" value="1" id="radio_1" <#if period?exists> <#if period ="1"> checked="checked" </#if></#if> >#i18n{calendar.search.event.label.period_today}
+					</label>
+					<label class="radio inline" for="radio_2">
+						<input type="radio" class="radio radio_" name="period" value="2" id="radio_2" <#if period?exists> <#if period ="2"> checked="checked" </#if></#if> >
+						#i18n{calendar.search.event.label.period_week}
+					</label>
+					<label class="radio" for="radio_3">
+						<input type="radio" class="radio radio_" name="period" value="3" id="radio_3" <#if period?exists> <#if period ="3"> checked="checked" </#if></#if>>
+						#i18n{calendar.search.event.label.period_range}
+							<label for="event_date_begin">#i18n{calendar.search.event.label.datebegin}</label>
+							<input type="text" id="date_start" name="date_start" class="input-small" maxlength="10" <#if period?exists> <#if period !="3"> disabled="disabled" class="disabled-date" </#if></#if> value="<#if date_start?has_content>${date_start}</#if>" />
+							<label for="event_date_end">#i18n{calendar.search.event.label.dateend}</label>
+							<input type="text" id="date_end" name="date_end" class="input-small" maxlength="10" <#if period?exists> <#if period !="3"> disabled="disabled" class="disabled-date" </#if></#if> value="<#if date_end?has_content>${date_end}</#if>"/>
+					</label>
+				</div>
+			</form>
 		</div>
-		<br/>
-
-		<a href="javascript:displayId('complementary');"><img src="images/admin/skin/open_block.gif" alt="" border="0"/></a>
-        <a href="javascript:hideId('complementary');"><img src="images/admin/skin/closed_block.gif" alt="" border="0"/></a>
-
-		<div id="complementary" style="visibility:hidden; display:none;" >
-	        <p>
-	          <#if calendar_list?has_content>
-	            <label for="event_search_calendar">#i18n{calendar.search.event.label.calendar_choice} :</label>           
-				<table>
-					<#assign rowTab = 0>		
-			       	<#list calendar_list as agenda >
-			        <#if rowTab = 0>
-				    	<tr>
-			        </#if>
-			           <td><input class="checkbox" type="checkbox" name="calendar_id" <#if agenda.isChecked()> checked="checked"</#if> value="${agenda.code}" />
-			           ${agenda.name}&nbsp;
-			           </td>
-			        <#if rowTab == 0>
-			       		<#assign rowTab = 1>
-			      		<#else>
-				        </tr>
-						<#assign rowTab = 0>
-			        </#if>
-			       </#list>
-			       <#if rowTab = 1>
-			        <tr>
-			       </#if>
-			    </table>
-			  </#if>
-	        </p>
-	        
-	        <p>
-	           <#if category_list?has_content>
-	       		<label for="event_category">#i18n{calendar.create_event.category} :</label>
-				<table>
-					<#assign rowTab = 0>		
-			       	<#list category_list as category >
-			        <#if rowTab = 0>
-				    	<tr>
-			        </#if>
-			           <td><input class="checkbox" type="checkbox" name="category" <#if category.isChecked()> checked="checked"</#if> value="${category.code}" />
-			          	${category.name}&nbsp;
-			           </td>
-			        <#if rowTab == 0>
-			       		<#assign rowTab = 1>
-			      		<#else>
-				        </tr>
-						<#assign rowTab = 0>
-			        </#if>
-			       </#list>
-			       <#if rowTab = 1>
-			        <tr>
-			       </#if>
-			    </table>
-			   </#if>
-	        </p>
-	            <label for="event_search_ratio">#i18n{calendar.search.event.label.criteria}</label><br/>
-	            <input type="radio" class="radio" name="period" value="0" id="radio_0" 
-	            	onclick="disableDate()" <#if period?exists> <#if period ="0" > checked="checked"</#if></#if> />
-	            	#i18n{calendar.search.event.label.period_none}<br/>
-	            <input type="radio" class="radio" name="period" value="1" id="radio_1" onclick="disableDate()" 
-	            	<#if period?exists> <#if period ="1"> checked="checked" </#if></#if> />
-	            	#i18n{calendar.search.event.label.period_today}<br/>
-	           	<input type="radio" class="radio" name="period" value="2" id="radio_2" onclick="disableDate()"
-	           		<#if period?exists> <#if period ="2"> checked="checked" </#if></#if>/>
-	           	#i18n{calendar.search.event.label.period_week}<br/>
-	           	<input type="radio" class="radio" name="period" value="3" id="radio_3" onclick="enableDate()" 
-	           	<#if period?exists> <#if period ="3"> checked="checked" </#if></#if> />
-	           	#i18n{calendar.search.event.label.period_range}<br/>     
-	
-	        <p>
-	        	<label for="event_date_begin">#i18n{calendar.search.event.label.datebegin}</label>
-	           	<input type="text" id="date_start" name="date_start" size="10" maxlength="10" 
-	           		<#if period?exists> <#if period !="3"> disabled="disabled" class="disabled-date" </#if></#if> value="<#if date_start?has_content>${date_start}</#if>" />		
-		        
-	        </p>  
-	        
-	        <p>
-	        	<label for="event_date_end">#i18n{calendar.search.event.label.dateend}</label>
-	           	<input type="text" id="date_end" name="date_end" size="10" maxlength="10" 
-				<#if period?exists> <#if period !="3"> disabled="disabled" class="disabled-date" </#if></#if> value="<#if date_end?has_content>${date_end}</#if>"/>		
-	        </p>
-        </div>
-        
-        <input type="hidden" name="page" value="calendar" /> 
-        <input type="hidden" name="action" value="do_search" /> 
-
-    </form>
-    
-	<div class="portlet-header">#i18n{portal.search.search_results.title}</div>
-	<#if error?has_content>
-		<div class="error">${error}</div>
-	</#if>
-	<div>#i18n{portal.search.search_results.labelResultsCount} : <strong>${paginator.itemsCount}</strong></div>
-	<div>#i18n{portal.search.search_results.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong></div>
-	<div>&nbsp;</div>
-	<@pagination paginator=paginator />
-
-		<div>
-			
-			<!-- Title of agenda -->
-			<div class="calendar-search-hearder-box">
-			
-				<div class="calendar-search-result-title calendar-search-float-left">
-				
-				<#if agenda?has_content && agenda != "none">
-					<span class="calendar-search-header-title calenddar-search-float-left">
-						#i18n{calendar.search.title.agenda-of} 
-					</span> 				
-					<span class="calendar-search-header-title-agenda calenddar-search-float-left">
-						<#list calendar_list as calendar ><#if agenda == calendar.code>  ${calendar.name} <#break></#if></#list>
-					</span>
-				<#else>
-					&nbsp;				
+	</fieldset>
+	<fieldset>
+		<legend>#i18n{portal.search.search_results.title} <small class="pull-right">#i18n{portal.search.search_results.labelResultsCount} : <strong>${paginator.itemsCount}</strong> - #i18n{portal.search.search_results.labelResultsRange} : <strong>${paginator.rangeMin} - ${paginator.rangeMax}</strong></small></legend>
+		<#if error?has_content>
+			<div class="alert alert-error">${error}</div>
+		</#if>
+		<!-- /><@paginationAdmin paginator=paginator combo=1 /> -->
+		<!-- Title of agenda -->
+		<#if agenda?has_content && agenda != "none">
+		<h3>#i18n{calendar.search.title.agenda-of} 
+			<#list calendar_list as calendar >
+				<#if agenda == calendar.code>
+					${calendar.name} 
+					<#break>
 				</#if>
-				
-				</div>
-
-				<div class="calendar-search-float-left">								
-					<a href="${subscription_page}"><img  border="0"  src="images/local/skin/buttons/b_subscribe.png" alt="#i18n{calendar.subscription.buttonLabelSubscribe}" 
-						title="#i18n{calendar.subscription.buttonLabelSubscribe}"/></a>
-					&nbsp;	
-					<a href="${download_page}"><img  border="0"  src="images/local/skin/plugins/calendar/download.jpg" alt="#i18n{calendar.label.download}" 
-						title="#i18n{calendar.label.download}"/></a>
-					&nbsp;		
-					<a href="javascript:window.print();"><img  border="0"  src="images/local/skin/buttons/b_print.png" alt="#i18n{calendar.label.buttonPrint}" 
-						title="#i18n{calendar.search.label.buttonPrint}"/></a>
-					&nbsp;	
-					<a href="${rss_page}"><img  border="0"  src="images/local/skin/feed.png " alt="RSS" title="RSS"/></a>		 
-				</div>
-				
-				<div class="calendar-clearboth"></div>
-			</div>
-			
-			
-			<#list event_list as event >
-			
-			<div>
-			
-				<div class="calendar-search-result-img calendar-search-float-left">
-					<#if event.imageUrl?has_content>
-					<img height="85" border="0" width="85" src=${event.imageUrl} title="${event.title}"/>
-					</#if>				
-				</div>
-				<div class="calendar-search-result-description calenddar-search-float-left">
-						<div>				
-							<span class="calendar-search-header"><a class="calendar-search-link" href="${event.url}">${event.title}</a></span>  - <span class="calendar-search-header-agenda"><#list calendar_list as calendar >
-							<#if event.idCalendar?string == calendar.code>  ${calendar.name} <#break></#if>
-							</#list></span> <br/>
-							
-							<#if event.date?date?string == event.dateEnd?date?string >					
-								<span class="calendar-search-element">${event.date?date?string.short}</span>
-							<#else>
-							<span class="calendar-search-element">#i18n{calendar.search_result.labelFrom} ${event.date?date?string.short} #i18n{calendar.search_result.labelTo} ${event.dateEnd?date?string.short}</span>
-							</#if>
-							
-							<#if event.location?has_content>
-								|<span class="calendar-search-element">${event.location}</span>
-							</#if>
-							<#if event.dateTimeStart?has_content>
-								|<span class="calendar-search-element">${event.dateTimeStart}</span>
-							</#if>
-							
-							<#if event.dateTimeEnd?has_content>
-								|<span class="calendar-search-element">${event.dateTimeEnd}</span>
-							</#if>
-	
-						</div>
-	
-						<div>
-							<#if event.description?has_content>
-								<p class="calendar-description">${event.description}</p>
-							</#if>
-						</div>
-				</div>
-				
-				<div class="calendar-clearboth"></div>
-				
-			</div>
-			
 			</#list>
-
-
+		</h3>
+		</#if>
+		<div class="btn-group pull-right">
+				<a class="btn" href="${subscription_page}" title="#i18n{calendar.subscription.buttonLabelSubscribe}">
+					<i class="icon-star"></i>
+				</a>
+				<a class="btn"  href="${download_page}" title="#i18n{calendar.label.download}">
+					<i class="icon-download"></i>
+				</a>
+				<a class="btn" href="javascript:window.print();" title="#i18n{calendar.search.label.buttonPrint}">
+					<i class="icon-print"></i>
+				</a>
+				<a class="btn" href="${rss_page}" title="RSS">
+					<i class="icon-fire"></i>
+				</a>	
 		</div>
-
+		<div class="row-fluid">
+			<#list event_list as event >
+			<div class="span12">
+				<h4>
+					<#if event.imageUrl?has_content>
+					<img class="thumbnails thumblist-medium" src=${event.imageUrl} title="${event.title}"/>
+					</#if>				
+					<a class="btn btn-link" href="${event.url}">${event.title}</a>
+					<small> - 
+					<#list calendar_list as calendar >
+						<#if event.idCalendar?string == calendar.code>  ${calendar.name} <#break></#if>
+					</#list>
+					</small>
+				</h4>	
+				<p>
+				<#if event.date?date?string == event.dateEnd?date?string >					
+					<i class="icon-calendar"></i>&nbsp;${event.date?date?string.short}
+				<#else>
+					#i18n{calendar.search_result.labelFrom} ${event.date?date?string.short} #i18n{calendar.search_result.labelTo} ${event.dateEnd?date?string.short}
+				</#if>
+				<#if event.location?has_content>
+					| <i class="icon-map-marker"></i>&nbsp;${event.location}
+				</#if>
+				<#if event.dateTimeStart?has_content>
+					| <i class="icon-time"></i>&nbsp;${event.dateTimeStart}
+					<#if event.dateTimeEnd?has_content>
+						- ${event.dateTimeEnd}
+					</#if>
+				</#if>
+				</p>
+				<#if event.description?has_content>
+					<p>${event.description}</p>
+				</#if>
+			</div>	
+		</#list>
+		</div>	
+	</#escape>
+	</fieldset>
 	</div>
-
+	<div class="span2">
+		${small_month_calendar}
+	</div>
 </div>
-</#escape>
-<div id="sidebar" class="span-6 append-1 append-bottom last">
-	${small_month_calendar}
-</div>
-
-<!-- main calendar program -->
-<script type="text/javascript" src="js/jscalendar/calendar.js"></script>
-
-<!-- language for the calendar -->
-<script type="text/javascript" src="js/jscalendar/lang/calendar-${locale}.js"></script>
-
-<!-- the following script defines the Calendar.setup helper function, which makes
-     adding a calendar a matter of 1 or 2 lines of code. -->
-<script type="text/javascript" src="js/jscalendar/calendar-setup.js"></script>
-
-<script type="text/javascript">
-
-	function enableDate( ){	
-	document.getElementById('date_start').disabled = false;
-	document.getElementById('date_end').disabled = false;
-	document.getElementById('button_date').disabled = false;
-	document.getElementById('button_end').disabled = false;
-	
-	document.getElementById('date_start').className="enabled-date"
-	document.getElementById('date_end').className="enabled-date"		
-	}
-
-	function disableDate( ){	
-	document.getElementById('date_start').disabled = true;
-	document.getElementById('date_end').disabled = true;
-	document.getElementById('button_date').disabled = true;
-	document.getElementById('button_end').disabled = true;
-	
-	document.getElementById('date_start').className="disabled-date"
-	document.getElementById('date_end').className="disabled-date"
-	}
-
+<script>
+$(document).ready( function(){
+	$(".radio_").click( function(){
+		if( $(this).attr("id")=="radio_3" ){
+			$("#date_start").removeAttr("disabled")
+			$("#date_end").removeAttr("disabled")
+		} else {
+			$("#date_start").attr("disabled","disabled")
+			$("#date_end").attr("disabled","disabled")
+		}
+	});
+	$("#advanced_parameters").toggle();
+	$("#advparam").click( function(){
+		$("#advanced_parameters").toggle();
+		if( $("#ico").hasClass('icon-chevron-down') ){
+			$("#ico").addClass("icon-chevron-up");
+			$("#ico").removeClass("icon-chevron-down");
+		} else {
+			$("#ico").addClass("icon-chevron-down");
+			$("#ico").removeClass("icon-chevron-up");
+		}
+	});
+ });  
 </script>
+<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="js/jquery/plugins/ui/ui.datepicker-${locale}.js"></script>
+<script src="js/jquery/plugins/ui/timepicker/jquery-ui-timepicker-addon.js"></script>
+<script src="js/jquery/plugins/ui/timepicker/jquery-ui-sliderAccess.js"></script>
+<script src="js/jquery/plugins/ui/timepicker/localization/jquery-ui-timepicker-${locale}.js"></script>
+<script>$('.timepicker-default').timepicker();</script>
 <@getDatePickerRange idFieldFrom="date_start" idFieldTo="date_end" language=locale />
+

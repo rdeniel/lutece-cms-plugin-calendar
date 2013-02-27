@@ -1,59 +1,45 @@
 <#include "/admin/util/calendar/calendar.html" />
 <#escape x as x?html>
-
-<div class="prepend-1 span-22 append-1 last">
-	<div class="portlet -lutece-border-radius append-bottom">
-		<h2 class="page-title" style="margin-left:10px;">#i18n{calendar.modify_event_front.pageTitle}</h2>
-		<div style="margin-left:10px;">
-		    <form action="jsp/site/Portal.jsp" method="post">
-		        <table>
-		            <tr>
-		                <td>
-		                    <label for="event_date">#i18n{calendar.modify_event_front.date}  (dd/MM/yyyy) * :</label>
-		                </td>
-		                <td>
-		                    <input type="text" id="event_date" name="event_date" value="<#if event.date?exists>${event.date?date}</#if>" tabindex="1" size="10" maxlength="10" />
-		                    <input type="button" class="button" id="button_date" value="..." />
-		                </td>
-		            </tr>
-		            <tr>
-		                <td>
-		                    <label for="event_time_start">#i18n{calendar.modify_event_front.time_start} (hh:mm) :</label>
-		                </td>
-		                <td>
-		                    <input type="text" id="event_time_start" name="event_time_start" value="<#if event.dateTimeStart?exists>${event.dateTimeStart}</#if>" tabindex="2" size="5" maxlength="5" />
-		                </td>
-		            </tr>
-		            <tr>
-		                <td>
-		                    <label for="event_time_end">#i18n{calendar.modify_event_front.time_end}  (hh:mm) :</label>
-		                </td>
-		                <td>
-		                    <input type="text" id="event_time_end" name="event_time_end" value="<#if event.dateTimeEnd?exists>${event.dateTimeEnd}</#if>" tabindex="3" size="5" maxlength="5" />
-		                </td>
-		            </tr>
-		            <tr>
-		                <td>
-		                    <label for="event_title">#i18n{calendar.modify_event_front.title} * :</label>
-		                </td>
-		                <td>
-		                    <input type="text" id="event_title" name="event_title" value="${event.title}" tabindex="4" size="60" maxlength="60" />
-		                </td>
-		            </tr>
-		            <tr>
-		                <td>
-		                    <input type="hidden" name="calendar_id" value="${calendar_id}" /> 
-		                    <input type="hidden" name="event_id" value="${event.id}" /> 
-		                    <input type="hidden" name="page" value="calendar" />
-		                    <input type="hidden" name="action" value="do_modify_event" /> 
-		                    <input type="submit" value="#i18n{calendar.modify_event_front.buttonLabelUpdate}" tabindex="10" class="button" />
-		                    <input class="button" type="button" onclick="javascript:history.go(-1)" value="#i18n{portal.admin.message.buttonCancel}" />
-		                </td>
-		            </tr>
-		        </table>
-		    </form>
+<div class="portlet">
+	<fieldset>
+	<legend>#i18n{calendar.modify_event_front.pageTitle}</legend>
+	<form class="form-horizontal" action="jsp/site/Portal.jsp" method="post">
+	<input type="hidden" name="calendar_id" value="${calendar_id}" /> 
+	<input type="hidden" name="event_id" value="${event.id}" /> 
+	<input type="hidden" name="page" value="calendar" />
+	<input type="hidden" name="action" value="do_modify_event" /> 
+	<div class="control-group">
+	<label class="control-label" for="event_date">#i18n{calendar.modify_event_front.date}  (dd/MM/yyyy) * </label>
+		<div class="controls">
+			<input type="text" id="event_date" name="event_date" value="<#if event.date?exists>${event.date?date}</#if>" tabindex="1" class="input-mini" maxlength="10" />
 		</div>
 	</div>
+	<div class="control-group">
+	<label class="control-label" for="event_time_start">#i18n{calendar.modify_event_front.time_start} (hh:mm) </label>
+		<div class="controls">
+				<input type="text" id="event_time_start" name="event_time_start" value="<#if event.dateTimeStart?exists>${event.dateTimeStart}</#if>" tabindex="2" class="input-mini" maxlength="5" />
+		</div>
+	</div>
+	<div class="control-group">
+	<label class="control-label" for="event_time_end">#i18n{calendar.modify_event_front.time_end}  (hh:mm)</label>
+		<div class="controls">
+			<input type="text" id="event_time_end" name="event_time_end" value="<#if event.dateTimeEnd?exists>${event.dateTimeEnd}</#if>" tabindex="3" class="input-mini" maxlength="5" />
+		</div>
+	</div>
+	<div class="control-group">
+	<label class="control-label" for="event_title">#i18n{calendar.modify_event_front.title} * </label>
+		<div class="controls">
+			<input type="text" id="event_title" name="event_title" value="${event.title}" tabindex="4" class="input-normal" maxlength="60" />
+		</div>
+	</div>
+		<button class="btn btn-primary btn-small" type="submit">
+			<i class="icon-ok icon-white"></i>&nbsp;#i18n{calendar.modify_event_front.buttonLabelUpdate}
+		</button>
+		<button class="btn btn-small" onclick="javascript:history.go(-1)" >
+			<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
+		</button>
+	   </fieldset>
+	</form>
 </div>
 </#escape>
 <@setupCalendar field="event_date" button="button_date" />

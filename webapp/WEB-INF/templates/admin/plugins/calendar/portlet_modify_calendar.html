@@ -1,39 +1,39 @@
 <#escape x as x?html>
 <fieldset>
-	<legend>#i18n{calendar.portlet_modify_calendar.labelPeriodicity}</legend>
-	<br/>            
-	<p>
-		<input class="radio" name="periodicity" value="1"  <#if time_span="FALSE">checked="checked"</#if>type="radio"><b> #i18n{calendar.portlet_modify_calendar.labelPeriodicityInterval}</b>
-		<br/>
-		#i18n{calendar.portlet_modify_calendar.labelFrom}
-		<input type="text" id="date_begin" name="date_begin" value="<#if date_begin?exists && date_begin?trim != "">${date_begin[6..7]}/${date_begin[4..5]}/${date_begin[0..3]}</#if>" size="10" maxlength="10" />
-		#i18n{calendar.portlet_modify_calendar.labelTo}
-		<input type="text" id="date_end" name="date_end" value="<#if date_end?exists && date_end?trim != "">${date_end[6..7]}/${date_end[4..5]}/${date_end[0..3]}</#if>" size="10" maxlength="10" />		
-	</p>
-	<b>#i18n{calendar.portlet_modify_calendar.labelOr}</b>
-	<p>                
-		<b><input class="radio" name="periodicity" value="0" <#if time_span="TRUE">checked="checked"</#if> type="radio" />#i18n{calendar.portlet_modify_calendar.labelPeriodicity}</b>
-		<br/>
-		<@combo name="number_days" default_value="${number_days}" items=interval_list />#i18n{calendar.portlet_modify_calendar.labelStartingNow}
-	</p>
+	<legend>#i18n{calendar.portlet_modify_calendar.labelPeriodicityInterval}</legend>
+	<label class="radio inline">
+		<input class="radio" name="periodicity" value="1" <#if time_span="FALSE">checked="checked"</#if>type="radio">
+		<label class="inline">#i18n{calendar.portlet_modify_calendar.labelFrom}</label>
+		<input type="text" id="date_begin" name="date_begin" value="<#if date_begin?exists && date_begin?trim != "">${date_begin[6..7]}/${date_begin[4..5]}/${date_begin[0..3]}</#if>" class="input-small" maxlength="10" />
+		<label class="inline">#i18n{calendar.portlet_modify_calendar.labelTo}</label>
+		<input type="text" id="date_end" name="date_end" value="<#if date_end?exists && date_end?trim != "">${date_end[6..7]}/${date_end[4..5]}/${date_end[0..3]}</#if>" class="input-small" maxlength="10" />
+	</label>
+	<label class="radio">
+		<input class="radio" name="periodicity" type="radio" value="0" <#if time_span="TRUE">checked="checked"</#if> >
+		#i18n{calendar.portlet_modify_calendar.labelOr}
+	</label>
+	#i18n{calendar.portlet_modify_calendar.labelPeriodicity}</b>
+	<@comboWithParams name="number_days" default_value="${number_days}" additionalParameters=" class=\"input-medium\"" items=interval_list />
+	#i18n{calendar.portlet_modify_calendar.labelStartingNow}
 </fieldset>
 <fieldset>
-	<legend align=top>#i18n{calendar.portlet_modify_calendar.labelChoiceAgenda}</legend>
-	<p>
-		<b>#i18n{calendar.portlet_modify_calendar.labelDatabaseAgenda}:</b>
-		<br />
+	<legend>#i18n{calendar.portlet_modify_calendar.labelChoiceAgenda}</legend>
+	<p>#i18n{calendar.portlet_modify_calendar.labelDatabaseAgenda}</p>
+	<ul>
 		<#list authorized_agenda_list as agenda>
-			<input type="checkbox" name="cbx_agenda_${agenda.id}" class="checkbox" ${selected_agenda_id_list?seq_contains(agenda.id)?string("checked=\"checked\"", "")} />                           
-			${agenda.id}
-			${agenda.name}
-			<br />
+		<li>
+			<label class="checkbox">
+				<input type="checkbox" name="cbx_agenda_${agenda.id}" class="checkbox" ${selected_agenda_id_list?seq_contains(agenda.id)?string("checked=\"checked\"", "")} />
+				${agenda.id} - ${agenda.name}
+			</label>
+		</li>
 		</#list>
-	</p>
-	<p>
-		<b>#i18n{calendar.portlet_modify_calendar.labelTextFileAgenda}:</b>
-		<input type="text" id="text_agendas" name="text_agendas" value="<#if text_agendas?exists>${text_agendas}</#if>" size="40" maxlength="255" />
-		<br/>
-		#i18n{calendar.portlet_modify_calendar.labelSummaryFile}
-	</p>
+	</ul>
+	<label>#i18n{calendar.portlet_modify_calendar.labelTextFileAgenda}</label>
+	<input type="text" id="text_agendas" name="text_agendas" value="<#if text_agendas?exists>${text_agendas}</#if>" size="40" maxlength="255" />
+	<span class="help-block">#i18n{calendar.portlet_modify_calendar.labelSummaryFile}</span>
 </fieldset>
 </#escape>
+<script src="../../js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="../../js/jquery/plugins/ui/ui.datepicker-fr.js"></script>
+<@getDatePickerRange idFieldFrom="date_begin" idFieldTo="date_end" language=locale />

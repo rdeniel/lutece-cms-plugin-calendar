@@ -1,51 +1,48 @@
-<table class="table">
-   	<tr>
-   		<th>#i18n{calendar.dashboard.columnTitleLabel}</th>
-   		<th>#i18n{calendar.dashboard.columnTitleActions}</th>
-   		<th>#i18n{calendar.dashboard.columnTitleSubscribers}</th>
-   	</tr>
-    <#list calendar_list as calendar>
-    	<tr>
-    		<td>
-                <a href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="admin-menu">
-                    <img src="${calendar.eventImage}" alt="${calendar.eventImage}" title="${calendar.eventImage}" /> ${calendar.name}
+<table class="table table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>#i18n{calendar.dashboard.columnTitleLabel}</th>
+            <th>#i18n{calendar.dashboard.columnTitleActions}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <#list calendar_list as calendar>
+        <tr>
+			<td>
+                <strong>
+					<img src="${calendar.eventImage}" title="logo">&nbsp;${calendar.name}
+				</strong>
+                &nbsp;
+                <a href="jsp/site/Portal.jsp?page=calendar&id_agenda=${calendar.id}" title="#i18n{calendar.manage_calendars.labelViewFullAgenda}" target="agenda">
+                    <i class="icon-globe"></i>
+                </a> 
+				&nbsp; |  <i class="icon-user"></i>&nbsp;#i18n{calendar.dashboard.nbSubscribers}: ${nb_subscribers_list[calendar.id]}
+                <#assign nb_event = 0>
+				<#list event_list as event>
+					<#if event.idCalendar == calendar.id?number>
+						<#assign nb_event = nb_event + 1>
+					</#if>	
+				</#list>
+				&nbsp; |  <i class="icon-calendar"></i>&nbsp;#i18n{calendar.dashboard.nbEvents}: ${nb_event}
+			</td> 
+            <td>
+                <a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar"  title="#i18n{calendar.dashboard.modifyEvent}" >
+                    <i class="icon-edit icon-white"></i>
                 </a>
-                <ul>
-                	<#assign nb_event = 0>
-                	<#list event_list as event>
-                		<#if event.idCalendar == calendar.id?number>
-                			<#if ( nb_event <= nb_events_max )>
-	                			<li>
-	                				-
-	                				<a href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&amp;calendar_id=${calendar.id}&event_id=${event.id}">
-					                    ${event.title} (${event.date?date})
-					                </a>
-	                			</li>
-                				<#assign nb_event = nb_event + 1>
-                			<#else>
-                				<li>
-                					-
-	                				<a href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
-	                					#i18n{calendar.dashboard.etc}
-	                				</a>
-	                			</li>
-                				<#break>
-                			</#if>
-                		</#if>
-                	</#list>
-                </ul>
+                <a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar"  title="#i18n{calendar.dashboard.addEvent}" >
+                    <i class="icon-plus icon-white"></i>
+                </a>
+				<a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=${calendar.id}" title="#i18n{calendar.dashboard.eventsList}">
+					<i class="icon-calendar icon-white"></i>
+                </a>
+				<a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar"  title="#i18n{calendar.dashboard.nbSubscribers}: ${nb_subscribers_list[calendar.id]}" >
+                    <i class="icon-user icon-white"></i>
+                </a>
+                <a class="btn btn-danger btn-small pull-left spaced" href="jsp/admin/plugins/calendar/RemoveCalendar.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar"  title="#i18n{calendar.dashboard.addEvent}" >
+                    <i class="icon-trash icon-white"></i>
+                </a>
             </td>
-            <td>
-            	<a href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
-           			<img src="images/admin/skin/actions/calendar_add.png" title="#i18n{calendar.dashboard.addEvent}" alt="#i18n{calendar.dashboard.addEvent}" />
-           		</a>
-            </td>
-            <td>
-            	<a href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
-           			<img src="images/admin/skin/actions/subscriber.png" title="#i18n{calendar.dashboard.nbSubscribers}" alt="#i18n{calendar.dashboard.nbSubscribers}">
-           		</a>
-           		(${nb_subscribers_list[calendar.id]})
-            </td>
-    	</tr>
-    </#list>
+        </tr>
+        </#list>
+    </tbody>
 </table>

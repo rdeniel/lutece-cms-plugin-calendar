@@ -1,43 +1,55 @@
 
 <div class="insert-service">
-	<h2>#i18n{calendar.insertService.name}</h2>
+	<fieldset>
+	<legend>#i18n{calendar.insertService.name}</legend>
 
 	<#if occurrence_list?size = 0>
-		<p>
+		
 			#i18n{calendar.selector.event.noEvent}
-		</p>
-		<p>
-			<input type="button" class="button" onclick="javascript:history.go(-1);"
-				value="#i18n{portal.util.labelBack}" />
-		</p>
+		
+		
+			<button class="btn btn-primary btn-small" onclick="javascript:history.go(-1);" >null</button>
+	
+		
 	<#else>
-		<form method="post" name="fsubmit"
+		<form class="form-horizontal" method="post" name="fsubmit"
 			action="jsp/admin/plugins/calendar/DoInsertEventLink.jsp">
 		
 			<h3>#i18n{calendar.selector.event.insertListTitle}</h3>
 			
-			<p>
-				<label for="alt">#i18n{calendar.selector.event.captionTitle}</label>
-				<input type="text" name="alt" id="alt" value="" size="30" maxlength="50" />
-			</p>
-			<p>
-				<label for="target">#i18n{calendar.selector.event.captionTarget}</label>
+			
+				<div class="control-group">
+		<label class="control-label" for="alt">#i18n{calendar.selector.event.captionTitle}</label>
+				<div class="controls">
+	<input type="text" name="alt" id="alt" value="" size="30" maxlength="50" />
+		<span class="help-block"></span>
+		</div>
+	</div>
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="target">#i18n{calendar.selector.event.captionTarget}</label>
 				<select name="target" id="target" size=1>
 					<option value="_self">#i18n{calendar.selector.event.target.self}</option>
 					<option value="_blank">#i18n{calendar.selector.event.target.blank}</option>
 					<option value="_parent">#i18n{calendar.selector.event.target.parent}</option>
 					<option value="_top">#i18n{calendar.selector.event.target.top}</option>
 				</select>
-			</p>
-			<p>
-				<label for="name">#i18n{calendar.selector.event.linkName}</label>
-				<input type="text" name="name" id="name" value="" size="30" maxlength="50" />
-			</p>
+			
+			
+				<div class="control-group">
+		<label class="control-label" for="name">#i18n{calendar.selector.event.linkName}</label>
+				<div class="controls">
+	<input type="text" name="name" id="name" value="" size="30" maxlength="50" />
+		<span class="help-block"></span>
+		</div>
+	</div>
+			
 			
 			<h3>#i18n{calendar.selector.event.eventChoiceTitle}</h3>
 			
-			<p>
-			<table>
+			
+			<table class="table table-striped table-condensed">
 				<tr>
 					<th></th>
 					<th>#i18n{calendar.selector.event.colDate}</th>
@@ -46,23 +58,27 @@
 				<#list occurrence_list as occurrence>
 				<tr>
 					<td>
-						<input class="radio" type="radio" id="event_id_${occurrence.id}"
+						<div class="controls">
+	<input class="radio" type="radio" id="event_id_${occurrence.id}"
 							name="event_id" value="${occurrence.eventId}" />
+		<span class="help-block"></span>
+		</div>
+	</div>
 					</td>
 					<td>${occurrence.date?date}</td>
 					<td>${occurrence.title}</td>
 				</tr>
 				</#list>
 			</table>
-			</p>
-			<p>
-			<input type="submit" class="button" value="#i18n{portal.util.labelValidate}" /> 
-			<input type="button"
-				class="button" onclick="javascript:history.go(-1);"
-				value="#i18n{portal.util.labelBack}" />
-			</p>
+			
+			
+			<button class="btn btn-primary btn-small" type="submit" >#i18n{portal.util.labelValidate}</button> 
+			<button class="btn btn-primary btn-small" onclick="javascript:history.go(-1);" >null</button>
+	
+			
 			<input type="hidden" name="input" value="${input}" />
 			<input type="hidden" name="calendar_id" value="${calendar_id}" />
-		</form>
+		</fieldset>
+</form>
 	</#if>
 </div>

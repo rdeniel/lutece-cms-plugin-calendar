@@ -1,74 +1,83 @@
-<div class="content-box" >
-
-    <h2 class="content-box-header">#i18n{calendar.create_calendar.pageTitle}</h2>
-			       
-    <form method="post" name="create_calendar" action="jsp/admin/plugins/calendar/DoCreateCalendar.jsp">		
-        <p>
-            <label for="calendar_name">#i18n{calendar.create_calendar.name} * :</label>
-            <input type="text" id="calendar_name" name="calendar_name" tabindex="1" size="100" maxlength="250" />
-        </p>
-        <p>
-            <label for="calendar_image">#i18n{calendar.create_calendar.image} *:</label>
-            <@radioImageList name="calendar_image" default_value="" items=dots_list />
-        </p>
-        </p>
-        <p>
-            <label for="calendar_prefix">#i18n{calendar.create_calendar.prefix} :</label>
-            <input type="text" id="calendar_prefix" name="calendar_prefix" tabindex="1" size="100" maxlength="250" />
-        </p>
-        <p>
-            <label for="calendar_role">#i18n{calendar.create_calendar.role} :</label>
-            <@combo name="calendar_role" default_value="" items=roles_list />
-        </p>
-        <p>
-            <label for="calendar_role_manager">#i18n{calendar.create_calendar.manager_role} :</label>
-            <@combo name="calendar_role_manager" default_value="" items=roles_list />
-        </p>
-        
-        <p>
-            <label for="workgroup">#i18n{calendar.create_calendar.workgroup}  :</label>
-            <@combo name="workgroup" default_value="" items=workgroups_list />
-        </p>
-        <p>
-			<label for="calendar_notification">#i18n{calendar.create_calendar.notification}  :</label>
-			<input name="calendar_notification" id="calendar_notification" type="checkbox" onclick="javascript:notification(  );"/>
-		</p>
-		<p>
-			<label>&nbsp;</label>
-			#i18n{calendar.create_calendar.notification.comment}
-		</p>
-		<p id="notification">
-			<label for="calendar_period">#i18n{calendar.create_calendar.periodValidity} * :</label>
-			<input type="text" id="calendar_period" name="calendar_period" tabindex="1" size="2" maxlength="2" />
-			&nbsp;#i18n{calendar.create_calendar.periodValidityUnit}
-		</p>
-        
-        <p>
-            <input type="submit" value="#i18n{calendar.create_calendar.buttonLabelCreate}" tabindex="10" class="button" />
-            <input class="button" type="button" onclick="javascript:history.go(-1)" value="#i18n{portal.admin.message.buttonCancel}" />
-        </p>
-    </form>
+<div class="row-fluid" >
+    <div class="span12">
+        <fieldset>
+            <legend>#i18n{calendar.create_calendar.pageTitle}</legend>
+            <form class="form-horizontal" method="post" name="create_calendar" action="jsp/admin/plugins/calendar/DoCreateCalendar.jsp">		
+                <div class="control-group">
+                    <label class="control-label" for="calendar_name">#i18n{calendar.create_calendar.name} *</label>
+                    <div class="controls">
+                        <input type="text" id="calendar_name" name="calendar_name" tabindex="1" class="input-xlarge" maxlength="250" >
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="calendar_image">#i18n{calendar.create_calendar.image} *</label>
+                    <div class="controls">
+                        <@radioImageList name="calendar_image" default_value="" items=dots_list />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="calendar_prefix">#i18n{calendar.create_calendar.prefix} :</label>
+                    <div class="controls">
+                        <input type="text" id="calendar_prefix" name="calendar_prefix" tabindex="1" class="input-small" maxlength="250" >
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="calendar_role">#i18n{calendar.create_calendar.role} :</label>
+                    <div class="controls">
+                        <@comboWithParams name="calendar_role" default_value="" additionalParameters=" class=\"input-normal\"" items=roles_list />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="calendar_role_manager">#i18n{calendar.create_calendar.manager_role}</label>
+                    <div class="controls">
+                        <@comboWithParams name="calendar_role_manager" default_value="" additionalParameters=" class=\"input-normal\"" items=roles_list />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="workgroup">#i18n{calendar.create_calendar.workgroup}</label>
+                    <div class="controls">
+                        <@comboWithParams name="workgroup" default_value="" additionalParameters=" class=\"input-normal\"" items=workgroups_list />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="calendar_notification">#i18n{calendar.create_calendar.notification}</label>
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input name="calendar_notification" id="calendar_notification" type="checkbox" >
+                            #i18n{calendar.create_calendar.notification.comment}
+                        </label>    
+                    </div>
+                </div>
+                <div class="control-group" id="notif">
+                    <label class="control-label" for="calendar_period">#i18n{calendar.create_calendar.periodValidity} *</label>
+                    <div class="controls">
+                        <input type="text" id="calendar_period" name="calendar_period" tabindex="1" class="input-mini" maxlength="2" value="7">
+                        <span class="help-text">#i18n{calendar.create_calendar.periodValidityUnit}</span>&nbsp;
+                        <span class="help-text">#i18n{calendar.create_calendar.periodValidity.comment}</span>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary btn-small" type="submit" >
+                        <i class="icon-ok icon-white"></i>&nbsp;#i18n{calendar.create_calendar.buttonLabelCreate}
+                    </button>
+                    <a class="btn btn-small" href="jsp/admin/plugins/calendar/ManageCalendars.jsp" >
+                        <i class="icon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
+                    </a>
+                </div>
+            </form>
+        </fieldset>
+    </div>
 </div>
 
+<script>
+$(document).ready( function(){
+    $("#notif").toggle();
+    if( $("input:checked").length > 0 ){
+        $("#notif").toggle();
+    }
+    $("#calendar_notification").click( function(e){
+         $("#notif").toggle();
+    });
+});
 
-<script type="text/javascript">
-	function notification(  )
-	{
-		var notification  = document.getElementById( "calendar_notification" );
-
-		if(notification .checked)
-		{
-			document.getElementById( "notification" ).style.display = "block";
-		}
-		else
-		{
-			document.getElementById( "notification" ).style.display = "none";
-		}
-	}
-	var initialisation = document.getElementById( "calendar_notification" );
-
-	if( !initialisation.checked )
-	{
-		notification(  );
-	}	
 </script>
