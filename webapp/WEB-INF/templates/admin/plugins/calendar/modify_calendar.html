@@ -5,31 +5,31 @@
             <form class="form-horizontal" method="post" name="modify_calendar" action="jsp/admin/plugins/calendar/DoModifyCalendar.jsp">
                 <input type="hidden" name="calendar_id" value="${calendar.id}">
                 <div class="control-group">
-                    <label class="control-label" for="calendar_name">#i18n{calendar.modify_calendar.name} * :</label>
+                    <label class="control-label" for="calendar_name">#i18n{calendar.modify_calendar.name} *</label>
                     <div class="controls">
-                        <input type="text" id="calendar_name" name="calendar_name" value="${calendar.name}" tabindex="1" size="100" maxlength="250" />
+                        <input type="text" id="calendar_name" name="calendar_name" value="${calendar.name}" tabindex="1" class="input-xxlarge" maxlength="250" />
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="calendar_image">#i18n{calendar.modify_calendar.image} *:</label>
+                    <label class="control-label" for="calendar_image">#i18n{calendar.modify_calendar.image} *</label>
                     <div class="controls">
                         <@radioImageList name="calendar_image" default_value="${calendar.eventImage}" items=dots_list />
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="calendar_prefix">#i18n{calendar.modify_calendar.prefix} :</label>
+                    <label class="control-label" for="calendar_prefix">#i18n{calendar.modify_calendar.prefix}</label>
                     <div class="controls">
-                        <input type="text" id="calendar_prefix" name="calendar_prefix" value="${calendar.eventPrefix}" tabindex="1" size="100" maxlength="250" />
+                        <input type="text" id="calendar_prefix" name="calendar_prefix" value="${calendar.eventPrefix}" tabindex="1" class="input-xxlarge" maxlength="250" />
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="calendar_role">#i18n{calendar.modify_calendar.role} :</label>
+                    <label class="control-label" for="calendar_role">#i18n{calendar.modify_calendar.role}</label>
                     <div class="controls">
                         <@combo name="calendar_role" default_value="${calendar.role}" items=roles_list />
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="calendar_role_manager">#i18n{calendar.modify_calendar.manager_role} :</label>
+                    <label class="control-label" for="calendar_role_manager">#i18n{calendar.modify_calendar.manager_role}</label>
                     <div class="controls">
                         <@combo name="calendar_role_manager" default_value="${calendar.roleManager}" items=roles_list />
                     </div>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="calendar_notification">#i18n{calendar.modify_calendar.notification}  :</label>
+                    <label class="control-label" for="calendar_notification">#i18n{calendar.modify_calendar.notification} </label>
                     <div class="controls">
                         <label class="checkbox">
                             <input name="calendar_notification" id="calendar_notification" type="checkbox" <#if calendar.notify>checked="checked"</#if>>
@@ -78,7 +78,7 @@
 <script>
 $(document).ready( function(){
     $("#notif").toggle();
-    if( $("input:checked").length > 0 ){
+    if( $("#calendar_notification:checked").length > 0 ){
         $("#notif").toggle();
     }
     $("#calendar_notification").click( function(e){
