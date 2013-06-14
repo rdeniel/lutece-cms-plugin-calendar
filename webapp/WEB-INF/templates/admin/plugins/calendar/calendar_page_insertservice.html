@@ -1,19 +1,20 @@
-<div class="insert-service">
-    <fieldset>
-    <legend>#i18n{portal.insert.page_insertservice.title}</legend>
-    <table class="table table-striped table-condensed">
+<div class="row">
+	<div class="span12">
+    <h3>#i18n{portal.insert.page_insertservice.title}</h3>
+		<table class="table table-striped table-condensed">
         <tr>
-            <th>#i18n{portal.insert.page_insertservice.labelInsert} :</th>
+            <th>#i18n{portal.insert.page_insertservice.labelInsert}</th>
         </tr>
         <#list insert_services_list as insertservice>
         <tr>
             <td>
-                <a class="btn btn-primary btn-small" href="jsp/admin/insert/DisplayInsertService.jsp?insert_service_type=${insertservice.id}&amp;plugin_name=${insertservice.pluginName}&amp;input=${input}&amp;selected_text=${selected_text}"  title="null" >
-                    <i class="icon-question-sign icon-white"></i>
+                <a class="btn btn-primary btn-small" href="jsp/admin/insert/DisplayInsertService.jsp?insert_service_type=${insertservice.id}&amp;plugin_name=${insertservice.pluginName}&amp;input=${input}&amp;selected_text=${selected_text}" title="#i18n{portal.util.labelOk}" >
+                    <i class="icon-ok icon-white"></i>
                 </a>
             </td>
         </tr>
         </#list>
-    </table>
+		</table>
+	</div>   
 </div>   
  

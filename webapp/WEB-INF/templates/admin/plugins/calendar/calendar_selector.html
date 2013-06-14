@@ -1,39 +1,41 @@
-<div class="insert-service">
-    <fieldset>
-        <legend>#i18n{calendar.insertService.name}</legend>
+<div class="row">    
+	<div class="span12"> 
+		<h3>#i18n{calendar.insertService.name}</h3>
         <#if calendar_list?size = 0>
-        #i18n{calendar.selector.calendar.noCalendar}
-        <button class="btn btn-primary btn-small" onclick="javascript:history.go(-1);" >null</button>
+			<div class="alert alert-error">
+				<p>#i18n{calendar.selector.calendar.noCalendar}</p>
+				<p>
+					<a class="btn btn-small" href="javascript:history.go(-1);">
+						<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.util.labelBack}
+					</a>
+				</p>
+			</div>
         <#else>
-        <form class="form-horizontal" method="post" name="fsubmit" action="jsp/admin/plugins/calendar/DoSelectCalendar.jsp">
-            <h3>#i18n{calendar.selector.calendar.calendarChoice}</h3>
-            <table class="table table-striped table-condensed">
-                <tr>
-                    <th></th>
-                    <th>#i18n{calendar.selector.calendar.calendarName}</th>
-                </tr>
-                <#list calendar_list as calendar>
-                <tr>
-                    <td>
-                        <div class="controls">
-                            <input class="radio" type="radio" id="calendar_id_${calendar.id}"
-                                   name="calendar_id" value="${calendar.id}" />
-                            <span class="help-block"></span>
-                        </div>
-                        </div>
-                    </td>
-                    <td>${calendar.name}</td>
-                </tr>
-                </#list>
-            </table>
-
-
-            <button class="btn btn-primary btn-small" type="submit" >#i18n{portal.util.labelValidate}</button> 
-            <button class="btn btn-primary btn-small" onclick="javascript:history.go(-1);" >null</button>
-
-
-            <input type="hidden" name="input" value="${input}" />
-    </fieldset>
-</form>
-</#if>
+			<form class="form-horizontal" method="post" name="fsubmit" action="jsp/admin/plugins/calendar/DoSelectCalendar.jsp">
+				<input type="hidden" name="input" value="${input}" />
+				<fieldset>
+					<legend>#i18n{calendar.selector.calendar.calendarChoice}</legend>
+					<#list calendar_list as calendar>
+						<div class="control-group">
+							<label class="controls-label" for=""></label>
+							<div class="controls">
+								<label class="radio" for="calendar_id_${calendar.id}">
+									<input class="radio" type="radio" id="calendar_id_${calendar.id}" name="calendar_id" value="${calendar.id}">
+									&nbsp;${calendar.name}
+								</label>
+							</div>
+						</div>
+					</#list>
+					<div class="form-actions">
+						<button class="btn btn-primary btn-small" type="submit" >
+							<i class="icon-ok icon-white"></i>&nbsp;#i18n{portal.util.labelValidate}
+						</button> 
+						<a class="btn btn-small" href="javascript:history.go(-1);">
+							<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.util.labelBack}
+						</a>
+					</div>	
+				</fieldset>
+			</form>
+		</#if>
+	</div>
 </div>
