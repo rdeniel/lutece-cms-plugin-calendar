@@ -20,7 +20,7 @@
 		<ul class="nav nav-tabs">
 				<li class="active">
 					<a href="#panel1"  data-toggle="tab">
-						#i18n{calendar.create_event.pageTitle}
+						#i18n{calendar.modify_event.pageTitle}
 					</a>
 				</li>
 				<li>
@@ -45,9 +45,9 @@
 							<textarea id="event_description" class="richtext" tabindex="3" name="event_description" rows="4" >${event.description}</textarea>
 						</div>
 					</div>
-					<div class="control-group">
+					<div class="control-group form-inline">
 						<label class="control-label" for="event_date">#i18n{calendar.create_event.event_hour_and_time}</label>
-						<div class="controls form-inline">
+						<div class="controls">
 							<label  for="event_date">#i18n{calendar.create_event.date} *&nbsp;</label>
 							<div class="input-prepend">
 								<span class="add-on">
@@ -65,8 +65,7 @@
 						   <a class="btn btn-small" href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}&sort_events=${default_sort_event}">
 								<i class="icon-edit"></i>&nbsp;#i18n{calendar.modify_event.buttonLabelmodify} #i18n{calendar.modify_event.periodicity}
 							</a>
-						</div>
-						<div class="controls form-inline">
+						
  						<label for="event_time_start">#i18n{calendar.create_event.time_start}&nbsp;</label>
 							<div class="input-prepend">
 								<span class="add-on">
@@ -232,7 +231,7 @@ $(document).ready( function(){
 </script>
 
 <@initEditor />
-<script src="js/jquery/plugins/ui/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="js/jquery/plugins/ui/ui.datepicker-${locale}.js"></script>
 <script src="js/jquery/plugins/ui/timepicker/jquery-ui-timepicker-addon.js"></script>
 <script src="js/jquery/plugins/ui/timepicker/jquery-ui-sliderAccess.js"></script>
