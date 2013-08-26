@@ -275,11 +275,11 @@ public class MiniCalendarPortlet extends Portlet
                     XmlUtil.addElement( strXml, TAG_DATE, strDateBegin );
                     XmlUtil.addElement( strXml, TAG_DATE_END, StringUtils.EMPTY );
                 }
-                XmlUtil.addElement( strXml, TAG_EVENT_TITLE, ( event.getTitle( ) != null ) ? event.getTitle( )
+                XmlUtil.addElementHtml( strXml, TAG_EVENT_TITLE, ( event.getTitle( ) != null ) ? event.getTitle( )
                         : StringUtils.EMPTY );
                 XmlUtil.addElement( strXml, TAG_EVENT_DATETIME_BEGIN,
                         ( event.getDateTimeStart( ) != null ) ? event.getDateTimeStart( ) : StringUtils.EMPTY );
-                XmlUtil.addElement( strXml, TAG_EVENT_DESCRIPTION,
+                XmlUtil.addElementHtml( strXml, TAG_EVENT_DESCRIPTION,
                         ( event.getDescription( ) != null ) ? event.getDescription( ) : StringUtils.EMPTY );
                 XmlUtil.addElement( strXml, TAG_EVENT_ID, event.getId( ) );
                 XmlUtil.endElement( strXml, TAG_EVENT );
