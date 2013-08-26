@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.calendar.business;
 
+import fr.paris.lutece.portal.service.image.ImageResource;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import fr.paris.lutece.portal.service.image.ImageResource;
 
 
 /**
@@ -48,176 +48,178 @@ public interface Event extends Serializable
      * Returns a date as an object java.util.Date
      * @return The date code
      */
-    Date getDate(  );
+    Date getDate( );
 
     /**
      * Returns the id of the event
-     *
+     * 
      * @return The id
      */
-    int getId(  );
+    int getId( );
 
     /**
      * Returns the Title
-     *
+     * 
      * @return The Title
      */
-    String getTitle(  );
+    String getTitle( );
 
     /**
      * Returns the Location
-     *
+     * 
      * @return The Location
      */
-    String getLocation(  );
+    String getLocation( );
 
     /**
      * Returns the EventClass
-     *
+     * 
      * @return The EventClass
      */
-    String getEventClass(  );
+    String getEventClass( );
 
     /**
      * Returns the Description
-     *
+     * 
      * @return The Description
      */
-    String getDescription(  );
+    String getDescription( );
 
     /**
      * Returns the DateTimeStart
-     *
+     * 
      * @return The DateTimeStart
      */
-    String getDateTimeStart(  );
+    String getDateTimeStart( );
 
     /**
      * Returns the DateEnd
-     *
+     * 
      * @return The DateEnd
      */
-    String getDateTimeEnd(  );
+    String getDateTimeEnd( );
 
     /**
      * Returns the Status
-     *
+     * 
      * @return The Status
      */
-    String getStatus(  );
+    String getStatus( );
 
     /**
      * Returns the Priority
-     *
+     * 
      * @return The Priority
      */
-    int getPriority(  );
+    int getPriority( );
 
     /**
      * Returns the Url
-     *
+     * 
      * @return The Url
      */
-    String getUrl(  );
+    String getUrl( );
 
     /**
      * Returns the periodicity
-     *
+     * 
      * @return The periodicity
      */
-    int getPeriodicity(  );
+    int getPeriodicity( );
 
     /**
      * Returns the occurrence
-     *
+     * 
      * @return The occurrence
      */
-    int getOccurrence(  );
+    int getOccurrence( );
 
     /**
      * Returns the date end
-     *
+     * 
      * @return The date end
      */
-    Date getDateEnd(  );
+    Date getDateEnd( );
 
     /**
      * Returns the location Town
-     *
+     * 
      * @return The location Town
      */
-    String getLocationTown(  );
+    String getLocationTown( );
 
     /**
      * Returns the location Zip
-     *
+     * 
      * @return The location Zip
      */
-    String getLocationZip(  );
+    String getLocationZip( );
 
     /**
      * Returns the location Address
-     *
+     * 
      * @return The location Address
      */
-    String getLocationAddress(  );
+    String getLocationAddress( );
 
     /**
      * Returns the date end
-     *
+     * 
      * @return The date end
      */
-    String getMapUrl(  );
+    String getMapUrl( );
 
     /**
      * Returns the link Url
-     *
+     * 
      * @return The link Url
      */
-    String getLinkUrl(  );
+    String getLinkUrl( );
 
     /**
      * Returns the document id
-     *
+     * 
      * @return The document id
      */
-    int getDocumentId(  );
+    int getDocumentId( );
 
     /**
      * Returns the page Url
-     *
+     * 
      * @return The page Url
      */
-    String getPageUrl(  );
+    String getPageUrl( );
 
     /**
      * Returns the top Event
-     *
+     * 
      * @return The top Event
      */
-    int getTopEvent(  );
+    int getTopEvent( );
 
     /**
      * Returns the ImageResource
-     *
+     * 
      * @return the ImageResource
      */
-    ImageResource getImageResource(  );
+    ImageResource getImageResource( );
 
     /**
      * Returns search type
-     *
+     * 
      * @return The search type
      */
-    String getType(  );
+    String getType( );
 
     /**
-     * Returns the creation date
+     * Get the creation date
+     * @return the creation date
      */
-    Date getDateCreation(  );
+    Date getDateCreation( );
 
     /**
-     * Returns the id of calendar
+     * Get the id of calendar
+     * @return the id of calendar
      */
-    int getIdCalendar(  );
+    int getIdCalendar( );
 }

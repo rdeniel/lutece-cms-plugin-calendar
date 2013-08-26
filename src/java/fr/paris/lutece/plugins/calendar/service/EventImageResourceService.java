@@ -44,25 +44,28 @@ import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.util.url.UrlItem;
 
 
+/**
+ * EventImageResourceService
+ */
 public class EventImageResourceService implements ImageResourceProvider
 {
-    private static EventImageResourceService _singleton = new EventImageResourceService(  );
+    private static EventImageResourceService _singleton = new EventImageResourceService( );
     private static final String IMAGE_RESOURCE_TYPE_ID = "image_event";
 
     /**
      * Creates a new instance of CategoryService
      */
-    EventImageResourceService(  )
+    EventImageResourceService( )
     {
         ImageResourceManager.registerProvider( this );
     }
 
     /**
      * Get the unique instance of the service
-     *
+     * 
      * @return The unique instance
      */
-    public static EventImageResourceService getInstance(  )
+    public static EventImageResourceService getInstance( )
     {
         return _singleton;
     }
@@ -74,7 +77,7 @@ public class EventImageResourceService implements ImageResourceProvider
      */
     public ImageResource getImageResource( int nIdEvent )
     {
-    	Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
+        Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
         return CalendarHome.getImageResource( nIdEvent, plugin );
     }
 
@@ -82,7 +85,7 @@ public class EventImageResourceService implements ImageResourceProvider
      * Get the type of resource
      * @return The type of resource
      */
-    public String getResourceTypeId(  )
+    public String getResourceTypeId( )
     {
         return IMAGE_RESOURCE_TYPE_ID;
     }
@@ -94,11 +97,11 @@ public class EventImageResourceService implements ImageResourceProvider
      */
     public String getResourceImageEvent( int nEventId )
     {
-        String strResourceType = EventImageResourceService.getInstance(  ).getResourceTypeId(  );
+        String strResourceType = EventImageResourceService.getInstance( ).getResourceTypeId( );
         UrlItem url = new UrlItem( Parameters.IMAGE_SERVLET );
         url.addParameter( Parameters.RESOURCE_TYPE, strResourceType );
         url.addParameter( Parameters.RESOURCE_ID, Integer.toString( nEventId ) );
 
-        return url.getUrl(  );
+        return url.getUrl( );
     }
 }

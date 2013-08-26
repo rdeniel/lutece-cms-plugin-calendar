@@ -1,10 +1,14 @@
 package fr.paris.lutece.plugins.calendar.service;
 
+import fr.paris.lutece.plugins.calendar.business.Event;
+
 import java.util.Comparator;
 import java.util.Date;
 
-import fr.paris.lutece.plugins.calendar.business.Event;
 
+/**
+ * EventComparator
+ */
 public class EventComparator implements Comparator<Event>{
 
 	public int compare(Event ev1, Event ev2) 

@@ -65,7 +65,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Result;
@@ -314,12 +316,12 @@ public final class XMLUtils
             {
                 transformer.clearParameters( );
 
-                Iterator<String> i = params.keySet( ).iterator( );
+                Set<Entry<String, String>> entries = params.entrySet( );
 
-                while ( i.hasNext( ) )
+                for ( Entry<String, String> entry : entries )
                 {
-                    String name = i.next( );
-                    String value = params.get( name );
+                    String name = entry.getKey( );
+                    String value = entry.getValue( );
                     transformer.setParameter( name, value );
                 }
             }

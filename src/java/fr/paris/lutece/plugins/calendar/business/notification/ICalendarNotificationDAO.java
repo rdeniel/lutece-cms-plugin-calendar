@@ -39,23 +39,21 @@ import java.util.List;
 
 
 /**
- *
+ * 
  * IResourceKeyDAO
- *
+ * 
  */
 public interface ICalendarNotificationDAO
 {
     /**
      * Insert object CalendarNotification
-     *
-     * @param calendarnotification
+     * @param calendarNotification The calendar notification to insert
      * @param plugin the plugin
      */
     void insert( CalendarNotification calendarNotification, Plugin plugin );
 
     /**
      * Update object CalendarNotification
-     *
      * @param calendarNotification
      * @param plugin the plugin
      */
@@ -66,19 +64,21 @@ public interface ICalendarNotificationDAO
      * @param strKey the key
      * @param plugin the plugin
      * @return ResourceKey
-     *
+     * 
      */
     CalendarNotification load( String strKey, Plugin plugin );
 
     /**
      * Delete object CalendarNotification
      * @param strKey the key
-     * @param plugin le plugin
+     * @param plugin The plugin
      */
     void delete( String strKey, Plugin plugin );
 
-    /**Delete resourceKey expiry
-     * @param plugin le plugin
+    /**
+     * Select notification expiry
+     * @param plugin The plugin
+     * @return The list of calendar notification
      */
     List<CalendarNotification> selectNotificationExpiry( Plugin plugin );
 }

@@ -676,7 +676,6 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String getOccurrenceList( HttpServletRequest request )
     {
-        String strHtml = StringUtils.EMPTY;
         String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
         String strEventId = request.getParameter( Constants.PARAMETER_EVENT_ID );
         if ( StringUtils.isNotBlank( strCalendarId ) && StringUtils.isNumeric( strCalendarId )

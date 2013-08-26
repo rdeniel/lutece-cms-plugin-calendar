@@ -54,20 +54,22 @@ import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.lucene.demo.html.HTMLParser;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.lucene.demo.html.HTMLParser;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
 
+
+/**
+ * CalendarIndexer
+ */
 public class CalendarIndexer implements SearchIndexer
 {
     //properties
@@ -84,22 +86,22 @@ public class CalendarIndexer implements SearchIndexer
 
     /**
      * Index all documents
-     *
+     * 
      * @throws IOException the exception
      * @throws InterruptedException the exception
      * @throws SiteMessageException the exception
      */
-    public void indexDocuments(  ) throws IOException, InterruptedException, SiteMessageException
+    public void indexDocuments( ) throws IOException, InterruptedException, SiteMessageException
     {
         String sRoleKey = "";
 
-        for ( AgendaResource agenda : Utils.getAgendaResourcesWithOccurrences(  ) )
+        for ( AgendaResource agenda : Utils.getAgendaResourcesWithOccurrences( ) )
         {
-            sRoleKey = agenda.getRole(  );
+            sRoleKey = agenda.getRole( );
 
-            String strAgenda = agenda.getId(  );
+            String strAgenda = agenda.getId( );
 
-            for ( Object oEvent : agenda.getAgenda(  ).getEvents(  ) )
+            for ( Object oEvent : agenda.getAgenda( ).getEvents( ) )
             {
                 indexSubject( oEvent, sRoleKey, strAgenda );
             }
@@ -108,41 +110,39 @@ public class CalendarIndexer implements SearchIndexer
 
     /**
      * Recursive method for indexing a calendar event
-     *
-     * @param faq the faq linked to the subject
-     * @param subject the subject
+     * 
      * @throws IOException I/O Exception
      * @throws InterruptedException interruptedException
      */
-    public void indexSubject( Object oEvent, String sRoleKey, String strAgenda )
-        throws IOException, InterruptedException
+    public void indexSubject( Object oEvent, String sRoleKey, String strAgenda ) throws IOException,
+            InterruptedException
     {
         OccurrenceEvent occurrence = (OccurrenceEvent) oEvent;
 
-        if ( occurrence.getStatus(  ).equals( AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_STATUS_CONFIRMED ) ) )
+        if ( occurrence.getStatus( ).equals(
+                AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_STATUS_CONFIRMED ) ) )
         {
-        	String strPortalUrl = AppPathService.getPortalUrl(  );
+            String strPortalUrl = AppPathService.getPortalUrl( );
 
             UrlItem urlEvent = new UrlItem( strPortalUrl );
             urlEvent.addParameter( XPageAppService.PARAM_XPAGE_APP, CalendarPlugin.PLUGIN_NAME );
             urlEvent.addParameter( Constants.PARAMETER_ACTION, Constants.ACTION_SHOW_RESULT );
-            urlEvent.addParameter( Constants.PARAMETER_EVENT_ID, occurrence.getEventId(  ) );
+            urlEvent.addParameter( Constants.PARAMETER_EVENT_ID, occurrence.getEventId( ) );
             urlEvent.addParameter( Constants.PARAM_AGENDA, strAgenda );
 
             org.apache.lucene.document.Document docSubject = null;
             try
             {
-            	docSubject = getDocument( occurrence, sRoleKey, urlEvent.getUrl(  ),
-            			strAgenda );
+                docSubject = getDocument( occurrence, sRoleKey, urlEvent.getUrl( ), strAgenda );
             }
             catch ( Exception e )
             {
-            	String strMessage = "Agenda ID : " + strAgenda + " - Occurrence ID : " + occurrence.getId(  );
-            	IndexationService.error( this, e, strMessage );
+                String strMessage = "Agenda ID : " + strAgenda + " - Occurrence ID : " + occurrence.getId( );
+                IndexationService.error( this, e, strMessage );
             }
             if ( docSubject != null )
             {
-            	IndexationService.write( docSubject );
+                IndexationService.write( docSubject );
             }
         }
     }
@@ -155,35 +155,36 @@ public class CalendarIndexer implements SearchIndexer
      * @throws InterruptedException the exception
      * @throws SiteMessageException the exception
      */
-    public List<Document> getDocuments( String strDocument )
-        throws IOException, InterruptedException, SiteMessageException
+    public List<Document> getDocuments( String strDocument ) throws IOException, InterruptedException,
+            SiteMessageException
     {
-        List<org.apache.lucene.document.Document> listDocs = new ArrayList<org.apache.lucene.document.Document>(  );
-        String strPortalUrl = AppPathService.getPortalUrl(  );
+        List<org.apache.lucene.document.Document> listDocs = new ArrayList<org.apache.lucene.document.Document>( );
+        String strPortalUrl = AppPathService.getPortalUrl( );
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
 
         OccurrenceEvent occurrence = CalendarHome.findOccurrence( Integer.parseInt( strDocument ), plugin );
-        if ( !occurrence.getStatus(  ).equals( AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_STATUS_CONFIRMED ) ) )
+        if ( !occurrence.getStatus( ).equals(
+                AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_STATUS_CONFIRMED ) ) )
         {
-        	return null;
+            return null;
         }
 
-        SimpleEvent event = CalendarHome.findEvent( occurrence.getEventId(  ), plugin );
-        
-        AgendaResource agendaResource = CalendarHome.findAgendaResource( event.getIdCalendar(  ), plugin );
+        SimpleEvent event = CalendarHome.findEvent( occurrence.getEventId( ), plugin );
+
+        AgendaResource agendaResource = CalendarHome.findAgendaResource( event.getIdCalendar( ), plugin );
         Utils.loadAgendaOccurrences( agendaResource, plugin );
 
-        String sRoleKey = agendaResource.getRole(  );
-        Agenda agenda = agendaResource.getAgenda(  );
+        String sRoleKey = agendaResource.getRole( );
+        Agenda agenda = agendaResource.getAgenda( );
 
         UrlItem urlEvent = new UrlItem( strPortalUrl );
         urlEvent.addParameter( XPageAppService.PARAM_XPAGE_APP, CalendarPlugin.PLUGIN_NAME );
         urlEvent.addParameter( Constants.PARAMETER_ACTION, Constants.ACTION_SHOW_RESULT );
-        urlEvent.addParameter( Constants.PARAMETER_EVENT_ID, occurrence.getEventId(  ) );
-        urlEvent.addParameter( Constants.PARAM_AGENDA, agenda.getKeyName(  ) );
+        urlEvent.addParameter( Constants.PARAMETER_EVENT_ID, occurrence.getEventId( ) );
+        urlEvent.addParameter( Constants.PARAM_AGENDA, agenda.getKeyName( ) );
 
-        org.apache.lucene.document.Document docEvent = getDocument( occurrence, sRoleKey, urlEvent.getUrl(  ),
-                agenda.getKeyName(  ) );
+        org.apache.lucene.document.Document docEvent = getDocument( occurrence, sRoleKey, urlEvent.getUrl( ),
+                agenda.getKeyName( ) );
 
         listDocs.add( docEvent );
 
@@ -191,37 +192,36 @@ public class CalendarIndexer implements SearchIndexer
     }
 
     /**
-     * Builds a document which will be used by Lucene during the indexing of the calendar list
-     *
-     * @param nIdFaq The {@link Faq} Id
+     * Builds a document which will be used by Lucene during the indexing of the
+     * calendar list
+     * @param occurrence The occurence event
      * @param strUrl the url of the subject
      * @param strRoleKey The role key
-     * @param plugin The {@link Plugin}
      * @param strAgenda the calendar id
      * @return A Lucene {@link Document} containing QuestionAnswer Data
      * @throws IOException The IO Exception
      * @throws InterruptedException The InterruptedException
      */
     public static org.apache.lucene.document.Document getDocument( OccurrenceEvent occurrence, String strRoleKey,
-        String strUrl, String strAgenda ) throws IOException, InterruptedException
+            String strUrl, String strAgenda ) throws IOException, InterruptedException
     {
         // make a new, empty document
-        org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document(  );
+        org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document( );
 
         //add the id of the calendar
         doc.add( new Field( Constants.FIELD_CALENDAR_ID, strAgenda + "_" + Constants.CALENDAR_SHORT_NAME,
                 Field.Store.NO, Field.Index.NOT_ANALYZED ) );
 
         //add the category of the event
-        Collection<Category> arrayCategories = occurrence.getListCategories(  );
+        Collection<Category> arrayCategories = occurrence.getListCategories( );
         String strCategories = Constants.EMPTY_STRING;
 
         if ( arrayCategories != null )
         {
-            Iterator<Category> i = arrayCategories.iterator(  );
+            Iterator<Category> i = arrayCategories.iterator( );
 
-            while ( i.hasNext(  ) )
-                strCategories += ( i.next(  ).getId(  ) + BLANK );
+            while ( i.hasNext( ) )
+                strCategories += ( i.next( ).getId( ) + BLANK );
         }
 
         doc.add( new Field( Constants.FIELD_CATEGORY, strCategories, Field.Store.NO, Field.Index.ANALYZED ) );
@@ -235,14 +235,14 @@ public class CalendarIndexer implements SearchIndexer
         // Add the uid as a field, so that index can be incrementally maintained.
         // This field is not stored with question/answer, it is indexed, but it is not
         // tokenized prior to indexing.
-        String strIdEvent = String.valueOf( occurrence.getId(  ) );
+        String strIdEvent = String.valueOf( occurrence.getId( ) );
         doc.add( new Field( SearchItem.FIELD_UID, strIdEvent + "_" + Constants.CALENDAR_SHORT_NAME, Field.Store.YES,
                 Field.Index.NOT_ANALYZED ) );
 
         // Add the last modified date of the file a field named "modified".
         // Use a field that is indexed (i.e. searchable), but don't tokenize
         // the field into words.
-        String strDate = Utils.getDate( occurrence.getDate(  ) );
+        String strDate = Utils.getDate( occurrence.getDate( ) );
         doc.add( new Field( SearchItem.FIELD_DATE, strDate, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
 
         String strContentToIndex = getContentToIndex( occurrence );
@@ -251,27 +251,27 @@ public class CalendarIndexer implements SearchIndexer
 
         //the content of the event descriptionr is recovered in the parser because this one
         //had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
-        Reader reader = parser.getReader(  );
+        Reader reader = parser.getReader( );
         int c;
-        StringBuffer sb = new StringBuffer(  );
+        StringBuffer sb = new StringBuffer( );
 
-        while ( ( c = reader.read(  ) ) != -1 )
+        while ( ( c = reader.read( ) ) != -1 )
         {
             sb.append( String.valueOf( (char) c ) );
         }
 
-        reader.close(  );
+        reader.close( );
 
         // Add the description as a summary field, so that index can be incrementally maintained.
         // This field is stored, but it is not indexed
-        String strDescription = occurrence.getDescription(  );
+        String strDescription = occurrence.getDescription( );
         strDescription = Utils.ParseHtmlToPlainTextString( strDescription );
 
         try
         {
             strDescription = strDescription.substring( 0,
-                    AppPropertiesService.getPropertyInt( PROPERTY_DESCRIPTION_MAX_CHARACTERS, 200 ) ) +
-                PROPERTY_DESCRIPTION_ETC;
+                    AppPropertiesService.getPropertyInt( PROPERTY_DESCRIPTION_MAX_CHARACTERS, 200 ) )
+                    + PROPERTY_DESCRIPTION_ETC;
         }
         catch ( StringIndexOutOfBoundsException e )
         {
@@ -284,13 +284,14 @@ public class CalendarIndexer implements SearchIndexer
 
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.
-        doc.add( new Field( SearchItem.FIELD_CONTENTS, sb.toString(  ), Field.Store.NO, Field.Index.ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_CONTENTS, sb.toString( ), Field.Store.NO, Field.Index.ANALYZED ) );
 
         // Add the subject name as a separate Text field, so that it can be searched
         // separately.
-        doc.add( new Field( SearchItem.FIELD_TITLE, occurrence.getTitle(  ), Field.Store.YES, Field.Index.ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_TITLE, occurrence.getTitle( ), Field.Store.YES, Field.Index.ANALYZED ) );
 
-        doc.add( new Field( SearchItem.FIELD_TYPE, CalendarPlugin.PLUGIN_NAME, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_TYPE, CalendarPlugin.PLUGIN_NAME, Field.Store.YES,
+                Field.Index.NOT_ANALYZED ) );
 
         // return the document
         return doc;
@@ -298,29 +299,29 @@ public class CalendarIndexer implements SearchIndexer
 
     /**
      * Set the Content to index (Description, location)
-     * @param  The Event
+     * @param event The Event
      * @return The content to index
      */
     private static String getContentToIndex( Event event )
     {
-        StringBuffer sbContentToIndex = new StringBuffer(  );
+        StringBuffer sbContentToIndex = new StringBuffer( );
         //Do not index question here
-        sbContentToIndex.append( event.getDescription(  ) );
+        sbContentToIndex.append( event.getDescription( ) );
         sbContentToIndex.append( BLANK );
-        sbContentToIndex.append( event.getLocationAddress(  ) );
+        sbContentToIndex.append( event.getLocationAddress( ) );
         sbContentToIndex.append( BLANK );
-        sbContentToIndex.append( event.getLocationTown(  ) );
+        sbContentToIndex.append( event.getLocationTown( ) );
         sbContentToIndex.append( BLANK );
-        sbContentToIndex.append( event.getLocationZip(  ) );
+        sbContentToIndex.append( event.getLocationZip( ) );
 
-        return sbContentToIndex.toString(  );
+        return sbContentToIndex.toString( );
     }
 
     /**
      * Returns the indexer service name
      * @return the indexer service name
      */
-    public String getName(  )
+    public String getName( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_NAME );
     }
@@ -329,7 +330,7 @@ public class CalendarIndexer implements SearchIndexer
      * Returns the indexer service version
      * @return the indexer service version
      */
-    public String getVersion(  )
+    public String getVersion( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_VERSION );
     }
@@ -338,7 +339,7 @@ public class CalendarIndexer implements SearchIndexer
      * Returns the indexer service description
      * @return the indexer service description
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_DESCRIPTION );
     }
@@ -347,14 +348,14 @@ public class CalendarIndexer implements SearchIndexer
      * Tells whether the service is enable or not
      * @return true if enable, otherwise false
      */
-    public boolean isEnable(  )
+    public boolean isEnable( )
     {
         boolean bReturn = false;
         String strEnable = AppPropertiesService.getProperty( PROPERTY_INDEXER_ENABLE );
 
-        if ( ( strEnable != null ) &&
-                ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString(  ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) ) &&
-                PluginService.isPluginEnable( CalendarPlugin.PLUGIN_NAME ) )
+        if ( ( strEnable != null )
+                && ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString( ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) )
+                && PluginService.isPluginEnable( CalendarPlugin.PLUGIN_NAME ) )
         {
             bReturn = true;
         }
@@ -365,19 +366,19 @@ public class CalendarIndexer implements SearchIndexer
     /**
      * {@inheritDoc}
      */
-	public List<String> getListType(  )
-	{
-		List<String> listType = new ArrayList<String>(  );
-		listType.add( CalendarPlugin.PLUGIN_NAME );
-		
-		return listType;
-	}
+    public List<String> getListType( )
+    {
+        List<String> listType = new ArrayList<String>( );
+        listType.add( CalendarPlugin.PLUGIN_NAME );
 
-	/**
+        return listType;
+    }
+
+    /**
      * {@inheritDoc}
      */
-	public String getSpecificSearchAppUrl(  )
-	{
-		return JSP_SEARCH_CALENDAR;
-	}
+    public String getSpecificSearchAppUrl( )
+    {
+        return JSP_SEARCH_CALENDAR;
+    }
 }

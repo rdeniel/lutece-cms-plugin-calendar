@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import fr.paris.lutece.plugins.calendar.business.Agenda;
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.Event;
@@ -57,6 +49,14 @@ import fr.paris.lutece.portal.web.LocalVariables;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -76,25 +76,27 @@ public class SmallMonthCalendar
      * @param options The options which contains displaying settings
      * @param strDate The code date defining the month to display
      * @param agenda An agenda to hilight some days.
-     * @param bIsSelectedDay true if the date is the selected day, false otherwise
+     * @param bIsSelectedDay true if the date is the selected day, false
+     *            otherwise
      */
-    public static String getSmallMonthCalendar( String strDate, Agenda agenda, CalendarUserOptions options, boolean bIsSelectedDay )
+    public static String getSmallMonthCalendar( String strDate, Agenda agenda, CalendarUserOptions options,
+            boolean bIsSelectedDay )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        Calendar calendar = new GregorianCalendar(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), 1 );
 
-        Calendar firstDayOfMonth = new GregorianCalendar(  );
+        Calendar firstDayOfMonth = new GregorianCalendar( );
         firstDayOfMonth.set( Utils.getYear( strDate ), Utils.getMonth( strDate ),
-            calendar.getMinimum( Calendar.DAY_OF_MONTH ) );
+                calendar.getMinimum( Calendar.DAY_OF_MONTH ) );
 
-        Date dFirstDayOfMonth = firstDayOfMonth.getTime(  );
+        Date dFirstDayOfMonth = firstDayOfMonth.getTime( );
 
-        Calendar lastDayOfMonth = new GregorianCalendar(  );
+        Calendar lastDayOfMonth = new GregorianCalendar( );
         lastDayOfMonth.set( Utils.getYear( strDate ), Utils.getMonth( strDate ),
-            calendar.getMaximum( Calendar.DAY_OF_MONTH ) );
+                calendar.getMaximum( Calendar.DAY_OF_MONTH ) );
 
-        Date dLastDayOfMonth = lastDayOfMonth.getTime(  );
+        Date dLastDayOfMonth = lastDayOfMonth.getTime( );
 
         int nDayOfWeek = calendar.get( Calendar.DAY_OF_WEEK );
 
@@ -103,38 +105,35 @@ public class SmallMonthCalendar
             nDayOfWeek = 8;
         }
 
-        StringBuffer sbWeeks = new StringBuffer(  );
+        StringBuffer sbWeeks = new StringBuffer( );
 
         boolean bDone = false;
         boolean bStarted = false;
 
         while ( !bDone )
         {
-            Map<String, Object> weekModel = new HashMap<String, Object>(  );
+            Map<String, Object> weekModel = new HashMap<String, Object>( );
 
             //HtmlTemplate tWeek = new HtmlTemplate( templateWeek );
-            StringBuffer sbDays = new StringBuffer(  );
+            StringBuffer sbDays = new StringBuffer( );
 
             for ( int i = 0; i < 7; i++ )
             {
                 if ( ( ( ( i + 2 ) != nDayOfWeek ) && !bStarted ) || bDone )
                 {
-                    sbDays.append( AppTemplateService.getTemplate( TEMPLATE_EMPTY_DAY ).getHtml(  ) );
+                    sbDays.append( AppTemplateService.getTemplate( TEMPLATE_EMPTY_DAY ).getHtml( ) );
 
                     continue;
                 }
-                else
-                {
-                    bStarted = true;
-                }
+                bStarted = true;
 
                 if ( strDate.equals( Utils.getDate( calendar ) ) && bIsSelectedDay )
                 {
-                	sbDays.append( getDay( calendar, agenda, options, true ) );
+                    sbDays.append( getDay( calendar, agenda, options, true ) );
                 }
                 else
                 {
-                	sbDays.append( getDay( calendar, agenda, options, false ) );
+                    sbDays.append( getDay( calendar, agenda, options, false ) );
                 }
 
                 int nDay = calendar.get( Calendar.DAY_OF_MONTH );
@@ -148,23 +147,23 @@ public class SmallMonthCalendar
                 }
             }
 
-            weekModel.put( Constants.MARK_DAYS, sbDays.toString(  ) );
-            sbWeeks.append( AppTemplateService.getTemplate( TEMPLATE_WEEK, options.getLocale(  ), weekModel ).getHtml(  ) );
+            weekModel.put( Constants.MARK_DAYS, sbDays.toString( ) );
+            sbWeeks.append( AppTemplateService.getTemplate( TEMPLATE_WEEK, options.getLocale( ), weekModel ).getHtml( ) );
         }
 
-        model.put( Constants.MARK_MONTH_LABEL, Utils.getMonthLabel( strDate, options.getLocale(  ) ) );
+        model.put( Constants.MARK_MONTH_LABEL, Utils.getMonthLabel( strDate, options.getLocale( ) ) );
         model.put( Constants.MARK_PREVIOUS, Utils.getPreviousMonth( strDate ) );
         model.put( Constants.MARK_DATE, strDate );
         model.put( Constants.MARK_NEXT, Utils.getNextMonth( strDate ) );
         model.put( Constants.MARK_DATE_START, dFirstDayOfMonth );
         model.put( Constants.MARK_DATE_END, dLastDayOfMonth );
 
-        model.put( Constants.MARK_WEEKS, sbWeeks.toString(  ) );
+        model.put( Constants.MARK_WEEKS, sbWeeks.toString( ) );
         model.put( Constants.MARK_JSP_URL, AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_MONTH, options.getLocale(  ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_MONTH, options.getLocale( ), model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -173,11 +172,12 @@ public class SmallMonthCalendar
      * @param options The options which stores the display settings
      * @param calendar A calendar object positioned on a given day
      * @param agenda The agenda
-     * @param bIsSelectedDay true if the date is the selected day, false otherwise
+     * @param bIsSelectedDay true if the date is the selected day, false
+     *            otherwise
      */
     private static String getDay( Calendar calendar, Agenda agenda, CalendarUserOptions options, boolean bIsSelectedDay )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         String strDate = Utils.getDate( calendar );
         Date date = Utils.getDate( strDate );
         String strLinkClass = AppPropertiesService.getProperty( Constants.PROPERTY_SMALLCALENDAR_LINKCLASS_NO_EVENT );
@@ -185,25 +185,25 @@ public class SmallMonthCalendar
         String[] strAgendaIds = null;
         if ( agenda instanceof fr.paris.lutece.plugins.calendar.business.MultiAgenda )
         {
-        	MultiAgenda multiAgenda = ( MultiAgenda ) agenda;
-        	if ( multiAgenda.getAgendaIds(  ) != null && multiAgenda.getAgendaIds(  ).length > 0 )
-        	{
-        		strAgendaIds = multiAgenda.getAgendaIds(  );
-        	}
+            MultiAgenda multiAgenda = (MultiAgenda) agenda;
+            if ( multiAgenda.getAgendaIds( ) != null && multiAgenda.getAgendaIds( ).length > 0 )
+            {
+                strAgendaIds = multiAgenda.getAgendaIds( );
+            }
         }
         List<Event> listEvent;
-        
+
         if ( agenda.hasEvents( strDate ) )
         {
-        	listEvent = CalendarSearchService.getInstance(  )
-        		.getSearchResults( strAgendaIds, null, "", date, date, LocalVariables.getRequest(  ), plugin );
+            listEvent = CalendarSearchService.getInstance( ).getSearchResults( strAgendaIds, null, "", date, date,
+                    LocalVariables.getRequest( ), plugin );
         }
         else
         {
-        	listEvent = new ArrayList<Event>(  );
+            listEvent = new ArrayList<Event>( );
         }
-        
-        if ( listEvent.size(  ) != 0 )
+
+        if ( listEvent.size( ) != 0 )
         {
             strLinkClass = AppPropertiesService.getProperty( Constants.PROPERTY_SMALLCALENDAR_LINKCLASS_HAS_EVENTS );
         }
@@ -216,46 +216,47 @@ public class SmallMonthCalendar
         //model.put( Constants.MARK_JSP_URL, AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );
 
         //we only show link days with events on calendar
-        if ( listEvent.size(  ) != 0 && !options.isShowSearchEngine(  ) )
+        if ( listEvent.size( ) != 0 && !options.isShowSearchEngine( ) )
         {
-            UrlItem urlDay = new UrlItem( AppPathService.getPortalUrl(  ) );
+            UrlItem urlDay = new UrlItem( AppPathService.getPortalUrl( ) );
             urlDay.addParameter( Constants.PARAMETER_PAGE, Constants.PLUGIN_NAME );
             urlDay.addParameter( Constants.PARAMETER_DATE, strDate );
-            model.put( Constants.MARK_JSP_URL, urlDay.getUrl(  ) );
+            model.put( Constants.MARK_JSP_URL, urlDay.getUrl( ) );
         }
-        else if ( listEvent.size(  ) != 0 && options.isShowSearchEngine(  ) )
+        else if ( listEvent.size( ) != 0 && options.isShowSearchEngine( ) )
         {
-            UrlItem urlDay = new UrlItem( AppPathService.getPortalUrl(  ) );
+            UrlItem urlDay = new UrlItem( AppPathService.getPortalUrl( ) );
             urlDay.addParameter( Constants.PARAMETER_PAGE, Constants.PLUGIN_NAME );
             urlDay.addParameter( Constants.PARAMETER_ACTION, Constants.ACTION_DO_SEARCH );
             urlDay.addParameter( Constants.PARAMETER_DATE_START,
-                DateUtil.getDateString( Utils.getDate( strDate ), options.getLocale(  ) ) );
+                    DateUtil.getDateString( Utils.getDate( strDate ), options.getLocale( ) ) );
             urlDay.addParameter( Constants.PARAMETER_DATE_END,
-                DateUtil.getDateString( Utils.getDate( strDate ), options.getLocale(  ) ) );
+                    DateUtil.getDateString( Utils.getDate( strDate ), options.getLocale( ) ) );
             urlDay.addParameter( Constants.PARAMETER_PERIOD, Constants.PROPERTY_PERIOD_RANGE );
-            model.put( Constants.MARK_JSP_URL, urlDay.getUrl(  ) );
+            model.put( Constants.MARK_JSP_URL, urlDay.getUrl( ) );
         }
         else
         {
             model.put( Constants.MARK_JSP_URL, "" );
         }
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_DAY, options.getLocale(  ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_DAY, options.getLocale( ), model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * Calculate the style class to render the day
      * @param calendar A calendar object positionned on the day to render
-     * @param bIsSelectedDay true if the date is the selected day, false otherwise
+     * @param bIsSelectedDay true if the date is the selected day, false
+     *            otherwise
      * @return A CSS style
      */
     public static String getDayClass( Calendar calendar, boolean bIsSelectedDay )
     {
         String strClass = Constants.STYLE_CLASS_SMALLMONTH_DAY;
         String strDate = Utils.getDate( calendar );
-        String strToday = Utils.getDateToday(  );
+        String strToday = Utils.getDateToday( );
 
         if ( CalendarHome.hasOccurrenceEvent( calendar, PluginService.getPlugin( Constants.PLUGIN_NAME ) ) )
         {
@@ -273,10 +274,10 @@ public class SmallMonthCalendar
         {
             strClass += Constants.STYLE_CLASS_SUFFIX_TODAY;
         }
-        
+
         if ( bIsSelectedDay )
         {
-        	strClass += Constants.SPACE + Constants.STYLE_CLASS_SELECTED_DAY;
+            strClass += Constants.SPACE + Constants.STYLE_CLASS_SELECTED_DAY;
         }
 
         return strClass;

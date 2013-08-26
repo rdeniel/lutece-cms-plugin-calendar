@@ -40,7 +40,7 @@ import java.util.Locale;
 
 
 /**
- *  This interface describes the minimum implementation for agendas
+ * This interface describes the minimum implementation for agendas
  */
 public interface Agenda extends Serializable
 {
@@ -60,9 +60,10 @@ public interface Agenda extends Serializable
 
     /**
      * Retrieves events for a given date
+     * @param dateBegin The start date
+     * @param dateEnd The end date
+     * @param localeEnv The locale
      * @return A list of events
-     * @param strDateBegin The start date
-     * @param strDateEnd The end date
      */
     List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv );
 
@@ -70,13 +71,13 @@ public interface Agenda extends Serializable
      * Retrieves all events of the agenda
      * @return A list of events
      */
-    List<Event> getEvents(  );
+    List<Event> getEvents( );
 
     /**
      * Returns the name of the Agenda
      * @return The agenda's name
      */
-    String getName(  );
+    String getName( );
 
     /**
      * Sets the name of the Agenda
@@ -88,7 +89,7 @@ public interface Agenda extends Serializable
      * Returns the key of the Agenda
      * @return The agenda's key
      */
-    String getKeyName(  );
+    String getKeyName( );
 
     /**
      * Sets the key of the Agenda

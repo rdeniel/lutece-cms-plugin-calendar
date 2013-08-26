@@ -55,14 +55,14 @@ public class CalendarResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
-    public void register(  )
+    public void register( )
     {
-        ResourceType rt = new ResourceType(  );
-        rt.setResourceIdServiceClass( CalendarResourceIdService.class.getName(  ) );
+        ResourceType rt = new ResourceType( );
+        rt.setResourceIdServiceClass( CalendarResourceIdService.class.getName( ) );
         rt.setResourceTypeKey( RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        Permission p = new Permission(  );
+        Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_MANAGE );
         p.setPermissionTitleKey( PROPERTY_LABEL_MANAGE );
         rt.registerPermission( p );
@@ -82,7 +82,7 @@ public class CalendarResourceIdService extends ResourceIdService
 
     /**
      * Returns the Title of a given resource
-     * @param strAdminUserServiceId The Id of the resource
+     * @param strAdminUserId The Id of the resource
      * @param locale The current locale
      * @return The Title of a given resource
      */

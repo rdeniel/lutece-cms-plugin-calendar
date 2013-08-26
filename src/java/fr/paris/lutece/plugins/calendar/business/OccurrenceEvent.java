@@ -35,52 +35,52 @@ package fr.paris.lutece.plugins.calendar.business;
 
 public class OccurrenceEvent extends SimpleEvent
 {
-	private static final long serialVersionUID = 4979315059166094219L;
-	private int _nEventId;
+    private static final long serialVersionUID = 4979315059166094219L;
+    private int _nEventId;
 
     /**
      * Default constructor
      */
-    public OccurrenceEvent(  )
+    public OccurrenceEvent( )
     {
     }
 
     /**
-    * Constructor
-    * @param event The event
-    * @param nEventId The id of an occurrence
-    */
+     * Constructor
+     * @param event The event
+     * @param nOccurrenceId The id of an occurrence
+     */
     public OccurrenceEvent( SimpleEvent event, int nOccurrenceId )
     {
-        setDate( event.getDate(  ) );
-        setEventClass( event.getEventClass(  ) );
-        setTitle( event.getTitle(  ) );
-        setDescription( event.getDescription(  ) );
-        setDateTimeStart( event.getDateTimeStart(  ) );
-        setDateTimeEnd( event.getDateTimeEnd(  ) );
-        setStatus( event.getStatus(  ) );
-        setPriority( event.getPriority(  ) );
-        setUrl( event.getUrl(  ) );
-        setLocation( event.getLocation(  ) );
+        setDate( event.getDate( ) );
+        setEventClass( event.getEventClass( ) );
+        setTitle( event.getTitle( ) );
+        setDescription( event.getDescription( ) );
+        setDateTimeStart( event.getDateTimeStart( ) );
+        setDateTimeEnd( event.getDateTimeEnd( ) );
+        setStatus( event.getStatus( ) );
+        setPriority( event.getPriority( ) );
+        setUrl( event.getUrl( ) );
+        setLocation( event.getLocation( ) );
         setId( nOccurrenceId );
-        setEventId( event.getId(  ) );
-        setListCategories( event.getListCategories(  ) );
+        setEventId( event.getId( ) );
+        setListCategories( event.getListCategories( ) );
     }
 
     /**
      * Returns the id of the event
-     *
+     * 
      * @return The id
      */
-    public int getEventId(  )
+    public int getEventId( )
     {
         return _nEventId;
     }
 
     /**
      * Sets the id of the event
-     *
-     * @param nId The id of the event
+     * 
+     * @param eventId The id of the event
      */
     public void setEventId( int eventId )
     {

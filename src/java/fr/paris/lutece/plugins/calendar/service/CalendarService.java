@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.parameter.CalendarParameterHome;
@@ -55,54 +46,64 @@ import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.portal.service.workgroup.AdminWorkgroupService;
 import fr.paris.lutece.portal.web.PortalJspBean;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
+
 /**
  * CalendarService
  */
 public class CalendarService
 {
-	// CONSTANTS
-	private static final String NONE = "-";
-	private static final String SERVICE_NAME = "Calendar Cache Service";
-	
-	// CACHE KEYS
-	private static final String KEY_CALENDAR = "calendar";
-    
+    // CONSTANTS
+    private static final String NONE = "-";
+    private static final String SERVICE_NAME = "Calendar Cache Service";
+
+    // CACHE KEYS
+    private static final String KEY_CALENDAR = "calendar";
+
     // VARIABLES
     private ICacheKeyService _cksCalendar;
-    private CalendarCacheService _cacheCalendar = CalendarCacheService.getInstance(  );
+    private CalendarCacheService _cacheCalendar = CalendarCacheService.getInstance( );
 
     /** Creates a new instance of CalendarService */
-    public CalendarService(  )
+    public CalendarService( )
     {
-        init(  );
+        init( );
     }
 
     /**
      * Initialize the CalendarService
      */
-    private void init(  )
+    private void init( )
     {
-        _cacheCalendar.initCache(  );
+        _cacheCalendar.initCache( );
     }
-    
+
     /**
      * Get the service name
      * @return the service name
      */
-    public String getName(  )
+    public String getName( )
     {
         return SERVICE_NAME;
     }
-    
+
     /**
      * Set the agenda cache key service
      * @param cacheKeyService the cache key service
      */
     public void setCalendarCacheKeyService( ICacheKeyService cacheKeyService )
     {
-    	_cksCalendar = cacheKeyService;
+        _cksCalendar = cacheKeyService;
     }
-    
+
     /**
      * Get the agenda
      * @param strAgendaKeyName the agenda key name
@@ -110,15 +111,15 @@ public class CalendarService
      */
     public AgendaResource getAgendaResource( String strAgendaKeyName )
     {
-    	AgendaResource agenda = null;
-    	if ( StringUtils.isNotBlank( strAgendaKeyName ) && StringUtils.isNumeric( strAgendaKeyName ) )
-    	{
-    		int nAgendaId = Integer.parseInt( strAgendaKeyName );
-    		agenda = getAgendaResource( nAgendaId );
-    	}
-    	return agenda;
+        AgendaResource agenda = null;
+        if ( StringUtils.isNotBlank( strAgendaKeyName ) && StringUtils.isNumeric( strAgendaKeyName ) )
+        {
+            int nAgendaId = Integer.parseInt( strAgendaKeyName );
+            agenda = getAgendaResource( nAgendaId );
+        }
+        return agenda;
     }
-    
+
     /**
      * Returns the agenda
      * @param nAgendaId the ID agenda
@@ -127,114 +128,116 @@ public class CalendarService
     public AgendaResource getAgendaResource( int nAgendaId )
     {
         String strKey = getKey( nAgendaId );
-        
+
         AgendaResource agenda = (AgendaResource) _cacheCalendar.getFromCache( strKey );
 
         if ( agenda == null )
         {
-        	Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
+            Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
             agenda = CalendarHome.findAgendaResource( nAgendaId, plugin );
             Utils.loadAgendaOccurrences( agenda, plugin );
             _cacheCalendar.putInCache( strKey, agenda );
         }
-		
+
         return agenda;
     }
-    
+
     /**
      * Return the list of agenda IDs
      * @return the list of agenda IDs
      */
-    public List<Integer> getAgendaIds(  )
+    public List<Integer> getAgendaIds( )
     {
-    	String strKey = getKey(  );
-    	List<Integer> listIds = (List<Integer>) _cacheCalendar.getFromCache( strKey );
-    	if ( listIds == null )
-    	{
-    		Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
-    		listIds = CalendarHome.findCalendarIds( plugin );
-    		_cacheCalendar.putInCache( strKey, listIds );
-    	}
-    	
-    	return listIds;
+        String strKey = getKey( );
+        List<Integer> listIds = (List<Integer>) _cacheCalendar.getFromCache( strKey );
+        if ( listIds == null )
+        {
+            Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
+            listIds = CalendarHome.findCalendarIds( plugin );
+            _cacheCalendar.putInCache( strKey, listIds );
+        }
+
+        return listIds;
     }
-    
+
     /**
      * Get the multiAgenda. Only the agenda the user has access to are put
-     * in the multiagenda (same role of the agenda, or the user has the role manager)
+     * in the multiagenda (same role of the agenda, or the user has the role
+     * manager)
      * @param request {@link HttpServletRequest}
      * @return the multiagenda
      */
     public MultiAgenda getMultiAgenda( HttpServletRequest request )
     {
-    	MultiAgenda multiAgenda = new MultiAgenda(  );
-    	for ( int nAgendaId : getAgendaIds(  ) )
-    	{
-    		AgendaResource agenda = getAgendaResource( nAgendaId );
+        MultiAgenda multiAgenda = new MultiAgenda( );
+        for ( int nAgendaId : getAgendaIds( ) )
+        {
+            AgendaResource agenda = getAgendaResource( nAgendaId );
 
-            if ( agenda != null && agenda.getAgenda(  ) != null )
+            if ( agenda != null && agenda.getAgenda( ) != null )
             {
                 // Check security access
-                String strRole = agenda.getRole(  );
+                String strRole = agenda.getRole( );
 
-                if ( StringUtils.isNotBlank( strRole ) && request != null &&
-                        !Constants.PROPERTY_ROLE_NONE.equals( strRole ) )
+                if ( StringUtils.isNotBlank( strRole ) && request != null
+                        && !Constants.PROPERTY_ROLE_NONE.equals( strRole ) )
                 {
-                    if ( SecurityService.isAuthenticationEnable(  ) )
+                    if ( SecurityService.isAuthenticationEnable( ) )
                     {
-                        if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
+                        if ( SecurityService.getInstance( ).isUserInRole( request, strRole ) )
                         {
-                            multiAgenda.addAgenda( agenda.getAgenda(  ) );
+                            multiAgenda.addAgenda( agenda.getAgenda( ) );
                         }
                     }
                 }
                 else
                 {
-                	multiAgenda.addAgenda( agenda.getAgenda(  ) );
+                    multiAgenda.addAgenda( agenda.getAgenda( ) );
                 }
             }
-    	}
-    	return multiAgenda;
+        }
+        return multiAgenda;
     }
-    
+
     /**
      * Get the list of agendas. Only the agenda the user has access to are put
-     * in the multiagenda (same role of the agenda, or the user has the role manager)
+     * in the multiagenda (same role of the agenda, or the user has the role
+     * manager)
      * @param request {@link HttpServletRequest}
      * @return the list of agenda
      */
     public List<AgendaResource> getAgendaResources( HttpServletRequest request )
     {
-    	List<AgendaResource> listAgendas = new ArrayList<AgendaResource>(  );
-    	for ( int nAgendaId : getAgendaIds(  ) )
-    	{
-    		AgendaResource agenda = getAgendaResource( nAgendaId );
+        List<AgendaResource> listAgendas = new ArrayList<AgendaResource>( );
+        for ( int nAgendaId : getAgendaIds( ) )
+        {
+            AgendaResource agenda = getAgendaResource( nAgendaId );
 
-            if ( agenda != null && agenda.getAgenda(  ) != null )
+            if ( agenda != null && agenda.getAgenda( ) != null )
             {
                 // Check security access
-                String strRole = agenda.getRole(  );
+                String strRole = agenda.getRole( );
 
-                if ( StringUtils.isNotBlank( strRole ) && request != null &&
-                        !Constants.PROPERTY_ROLE_NONE.equals( strRole ) )
+                if ( StringUtils.isNotBlank( strRole ) && request != null
+                        && !Constants.PROPERTY_ROLE_NONE.equals( strRole ) )
                 {
-                    if ( SecurityService.isAuthenticationEnable(  ) )
+                    if ( SecurityService.isAuthenticationEnable( ) )
                     {
-                        if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
+                        if ( SecurityService.getInstance( ).isUserInRole( request, strRole ) )
                         {
-                        	listAgendas.add( agenda );
+                            listAgendas.add( agenda );
                         }
                     }
                 }
                 else
                 {
-                	listAgendas.add( agenda );
+                    listAgendas.add( agenda );
                 }
             }
-    	}
-    	return listAgendas;
+        }
+        return listAgendas;
     }
-    
+
     /**
      * Get the list of agenda resources. Returns only the AgendaResource
      * that the AdminUser has the right to (WorkingGroup wise).
@@ -244,12 +247,12 @@ public class CalendarService
      */
     public List<AgendaResource> getAgendaResources( AdminUser user, Plugin plugin )
     {
-    	List<AgendaResource> listAgendas = CalendarHome.findAgendaResourcesList( plugin );
-    	listAgendas = (List<AgendaResource>) AdminWorkgroupService.getAuthorizedCollection( listAgendas, user );
-        
+        List<AgendaResource> listAgendas = CalendarHome.findAgendaResourcesList( plugin );
+        listAgendas = (List<AgendaResource>) AdminWorkgroupService.getAuthorizedCollection( listAgendas, user );
+
         return listAgendas;
     }
-    
+
     /**
      * Get the calendar default parameters
      * @param plugin {@link Plugin}
@@ -257,9 +260,9 @@ public class CalendarService
      */
     public Map<String, String> getCalendarParameters( Plugin plugin )
     {
-    	return CalendarParameterHome.findAll( plugin );
+        return CalendarParameterHome.findAll( plugin );
     }
-    
+
     /**
      * Create an agenda and reset the caches.
      * @param agenda the {@link AgendaResource}
@@ -267,12 +270,12 @@ public class CalendarService
      */
     public void doCreateAgenda( AgendaResource agenda, Plugin plugin )
     {
-    	CalendarHome.createAgenda( agenda, plugin );
-    	
-    	// Reset cache
-    	removeCache(  );
+        CalendarHome.createAgenda( agenda, plugin );
+
+        // Reset cache
+        removeCache( );
     }
-    
+
     /**
      * Modify an agenda and reset the caches.
      * @param agenda {@link AgendaResource}
@@ -280,13 +283,13 @@ public class CalendarService
      */
     public void doModifyAgenda( AgendaResource agenda, Plugin plugin )
     {
-    	CalendarHome.updateAgenda( agenda, plugin );
-    	
-    	// Reset caches
-    	removeCache(  );
-    	removeCache( agenda.getId(  ) );
+        CalendarHome.updateAgenda( agenda, plugin );
+
+        // Reset caches
+        removeCache( );
+        removeCache( agenda.getId( ) );
     }
-    
+
     /**
      * Remove an agenda and reset the caches.
      * @param nAgendaId the agenda ID
@@ -294,82 +297,82 @@ public class CalendarService
      */
     public void doRemoveAgenda( int nAgendaId, Plugin plugin )
     {
-    	CalendarHome.removeAgenda( nAgendaId, plugin );
-    	
-    	// Reset caches
-    	removeCache(  );
-    	removeCache( nAgendaId );
+        CalendarHome.removeAgenda( nAgendaId, plugin );
+
+        // Reset caches
+        removeCache( );
+        removeCache( nAgendaId );
     }
-    
+
     /**
      * Reset cache
      */
-    public void resetCache(  )
+    public void resetCache( )
     {
-    	_cacheCalendar.resetCache(  );
+        _cacheCalendar.resetCache( );
     }
-    
+
     /**
      * Reset the cache from the given agenda ID
      * @param strAgendaId the agenda ID
      */
     public void removeCache( String strAgendaId )
     {
-    	if ( StringUtils.isNotBlank( strAgendaId ) && StringUtils.isNumeric( strAgendaId ) )
-    	{
-    		int nAgendaId = Integer.parseInt( strAgendaId );
-    		removeCache( nAgendaId );
-    	}
+        if ( StringUtils.isNotBlank( strAgendaId ) && StringUtils.isNumeric( strAgendaId ) )
+        {
+            int nAgendaId = Integer.parseInt( strAgendaId );
+            removeCache( nAgendaId );
+        }
     }
-    
+
     /**
      * Reset the cache from the given agenda ID
      * @param nAgendaId the agenda ID
      */
     public void removeCache( int nAgendaId )
     {
-    	_cacheCalendar.removeCache( getKey( nAgendaId ) );
+        _cacheCalendar.removeCache( getKey( nAgendaId ) );
     }
-    
+
     /**
      * Reset the cache
      */
-    public void removeCache(  )
+    public void removeCache( )
     {
-    	_cacheCalendar.removeCache( getKey(  ) );
+        _cacheCalendar.removeCache( getKey( ) );
     }
-    
+
     /**
      * Get the cache size
      * @return the cache size
      */
-    public int getCacheSize(  )
+    public int getCacheSize( )
     {
-    	return _cacheCalendar.getCacheSize(  );
+        return _cacheCalendar.getCacheSize( );
     }
-    
+
     // CACHE KEYS
 
     /**
      * Get the cache key for the agenda
-     * @param nId the ID of the agenda
+     * @param nAgendaId the ID of the agenda
      * @return the key
      */
     private String getKey( int nAgendaId )
-    { 
-        Map<String, String> mapParams = new HashMap<String, String>(  );
+    {
+        Map<String, String> mapParams = new HashMap<String, String>( );
         mapParams.put( KEY_CALENDAR, Integer.toString( nAgendaId ) );
 
         return _cksCalendar.getKey( mapParams, PortalJspBean.MODE_HTML, null );
     }
-    
+
     /**
      * Get the cache key for the agenda
      * @return the key
      */
-    private String getKey(  )
+    private String getKey( )
     {
-    	Map<String, String> mapParams = new HashMap<String, String>(  );
+        Map<String, String> mapParams = new HashMap<String, String>( );
         mapParams.put( KEY_CALENDAR, NONE );
 
         return _cksCalendar.getKey( mapParams, PortalJspBean.MODE_HTML, null );

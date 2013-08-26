@@ -56,14 +56,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
 /**
- * This class provides the user interface to manage calendars from the dataBase features ( manage, create, modify, remove)
+ * This class provides the user interface to manage calendars from the dataBase
+ * features ( manage, create, modify, remove)
  */
 public class CalendarDownloadFile
 {
@@ -75,8 +75,15 @@ public class CalendarDownloadFile
     //Messages
     private static final String PROPERTY_ERROR_MESSAGE = "calendar.message.errorDownloadFile";
 
+    /**
+     * Download a calendar into a file
+     * @param request The request
+     * @param response The response
+     * @throws SiteMessageException If a message needs to be displayed to the
+     *             user
+     */
     public void downloadCalendarToFile( HttpServletRequest request, HttpServletResponse response )
-        throws SiteMessageException
+            throws SiteMessageException
     {
         byte[] result = null;
         String strAgenda = request.getParameter( Constants.PARAM_AGENDA );
@@ -101,15 +108,14 @@ public class CalendarDownloadFile
             if ( arrayCategory.length != 0 )
             {
                 arrayCategoryIds = new int[arrayCategory.length];
-            }
+                int i = 0;
 
-            int i = 0;
-
-            for ( String strIdCategory : arrayCategory )
-            {
-                if ( strIdCategory != null )
+                for ( String strIdCategory : arrayCategory )
                 {
-                    arrayCategoryIds[i++] = Integer.parseInt( strIdCategory );
+                    if ( strIdCategory != null )
+                    {
+                        arrayCategoryIds[i++] = Integer.parseInt( strIdCategory );
+                    }
                 }
             }
         }
@@ -120,20 +126,20 @@ public class CalendarDownloadFile
             if ( !arrayCalendar[0].equals( Constants.PROPERTY_CALENDAR_NONE ) ) //FIXME
             {
                 arrayCalendarIds = new int[arrayCalendar.length];
-            }
 
-            int i = 0;
+                int i = 0;
 
-            for ( String strId : arrayCalendar )
-            {
-                if ( strId != null )
+                for ( String strId : arrayCalendar )
                 {
-                    arrayCalendarIds[i++] = Integer.parseInt( strId );
+                    if ( strId != null )
+                    {
+                        arrayCalendarIds[i++] = Integer.parseInt( strId );
+                    }
                 }
             }
         }
 
-        CalendarFilter filter = new CalendarFilter(  );
+        CalendarFilter filter = new CalendarFilter( );
 
         if ( strRss != null )
         {
@@ -153,13 +159,13 @@ public class CalendarDownloadFile
             ByteArrayInputStream baSource = null;
 
             Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
-            
+
             if ( strStyleSheetId != null )
             {
                 int nStyleSheetId = Integer.parseInt( strStyleSheetId );
                 StyleSheet stylesheet = CalendarStyleSheetHome.findByPrimaryKey( nStyleSheetId, plugin );
                 String strAgendaExtension = CalendarStyleSheetHome.getExtension( nStyleSheetId, plugin );
-                baSource = new ByteArrayInputStream( stylesheet.getSource(  ) );
+                baSource = new ByteArrayInputStream( stylesheet.getSource( ) );
                 strFileName = PROPERTY_FILE_EXPORT_NAME + "." + strAgendaExtension;
                 response.setHeader( "Content-disposition", "attachement; filename=\"" + strFileName + "\"" );
             }
@@ -168,41 +174,40 @@ public class CalendarDownloadFile
                 int nStyleSheetId = AppPropertiesService.getPropertyInt( PROPERTY_CALENDAR_RSS_FILE_ID, 1 );
                 StyleSheet stylesheet = CalendarStyleSheetHome.findByPrimaryKey( nStyleSheetId, plugin );
                 String strAgendaExtension = CalendarStyleSheetHome.getExtension( nStyleSheetId, plugin );
-                baSource = new ByteArrayInputStream( stylesheet.getSource(  ) );
+                baSource = new ByteArrayInputStream( stylesheet.getSource( ) );
                 strFileName = PROPERTY_RSS_FILE_NAME + "." + strAgendaExtension;
                 response.setHeader( "Content-disposition", "inline; filename=\"" + strFileName + "\"" );
             }
 
             if ( baSource != null )
             {
-                HttpSession session = request.getSession(  );
-                ServletContext context = session.getServletContext(  );
+                HttpSession session = request.getSession( );
+                ServletContext context = session.getServletContext( );
                 String strMimetype = context.getMimeType( strFileName );
                 response.setContentType( ( strMimetype != null ) ? strMimetype : "application/octet-stream" );
                 result = XMLUtils.transformXMLToXSL( strXml, baSource, null, null );
             }
 
-            OutputStream os = response.getOutputStream(  );
+            OutputStream os = response.getOutputStream( );
             os.write( result );
-            os.flush(  );
-            os.close(  );
+            os.flush( );
+            os.close( );
         }
         catch ( IOException e )
         {
-            throw new AppException( I18nService.getLocalizedString( PROPERTY_ERROR_MESSAGE, request.getLocale(  ) ) );
+            throw new AppException( I18nService.getLocalizedString( PROPERTY_ERROR_MESSAGE, request.getLocale( ) ) );
         }
         catch ( Exception e )
         {
-            throw new AppException( I18nService.getLocalizedString( PROPERTY_ERROR_MESSAGE, request.getLocale(  ) ) );
+            throw new AppException( I18nService.getLocalizedString( PROPERTY_ERROR_MESSAGE, request.getLocale( ) ) );
         }
     }
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      * @param request servlet request
      * @param response servlet response
-         * @throws ServletException the servlet Exception
-         * @throws IOException the io exception
      */
     public void downloadXSLFileFromDatabase( HttpServletRequest request, HttpServletResponse response )
     {
@@ -219,25 +224,25 @@ public class CalendarDownloadFile
                     int nStyleSheetId = Integer.parseInt( strStyleSheetId );
 
                     Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
-                    
+
                     StyleSheet stylesheet = CalendarStyleSheetHome.findByPrimaryKey( nStyleSheetId, plugin );
 
-                    HttpSession session = request.getSession(  );
-                    ServletContext context = session.getServletContext(  );
-                    String strMimetype = context.getMimeType( stylesheet.getFile(  ) );
+                    HttpSession session = request.getSession( );
+                    ServletContext context = session.getServletContext( );
+                    String strMimetype = context.getMimeType( stylesheet.getFile( ) );
                     response.setContentType( ( strMimetype != null ) ? strMimetype : "application/octet-stream" );
-                    response.setHeader( "Content-Disposition",
-                        "attachement; filename=\"" + stylesheet.getFile(  ) + "\"" );
+                    response.setHeader( "Content-Disposition", "attachement; filename=\"" + stylesheet.getFile( )
+                            + "\"" );
 
-                    OutputStream out = response.getOutputStream(  );
-                    out.write( stylesheet.getSource(  ) );
-                    out.flush(  );
-                    out.close(  );
+                    OutputStream out = response.getOutputStream( );
+                    out.write( stylesheet.getSource( ) );
+                    out.flush( );
+                    out.close( );
                 }
             }
             catch ( IOException e )
             {
-                throw new AppException( I18nService.getLocalizedString( PROPERTY_ERROR_MESSAGE, request.getLocale(  ) ) );
+                throw new AppException( I18nService.getLocalizedString( PROPERTY_ERROR_MESSAGE, request.getLocale( ) ) );
             }
         }
     }

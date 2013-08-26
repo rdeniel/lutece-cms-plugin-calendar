@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -53,6 +44,15 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -67,7 +67,8 @@ public class MonthCalendarView implements CalendarView
     private static final String TEMPLATE_VIEW_EMPTY_DAY = "skin/plugins/calendar/calendar_view_month_empty_day.html";
 
     /**
-     * Returns the HTML view of the Month corresponding to the given date and displaying
+     * Returns the HTML view of the Month corresponding to the given date and
+     * displaying
      * events of a given agenda
      * @return The view in HTML
      * @param options The options
@@ -75,12 +76,13 @@ public class MonthCalendarView implements CalendarView
      * @param agenda An agenda
      * @param request HttpServletRequest
      */
-    public String getCalendarView( String strDate, MultiAgenda agenda, CalendarUserOptions options, HttpServletRequest request )
+    public String getCalendarView( String strDate, MultiAgenda agenda, CalendarUserOptions options,
+            HttpServletRequest request )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         HtmlTemplate tEmptyDay = AppTemplateService.getTemplate( TEMPLATE_VIEW_EMPTY_DAY );
 
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), 1 );
 
         int nDayOfWeek = calendar.get( Calendar.DAY_OF_WEEK );
@@ -90,27 +92,24 @@ public class MonthCalendarView implements CalendarView
             nDayOfWeek = 8;
         }
 
-        StringBuffer sbWeeks = new StringBuffer(  );
+        StringBuffer sbWeeks = new StringBuffer( );
 
         boolean bDone = false;
         boolean bStarted = false;
 
         while ( !bDone )
         {
-            StringBuffer sbDays = new StringBuffer(  );
+            StringBuffer sbDays = new StringBuffer( );
 
             for ( int i = 0; i < 7; i++ )
             {
                 if ( ( ( ( i + 2 ) != nDayOfWeek ) && !bStarted ) || bDone )
                 {
-                    sbDays.append( tEmptyDay.getHtml(  ) );
+                    sbDays.append( tEmptyDay.getHtml( ) );
 
                     continue;
                 }
-                else
-                {
-                    bStarted = true;
-                }
+                bStarted = true;
 
                 sbDays.append( getDay( calendar, agenda, options, request ) );
 
@@ -125,18 +124,19 @@ public class MonthCalendarView implements CalendarView
                 }
             }
 
-            model.put( Constants.MARK_DAYS, sbDays.toString(  ) );
+            model.put( Constants.MARK_DAYS, sbDays.toString( ) );
 
-            HtmlTemplate weekTemplate = AppTemplateService.getTemplate( TEMPLATE_VIEW_WEEK, options.getLocale(  ), model );
-            sbWeeks.append( weekTemplate.getHtml(  ) );
+            HtmlTemplate weekTemplate = AppTemplateService
+                    .getTemplate( TEMPLATE_VIEW_WEEK, options.getLocale( ), model );
+            sbWeeks.append( weekTemplate.getHtml( ) );
         }
 
-        model.put( Constants.MARK_WEEKS, sbWeeks.toString(  ) );
-        model.put( Constants.MARK_MONTH_LABEL, Utils.getMonthLabel( strDate, options.getLocale(  ) ) );
+        model.put( Constants.MARK_WEEKS, sbWeeks.toString( ) );
+        model.put( Constants.MARK_MONTH_LABEL, Utils.getMonthLabel( strDate, options.getLocale( ) ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_MONTH, options.getLocale(  ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_MONTH, options.getLocale( ), model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -147,30 +147,32 @@ public class MonthCalendarView implements CalendarView
      * @param agenda The agenda
      * @param request HttpServletRequest
      */
-    private String getDay( Calendar calendar, MultiAgenda agenda, CalendarUserOptions options, HttpServletRequest request )
+    private String getDay( Calendar calendar, MultiAgenda agenda, CalendarUserOptions options,
+            HttpServletRequest request )
     {
-        Map<String, Object> dayModel = new HashMap<String, Object>(  );
-        StringBuffer sbEvents = new StringBuffer(  );
+        Map<String, Object> dayModel = new HashMap<String, Object>( );
+        StringBuffer sbEvents = new StringBuffer( );
         String strDate = Utils.getDate( calendar );
 
         if ( agenda.hasEvents( strDate ) )
         {
             Date date = Utils.getDate( Utils.getDate( calendar ) );
             Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
-            List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
-            	.getSearchResults( agenda.getAgendaIds(  ), null, "", date, date, request, plugin );
-            
+            List<Event> listIndexedEvents = CalendarSearchService.getInstance( ).getSearchResults(
+                    agenda.getAgendaIds( ), null, "", date, date, request, plugin );
+
             for ( Event event : listIndexedEvents )
             {
-    			MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar(  ) ) );
-            	Map<String, Object> eventModel = new HashMap<String, Object>(  );
+                MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event,
+                        String.valueOf( event.getIdCalendar( ) ) );
+                Map<String, Object> eventModel = new HashMap<String, Object>( );
                 HtmlUtils.fillEventTemplate( eventModel, multiAgendaEvent, strDate );
                 eventModel.put( Constants.MARK_JSP_URL,
-                    AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );
+                        AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );
 
-                HtmlTemplate tEvent = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY_EVENT, options.getLocale(  ),
+                HtmlTemplate tEvent = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY_EVENT, options.getLocale( ),
                         eventModel );
-                sbEvents.append( tEvent.getHtml(  ) );
+                sbEvents.append( tEvent.getHtml( ) );
             }
         }
 
@@ -178,7 +180,7 @@ public class MonthCalendarView implements CalendarView
         dayModel.put( Constants.MARK_DAY_LINK, strDateLink );
         dayModel.put( Constants.MARK_DAY_CLASS, getDayClass( calendar ) );
         dayModel.put( Constants.MARK_DAY, calendar.get( Calendar.DAY_OF_MONTH ) );
-        dayModel.put( Constants.MARK_EVENTS, sbEvents.toString(  ) );
+        dayModel.put( Constants.MARK_EVENTS, sbEvents.toString( ) );
         dayModel.put( Constants.MARK_DATE, strDate );
 
         //we only show link on the calendar for days with events
@@ -191,9 +193,9 @@ public class MonthCalendarView implements CalendarView
             dayModel.put( Constants.MARK_JSP_URL, "" );
         }
 
-        HtmlTemplate tDay = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY, options.getLocale(  ), dayModel );
+        HtmlTemplate tDay = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY, options.getLocale( ), dayModel );
 
-        return tDay.getHtml(  );
+        return tDay.getHtml( );
     }
 
     /**
@@ -205,7 +207,7 @@ public class MonthCalendarView implements CalendarView
     {
         String strClass = Constants.STYLE_CLASS_VIEW_MONTH_DAY;
         String strDate = Utils.getDate( calendar );
-        String strToday = Utils.getDateToday(  );
+        String strToday = Utils.getDateToday( );
 
         if ( Utils.isDayOff( calendar ) )
         {
@@ -224,7 +226,8 @@ public class MonthCalendarView implements CalendarView
     }
 
     /**
-     * Returns the next code date corresponding to the current view and the current date
+     * Returns the next code date corresponding to the current view and the
+     * current date
      * @param strDate The current date code
      * @return The next code date
      */
@@ -234,7 +237,8 @@ public class MonthCalendarView implements CalendarView
     }
 
     /**
-     * Returns the previous code date corresponding to the current view and the current date
+     * Returns the previous code date corresponding to the current view and the
+     * current date
      * @param strDate The current date code
      * @return The previous code date
      */
@@ -251,7 +255,7 @@ public class MonthCalendarView implements CalendarView
      */
     public String getTitle( String strDate, CalendarUserOptions options )
     {
-        String strTitle = Utils.getMonthLabel( strDate, options.getLocale(  ) );
+        String strTitle = Utils.getMonthLabel( strDate, options.getLocale( ) );
 
         return strTitle;
     }
@@ -271,7 +275,7 @@ public class MonthCalendarView implements CalendarView
      * Returns the view type
      * @return The view type
      */
-    public int getType(  )
+    public int getType( )
     {
         return CalendarView.TYPE_MONTH;
     }

@@ -33,16 +33,15 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
-import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
 import fr.paris.lutece.plugins.calendar.service.CalendarService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -97,49 +96,48 @@ public class HtmlUtils
      */
     public static void fillEventTemplate( Map<String, Object> model, MultiAgendaEvent event, String strDate )
     {
-    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
-        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
-    	int nShortTitleLength = AppPropertiesService.getPropertyInt( Constants.PROPERTY_EVENT_SHORT_TITLE_LENGTH, 18 );
-        StringBuilder sbTitle = new StringBuilder(  );
+        CalendarService calendarService = SpringContextService.getBean( Constants.BEAN_CALENDAR_CALENDARSERVICE );
+        int nShortTitleLength = AppPropertiesService.getPropertyInt( Constants.PROPERTY_EVENT_SHORT_TITLE_LENGTH, 18 );
+        StringBuilder sbTitle = new StringBuilder( );
         String strImage = StringUtils.EMPTY;
-        
-        AgendaResource agenda = calendarService.getAgendaResource( event.getAgenda(  ) );
+
+        AgendaResource agenda = calendarService.getAgendaResource( event.getAgenda( ) );
         if ( agenda != null )
         {
-        	sbTitle.append( agenda.getEventPrefix(  ) );
-        	sbTitle.append( Constants.SPACE );
-        	strImage = agenda.getEventImage(  );
+            sbTitle.append( agenda.getEventPrefix( ) );
+            sbTitle.append( Constants.SPACE );
+            strImage = agenda.getEventImage( );
         }
-        
-        if ( StringUtils.isNotBlank( event.getDateTimeStart(  ) ) )
+
+        if ( StringUtils.isNotBlank( event.getDateTimeStart( ) ) )
         {
-        	sbTitle.append( event.getDateTimeStart(  ) );
+            sbTitle.append( event.getDateTimeStart( ) );
         }
         sbTitle.append( Constants.INDENT );
-        if ( StringUtils.isNotBlank( event.getDateTimeEnd(  ) ) )
+        if ( StringUtils.isNotBlank( event.getDateTimeEnd( ) ) )
         {
-        	sbTitle.append( event.getDateTimeEnd(  ) );
+            sbTitle.append( event.getDateTimeEnd( ) );
         }
         sbTitle.append( Constants.SPACE );
-        
-        sbTitle.append( removeHtml( event.getTitle(  ) ) );
 
-        String strShortTitle = sbTitle.toString(  );
+        sbTitle.append( removeHtml( event.getTitle( ) ) );
 
-        if ( strShortTitle.length(  ) > nShortTitleLength )
+        String strShortTitle = sbTitle.toString( );
+
+        if ( strShortTitle.length( ) > nShortTitleLength )
         {
-        	StringBuilder sbShortTitle = new StringBuilder(  );
-        	sbShortTitle.append( strShortTitle.substring( 0, nShortTitleLength ) );
-        	sbShortTitle.append( AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_SHORT_TITLE_END ) );
-        	strShortTitle = sbShortTitle.toString(  );
+            StringBuilder sbShortTitle = new StringBuilder( );
+            sbShortTitle.append( strShortTitle.substring( 0, nShortTitleLength ) );
+            sbShortTitle.append( AppPropertiesService.getProperty( Constants.PROPERTY_EVENT_SHORT_TITLE_END ) );
+            strShortTitle = sbShortTitle.toString( );
         }
 
-        String strDescription = ( event.getDescription(  ) != null ) ? event.getDescription(  ) : StringUtils.EMPTY;
-        String strLocation = ( event.getLocation(  ) != null ) ? event.getLocation(  ) : StringUtils.EMPTY;
-        String strUrl = ( event.getUrl(  ) != null ) ? event.getUrl(  ) : StringUtils.EMPTY;
+        String strDescription = ( event.getDescription( ) != null ) ? event.getDescription( ) : StringUtils.EMPTY;
+        String strLocation = ( event.getLocation( ) != null ) ? event.getLocation( ) : StringUtils.EMPTY;
+        String strUrl = ( event.getUrl( ) != null ) ? event.getUrl( ) : StringUtils.EMPTY;
 
-        model.put( Constants.MARK_AGENDA, event.getAgenda(  ) );
-        model.put( Constants.MARK_EVENT_TITLE, sbTitle.toString(  ) );
+        model.put( Constants.MARK_AGENDA, event.getAgenda( ) );
+        model.put( Constants.MARK_EVENT_TITLE, sbTitle.toString( ) );
         model.put( Constants.MARK_EVENT_SHORT_TITLE, strShortTitle );
         model.put( Constants.MARK_EVENT_DESCRIPTION, strDescription );
         model.put( Constants.MARK_EVENT_LOCATION, strLocation );

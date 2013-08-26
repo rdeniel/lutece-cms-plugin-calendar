@@ -52,7 +52,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -71,14 +70,14 @@ public class CalendarSearchService
 
     /**
      * Get the HelpdeskSearchService instance
-     *
+     * 
      * @return The {@link CalendarSearchService}
      */
-    public static CalendarSearchService getInstance(  )
+    public static CalendarSearchService getInstance( )
     {
         if ( _singleton == null )
         {
-            _singleton = new CalendarSearchService(  );
+            _singleton = new CalendarSearchService( );
         }
 
         return _singleton;
@@ -92,57 +91,57 @@ public class CalendarSearchService
      * @param dateBegin The date begin
      * @param dateEnd The date end
      * @param request The {@link HttpServletRequest}
+     * @param plugin The plugin
      * @return Results as a collection of SearchResult
      */
     public List<Event> getSearchResults( String[] arrayAgendaIds, String[] arrayCategory, String strQuery,
-        Date dateBegin, Date dateEnd, HttpServletRequest request, Plugin plugin )
+            Date dateBegin, Date dateEnd, HttpServletRequest request, Plugin plugin )
     {
-        List<Event> listEvent = new ArrayList<Event>(  );
-        HashMap<String, Event> hmListEvent = new HashMap<String, Event>(  );
-        CalendarSearchEngine engine = (CalendarSearchEngine) SpringContextService.getPluginBean( plugin.getName(  ),
-                BEAN_SEARCH_ENGINE );
+        List<Event> listEvent = new ArrayList<Event>( );
+        HashMap<String, Event> hmListEvent = new HashMap<String, Event>( );
+        CalendarSearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
         List<SearchResult> listResults = engine.getSearchResults( arrayAgendaIds, arrayCategory, strQuery, dateBegin,
                 dateEnd, request );
 
         for ( SearchResult searchResult : listResults )
         {
-            if ( ( ( searchResult.getId(  ) != null ) && searchResult.getId(  ).matches( REGEX_ID_EVENT ) ) ||
-                    ( ( searchResult.getId(  ) != null ) && searchResult.getId(  ).matches( REGEX_ID_DOCUMENT ) ) )
+            if ( ( ( searchResult.getId( ) != null ) && searchResult.getId( ).matches( REGEX_ID_EVENT ) )
+                    || ( ( searchResult.getId( ) != null ) && searchResult.getId( ).matches( REGEX_ID_DOCUMENT ) ) )
             {
                 try
                 {
                     //Retrieve all occurences of an event
-                    OccurrenceEvent occurence = CalendarHome.findOccurrence( Integer.parseInt( 
-                                searchResult.getId(  ).substring( 0, searchResult.getId(  ).indexOf( UNDERSCORE ) ) ),
-                            plugin );
+                    OccurrenceEvent occurence = CalendarHome.findOccurrence(
+                            Integer.parseInt( searchResult.getId( ).substring( 0,
+                                    searchResult.getId( ).indexOf( UNDERSCORE ) ) ), plugin );
 
                     //Retrieve the event related to the occurence
-                    SimpleEvent event = CalendarHome.findEvent( occurence.getEventId(  ), plugin );
-                    event.setUrl( searchResult.getUrl(  ) );
-                    event.setType( searchResult.getType(  ) );
-                    event.setImageUrl( EventImageResourceService.getInstance(  ).getResourceImageEvent( event.getId(  ) ) );
+                    SimpleEvent event = CalendarHome.findEvent( occurence.getEventId( ), plugin );
+                    event.setUrl( searchResult.getUrl( ) );
+                    event.setType( searchResult.getType( ) );
+                    event.setImageUrl( EventImageResourceService.getInstance( ).getResourceImageEvent( event.getId( ) ) );
 
-                    event.setDescription( searchResult.getSummary(  ) );
+                    event.setDescription( searchResult.getSummary( ) );
 
                     //if it is not already present stroring the event to the temp list
-                    if ( !hmListEvent.containsKey( Integer.toString( event.getId(  ) ) ) )
+                    if ( !hmListEvent.containsKey( Integer.toString( event.getId( ) ) ) )
                     {
-                        hmListEvent.put( Integer.toString( event.getId(  ) ), event );
+                        hmListEvent.put( Integer.toString( event.getId( ) ), event );
                     }
                 }
                 catch ( NullPointerException e )
                 {
-                	AppLogService.error( e );
+                    AppLogService.error( e );
                 }
             }
         }
-        
+
         //Adding the event to final list
-        if ( !hmListEvent.isEmpty(  ) )
+        if ( !hmListEvent.isEmpty( ) )
         {
-            Collection<Event> collection = hmListEvent.values(  );
+            Collection<Event> collection = hmListEvent.values( );
             listEvent = new ArrayList<Event>( collection );
-            Collections.sort( listEvent, new EventComparator(  ) );
+            Collections.sort( listEvent, new EventComparator( ) );
         }
 
         return listEvent;

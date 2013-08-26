@@ -37,11 +37,14 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * The interface representing the methods for getting a document related to an event
+ * The interface representing the methods for getting a document related to an
+ * event
  */
 public interface IAppUtils
 {
     /**
+     * @param nDocumentId The id of the document
+     * @param request The request
      * @return the html template of a document
      */
     String getTemplateDocument( int nDocumentId, HttpServletRequest request );

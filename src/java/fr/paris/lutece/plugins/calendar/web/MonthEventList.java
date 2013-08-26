@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -50,6 +43,13 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -62,7 +62,8 @@ public class MonthEventList implements EventList
     private static final String TEMPLATE_MONTH_EVENT_LIST_EVENT = "skin/plugins/calendar/calendar_eventlist_month_event.html";
 
     /**
-     * Build an event list corresponding to the date, the agenda and privileges stored in the HTTP request
+     * Build an event list corresponding to the date, the agenda and privileges
+     * stored in the HTTP request
      * @return The HTML code of the event list formatted
      * @param locale The locale
      * @param strMonthDate The date of the event list
@@ -70,10 +71,10 @@ public class MonthEventList implements EventList
      */
     public String getEventList( String strMonthDate, MultiAgenda agenda, Locale locale, HttpServletRequest request )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         int nYear = Utils.getYear( strMonthDate );
         int nMonth = Utils.getMonth( strMonthDate );
-        StringBuffer sbDays = new StringBuffer(  );
+        StringBuffer sbDays = new StringBuffer( );
 
         for ( int nDay = 1; nDay < 32; nDay++ )
         {
@@ -85,11 +86,11 @@ public class MonthEventList implements EventList
             }
         }
 
-        model.put( Constants.MARK_DAYS, sbDays.toString(  ) );
+        model.put( Constants.MARK_DAYS, sbDays.toString( ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MONTH_EVENT_LIST, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -98,37 +99,38 @@ public class MonthEventList implements EventList
      * @param locale The locale
      * @param strDate The date of the Day
      * @param agenda The agenda that contains events
+     * @param request The request
      */
     private String getDay( String strDate, MultiAgenda agenda, Locale locale, HttpServletRequest request )
     {
-    	HashMap<String, Object> dayModel = new HashMap<String, Object>(  );
-        StringBuffer sbEvents = new StringBuffer(  );
-    	Date date = Utils.getDate( strDate );
+        HashMap<String, Object> dayModel = new HashMap<String, Object>( );
+        StringBuffer sbEvents = new StringBuffer( );
+        Date date = Utils.getDate( strDate );
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
-        List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
-        	.getSearchResults( agenda.getAgendaIds(  ), null, Constants.EMPTY_STRING, date, date, request, plugin );
+        List<Event> listIndexedEvents = CalendarSearchService.getInstance( ).getSearchResults( agenda.getAgendaIds( ),
+                null, Constants.EMPTY_STRING, date, date, request, plugin );
         boolean bHasIndexedEvent = false;
-        
+
         for ( Event event : listIndexedEvents )
         {
-			MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar(  ) ) );
-			HashMap<String, Object> eventModel = new HashMap<String, Object>(  );
+            MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar( ) ) );
+            HashMap<String, Object> eventModel = new HashMap<String, Object>( );
             HtmlUtils.fillEventTemplate( eventModel, multiAgendaEvent, strDate );
 
             HtmlTemplate tEvent = AppTemplateService.getTemplate( TEMPLATE_MONTH_EVENT_LIST_EVENT, locale, eventModel );
-            sbEvents.append( tEvent.getHtml(  ) );
+            sbEvents.append( tEvent.getHtml( ) );
             bHasIndexedEvent = true;
         }
-        
+
         if ( bHasIndexedEvent )
         {
-        	dayModel.put( Constants.MARK_DAY, Utils.getDayLabel( strDate, locale ) );
-            dayModel.put( Constants.MARK_EVENTS, sbEvents.toString(  ) );
+            dayModel.put( Constants.MARK_DAY, Utils.getDayLabel( strDate, locale ) );
+            dayModel.put( Constants.MARK_EVENTS, sbEvents.toString( ) );
             HtmlTemplate tDay = AppTemplateService.getTemplate( TEMPLATE_MONTH_EVENT_LIST_DAY, locale, dayModel );
 
-            return tDay.getHtml(  );
+            return tDay.getHtml( );
         }
-        
+
         return Constants.EMPTY_STRING;
     }
 }

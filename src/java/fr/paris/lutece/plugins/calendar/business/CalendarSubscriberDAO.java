@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import java.sql.Timestamp;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,13 +63,13 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
     private static final String SQL_QUERY_CHECK_IS_REGISTERED = "SELECT id_agenda FROM calendar_subscriber WHERE  id_subscriber = ?  AND id_agenda = ?";
     private static final String SQL_QUERY_INSERT_SUBSCRIBER = "INSERT INTO calendar_subscriber (  id_subscriber, id_agenda ,date_subscription ) VALUES ( ?, ?, ? )";
     private static final String SQL_QUERY_CHECK_IS_REGISTERED_TO_ANY_CALENDAR = "SELECT id_agenda FROM calendar_subscriber WHERE id_subscriber = ? LIMIT 1";
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////
     //Access methods to data
 
     /**
      * Insert a new record in the table.
-     *
+     * 
      * @param subscriber the object to be inserted
      * @param plugin the Plugin
      */
@@ -81,16 +80,16 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
 
-        daoUtil.setInt( 1, subscriber.getId(  ) );
-        daoUtil.setString( 2, subscriber.getEmail(  ) );
+        daoUtil.setInt( 1, subscriber.getId( ) );
+        daoUtil.setString( 2, subscriber.getEmail( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Delete a record from the table
-     *
+     * 
      * @param nId the subscriber's identifier
      * @param plugin the Plugin
      */
@@ -98,13 +97,13 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * loads data from a subscriber's identifier
-     *
+     * 
      * @param nId the subscriber's identifier
      * @param plugin the Plugin
      * @return an object Subscriber
@@ -113,40 +112,40 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setInt( 1, nId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        CalendarSubscriber subscriber = new CalendarSubscriber(  );
+        CalendarSubscriber subscriber = new CalendarSubscriber( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             subscriber.setId( nId );
             subscriber.setEmail( daoUtil.getString( 1 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return subscriber;
     }
 
     /**
      * Update the record in the table
-     *
+     * 
      * @param subscriber the instance of subscriber class to be updated
      * @param plugin the Plugin
      */
     public void store( CalendarSubscriber subscriber, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        daoUtil.setString( 1, subscriber.getEmail(  ) );
-        daoUtil.setInt( 2, subscriber.getId(  ) );
+        daoUtil.setString( 1, subscriber.getEmail( ) );
+        daoUtil.setInt( 2, subscriber.getId( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Check the unicity of a primary key
-     *
+     * 
      * @param nKey the primary key to be checked
      * @param plugin the Plugin
      * @return true if the key exists, false if not
@@ -155,23 +154,23 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_CHECK_PRIMARY_KEY, plugin );
         daoUtil.setInt( 1, nKey );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
-            daoUtil.free(  );
+            daoUtil.free( );
 
             return false;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return true;
     }
 
     /**
      * Generates a new primary key
-     *
+     * 
      * @param plugin the Plugin
      * @return the new primary key
      */
@@ -181,9 +180,9 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
 
         int nKey;
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
             // If the table is empty
             nKey = 1;
@@ -191,40 +190,40 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
 
         nKey = daoUtil.getInt( 1 ) + 1;
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nKey;
     }
 
     /**
      * Loads the list of subscribers
-     *
+     * 
      * @param plugin the Plugin
      * @return a collection of objects Subscriber
      */
     public List<CalendarSubscriber> selectAll( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        List<CalendarSubscriber> list = new ArrayList<CalendarSubscriber>(  );
+        List<CalendarSubscriber> list = new ArrayList<CalendarSubscriber>( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            CalendarSubscriber subscriber = new CalendarSubscriber(  );
+            CalendarSubscriber subscriber = new CalendarSubscriber( );
             subscriber.setId( daoUtil.getInt( 1 ) );
             subscriber.setEmail( daoUtil.getString( 2 ) );
             list.add( subscriber );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }
 
     /**
      * Finds a subscriber from his email
-     *
+     * 
      * @param strEmail the subscriber's email
      * @param plugin the Plugin
      * @return a subscriber object if it exists, null if not
@@ -232,26 +231,26 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
     public CalendarSubscriber selectByEmail( String strEmail, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_EMAIL, plugin );
-        daoUtil.setString( 1, strEmail.toLowerCase(  ) );
-        daoUtil.executeQuery(  );
+        daoUtil.setString( 1, strEmail.toLowerCase( ) );
+        daoUtil.executeQuery( );
 
         CalendarSubscriber subscriber = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            subscriber = new CalendarSubscriber(  );
+            subscriber = new CalendarSubscriber( );
             subscriber.setId( daoUtil.getInt( 1 ) );
             subscriber.setEmail( daoUtil.getString( 2 ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return subscriber;
     }
 
     /**
      * loads the list of subscribers for a calendar
-     *
+     * 
      * @param nCalendarId the Calendar identifier
      * @param plugin the Plugin
      * @return a collection of subscribers
@@ -260,37 +259,38 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_SUBSCRIBERS_BY_CALENDAR, plugin );
         daoUtil.setInt( 1, nCalendarId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        List<CalendarSubscriber> list = new ArrayList<CalendarSubscriber>(  );
+        List<CalendarSubscriber> list = new ArrayList<CalendarSubscriber>( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            CalendarSubscriber subscriber = new CalendarSubscriber(  );
+            CalendarSubscriber subscriber = new CalendarSubscriber( );
             subscriber.setId( daoUtil.getInt( 1 ) );
             subscriber.setEmail( daoUtil.getString( 2 ) );
             subscriber.setDateSubscription( daoUtil.getTimestamp( 3 ) );
             list.add( subscriber );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }
 
     /**
      * loads the list of subscribers for a Calendar
-     *
+     * 
      * @param nCalendarId the Calendar identifier
      * @param strSearchString gets all the subscribers if null or empty
-     *         and gets the subscribers whith an email containing this string otherwise
+     *            and gets the subscribers whith an email containing this string
+     *            otherwise
      * @param nBegin the rank of the first subscriber to return
      * @param nEnd the maximum number of suscribers to return
      * @param plugin the Plugin
      * @return a collection of subscribers
      */
     public List<CalendarSubscriber> selectSubscribers( int nCalendarId, String strSearchString, int nBegin, int nEnd,
-        Plugin plugin )
+            Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_SUBSCRIBERS, plugin );
 
@@ -299,27 +299,27 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
         daoUtil.setInt( 3, nEnd );
         daoUtil.setInt( 4, nBegin );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        List<CalendarSubscriber> list = new ArrayList<CalendarSubscriber>(  );
+        List<CalendarSubscriber> list = new ArrayList<CalendarSubscriber>( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            CalendarSubscriber subscriber = new CalendarSubscriber(  );
+            CalendarSubscriber subscriber = new CalendarSubscriber( );
             subscriber.setId( daoUtil.getInt( 1 ) );
             subscriber.setEmail( daoUtil.getString( 2 ) );
             subscriber.setDateSubscription( daoUtil.getTimestamp( 3 ) );
             list.add( subscriber );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }
 
     /**
      * Returns, for a subscriber, the number of his subscriptions
-     *
+     * 
      * @param nSubscriberId the subscriber's identifier
      * @param plugin the Plugin
      * @return the number of subscriptions
@@ -328,28 +328,25 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_COUNT_CALENDARS_NBR_SUBSCRIBERS, plugin );
 
-        int nCount;
+        int nCount = 0;
 
         daoUtil.setInt( 1, nSubscriberId );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( !daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            // If the table is empty
-            nCount = 0;
+            nCount = daoUtil.getInt( 1 );
         }
 
-        nCount = daoUtil.getInt( 1 );
-
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nCount;
     }
 
     /**
      * loads the list of subscribers
-     *
+     * 
      * @param plugin the Plugin
      * @return a collection of subscribers
      */
@@ -357,26 +354,26 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_SUBSCRIBERS_LIST, plugin );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        List<CalendarSubscriber> list = new ArrayList<CalendarSubscriber>(  );
+        List<CalendarSubscriber> list = new ArrayList<CalendarSubscriber>( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            CalendarSubscriber subscriber = new CalendarSubscriber(  );
+            CalendarSubscriber subscriber = new CalendarSubscriber( );
             subscriber.setId( daoUtil.getInt( 1 ) );
             subscriber.setEmail( daoUtil.getString( 2 ) );
             list.add( subscriber );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return list;
     }
 
     /**
      * Remove the subscriber's inscription to a calendar
-     *
+     * 
      * @param nCalendarId the calendar identifier
      * @param nSubscriberId the subscriber identifier
      * @param plugin the Plugin
@@ -388,13 +385,13 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
         daoUtil.setInt( 1, nCalendarId );
         daoUtil.setInt( 2, nSubscriberId );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Insert a new subscriber for a calendar
-     *
+     * 
      * @param nCalendarId the calendar identifier
      * @param nSubscriberId the subscriber identifier
      * @param tToday The day
@@ -414,13 +411,13 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
         daoUtil.setInt( 2, nCalendarId );
         daoUtil.setTimestamp( 3, tToday );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * check if the subscriber is not yet registered to a calendar
-     *
+     * 
      * @param nCalendarId the calendar identifier
      * @param nSubscriberId the subscriber identifier
      * @param plugin the Plugin
@@ -433,20 +430,20 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
         daoUtil.setInt( 1, nSubscriberId );
         daoUtil.setInt( 2, nCalendarId );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( !daoUtil.next(  ) )
+        if ( !daoUtil.next( ) )
         {
-            daoUtil.free(  );
+            daoUtil.free( );
 
             return false;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return true;
     }
-    
+
     /**
      * Check if the user is subscribed to any agenda
      * @param nSubscriberId the ID of the subscriber
@@ -455,18 +452,18 @@ public final class CalendarSubscriberDAO implements ICalendarSubscriberDAO
      */
     public boolean isUserSubscribed( int nSubscriberId, Plugin plugin )
     {
-    	boolean bIsSubscribed = false;
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_CHECK_IS_REGISTERED_TO_ANY_CALENDAR, plugin );
+        boolean bIsSubscribed = false;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_CHECK_IS_REGISTERED_TO_ANY_CALENDAR, plugin );
 
         daoUtil.setInt( 1, nSubscriberId );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-        	bIsSubscribed = true;
+            bIsSubscribed = true;
         }
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return bIsSubscribed;
     }

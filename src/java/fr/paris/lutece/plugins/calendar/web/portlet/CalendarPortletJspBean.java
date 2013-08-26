@@ -33,16 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.web.portlet;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.MissingFormatArgumentException;
-import java.util.StringTokenizer;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.portlet.CalendarPortlet;
 import fr.paris.lutece.plugins.calendar.business.portlet.CalendarPortletHome;
@@ -64,6 +54,16 @@ import fr.paris.lutece.portal.web.portlet.PortletJspBean;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.MissingFormatArgumentException;
+import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * This class provides the user interface to manage calendar interval portlets.
@@ -72,6 +72,8 @@ public class CalendarPortletJspBean extends PortletJspBean
 {
     // Prefix of the properties related to this checkbox
     public static final String PROPERTY_TIME_INTERVAL_LIST = "calendar.interval.time";
+
+    private static final long serialVersionUID = 3201646840294844754L;
 
     // Prefix used to generate checkbox names
     private static final String PREFIX_CHECKBOX_NAME = "cbx_agenda_";
@@ -103,7 +105,7 @@ public class CalendarPortletJspBean extends PortletJspBean
 
     /**
      * Returns the creation form for the portlet
-     *
+     * 
      * @param request the HTML request
      * @return the HTML code for the page
      */
@@ -114,18 +116,18 @@ public class CalendarPortletJspBean extends PortletJspBean
 
         HtmlTemplate template = getCreateTemplate( strPageId, strPortletTypeId );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * Processes the creation of the portlet
-     *
+     * 
      * @param request the HTML request
      * @return the URL to redirect to
      */
     public String doCreate( HttpServletRequest request )
     {
-        CalendarPortlet portlet = new CalendarPortlet(  );
+        CalendarPortlet portlet = new CalendarPortlet( );
 
         // Standard controls on the creation form
         String strIdPage = request.getParameter( PARAMETER_PAGE_ID );
@@ -133,7 +135,7 @@ public class CalendarPortletJspBean extends PortletJspBean
 
         String strStyleId = request.getParameter( Parameters.STYLE );
 
-        if ( ( strStyleId == null ) || strStyleId.trim(  ).equals( "" ) )
+        if ( ( strStyleId == null ) || strStyleId.trim( ).equals( "" ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -141,9 +143,9 @@ public class CalendarPortletJspBean extends PortletJspBean
         setPortletCommonData( request, portlet );
 
         // mandatory field
-        String strName = portlet.getName(  );
+        String strName = portlet.getName( );
 
-        if ( strName.trim(  ).equals( "" ) )
+        if ( strName.trim( ).equals( "" ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -151,15 +153,15 @@ public class CalendarPortletJspBean extends PortletJspBean
         portlet.setPageId( nIdPage );
 
         // Creating portlet
-        CalendarPortletHome.getInstance(  ).create( portlet );
+        CalendarPortletHome.getInstance( ).create( portlet );
 
         // Returns page with new created portlet
-        return getPageUrl( portlet.getPageId(  ) );
+        return getPageUrl( portlet.getPageId( ) );
     }
 
     /**
      * Returns the modification form for the portlet
-     *
+     * 
      * @param request the HTML request
      * @return the HTML code for the page
      */
@@ -172,13 +174,13 @@ public class CalendarPortletJspBean extends PortletJspBean
         String strIdPage = request.getParameter( PARAMETER_PAGE_ID );
         String strBaseUrl = AppPathService.getBaseUrl( request );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         model.put( BOOKMARK_PORTLET_ID, strPortletId );
         model.put( BOOKMARK_PAGE_ID, strIdPage );
 
         // Get the plugin for the portlet
-        Plugin plugin = PluginService.getPlugin( portlet.getPluginName(  ) );
-        
+        Plugin plugin = PluginService.getPlugin( portlet.getPluginName( ) );
+
         String strBeginDate = Utils.getDate( CalendarPortletHome.getBeginDate( nPortletId ) );
         String strEndDate = Utils.getDate( CalendarPortletHome.getEndDate( nPortletId ) );
         int nDays = CalendarPortletHome.getRepetitionDays( nPortletId );
@@ -186,8 +188,8 @@ public class CalendarPortletJspBean extends PortletJspBean
         // Get the list of authorized calendars depending on workgroup
         List<AgendaResource> listCalendar = CalendarHome.findAgendaResourcesList( plugin );
 
-        List<AgendaResource> listAuthorizedAgendas = (List<AgendaResource>) AdminWorkgroupService.getAuthorizedCollection( listCalendar,
-                getUser(  ) );
+        List<AgendaResource> listAuthorizedAgendas = (List<AgendaResource>) AdminWorkgroupService
+                .getAuthorizedCollection( listCalendar, getUser( ) );
 
         //Add other agendas
         List<AgendaResource> listSelectedAgendas = CalendarPortletHome.findAgendasInPortlet( nPortletId );
@@ -197,32 +199,32 @@ public class CalendarPortletJspBean extends PortletJspBean
 
         for ( AgendaResource agenda : listSelectedAgendas )
         {
-        	if( agenda != null )
-        	{
-	            try
-	            {
-	                Integer.parseInt( agenda.getId(  ) );
-	            }
-	            catch ( NumberFormatException e )
-	            {
-	                strFileAgendas += ( agenda.getId(  ) + "," );
-	            }
-        	}
+            if ( agenda != null )
+            {
+                try
+                {
+                    Integer.parseInt( agenda.getId( ) );
+                }
+                catch ( NumberFormatException e )
+                {
+                    strFileAgendas += ( agenda.getId( ) + "," );
+                }
+            }
         }
 
         if ( strFileAgendas.endsWith( "," ) )
         {
-            strFileAgendas = strFileAgendas.substring( 0, strFileAgendas.length(  ) - 1 );
+            strFileAgendas = strFileAgendas.substring( 0, strFileAgendas.length( ) - 1 );
         }
 
-        List<String> listSelectedAgendaId = new ArrayList<String>(  );
+        List<String> listSelectedAgendaId = new ArrayList<String>( );
 
         for ( AgendaResource agenda : listSelectedAgendas )
         {
-        	if( agenda != null )
-        	{
-        		listSelectedAgendaId.add( agenda.getId(  ) );
-        	}
+            if ( agenda != null )
+            {
+                listSelectedAgendaId.add( agenda.getId( ) );
+            }
         }
 
         String strBooleanTimeSpan = "TRUE";
@@ -241,17 +243,17 @@ public class CalendarPortletJspBean extends PortletJspBean
         model.put( MARK_DATE_END, strEndDate );
         model.put( MARK_NUMBER_DAYS, nDays );
         model.put( MARK_BASE_URL, strBaseUrl );
-        model.put( Constants.MARK_LOCALE, getLocale(  ).getLanguage(  ) );
+        model.put( Constants.MARK_LOCALE, getLocale( ).getLanguage( ) );
 
         // Fill the specific part of the modify form
         HtmlTemplate template = getModifyTemplate( portlet, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * Processes the modification of the portlet
-     *
+     * 
      * @param request the HTTP request
      * @return the URL to redirect to
      */
@@ -265,7 +267,7 @@ public class CalendarPortletJspBean extends PortletJspBean
         // Standard controls on the creation form
         String strStyleId = request.getParameter( Parameters.STYLE );
 
-        if ( ( strStyleId == null ) || strStyleId.trim(  ).equals( "" ) )
+        if ( ( strStyleId == null ) || strStyleId.trim( ).equals( "" ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -273,14 +275,14 @@ public class CalendarPortletJspBean extends PortletJspBean
         setPortletCommonData( request, portlet );
 
         // mandatory field
-        String strName = portlet.getName(  );
+        String strName = portlet.getName( );
 
-        if ( strName.trim(  ).equals( "" ) )
+        if ( strName.trim( ).equals( "" ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
 
-        portlet.update(  );
+        portlet.update( );
 
         String strDateBegin = request.getParameter( PARAMETER_DATE_BEGIN );
         String strDateEnd = request.getParameter( PARAMETER_DATE_END );
@@ -302,19 +304,19 @@ public class CalendarPortletJspBean extends PortletJspBean
             catch ( MissingFormatArgumentException e )
             {
                 return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATEFORMAT,
-                    AdminMessage.TYPE_STOP );
+                        AdminMessage.TYPE_STOP );
             }
 
             if ( !Utils.isValid( strDateBegin ) || !Utils.isValid( strDateEnd ) )
             {
                 return AdminMessageService.getMessageUrl( request, Constants.PROPERTY_MESSAGE_DATEFORMAT,
-                    AdminMessage.TYPE_STOP );
+                        AdminMessage.TYPE_STOP );
             }
         }
 
         modifyCalendar( request, nPortletId, strDateBegin, strDateEnd, nDays, bIntervalPeriodicity );
 
-        return getPageUrl( portlet.getPageId(  ) );
+        return getPageUrl( portlet.getPageId( ) );
     }
 
     /**
@@ -325,13 +327,13 @@ public class CalendarPortletJspBean extends PortletJspBean
     public static ReferenceList getIntervalList( HttpServletRequest request )
     {
         StringTokenizer st = new StringTokenizer( AppPropertiesService.getProperty( PROPERTY_TIME_INTERVAL_LIST ), "," );
-        ReferenceList timeIntervalList = new ReferenceList(  );
+        ReferenceList timeIntervalList = new ReferenceList( );
 
-        while ( st.hasMoreElements(  ) )
+        while ( st.hasMoreElements( ) )
         {
-            String strIntervalName = st.nextToken(  ).trim(  );
-            String strDescription = I18nService.getLocalizedString( "calendar.interval." + strIntervalName +
-                    ".description", request.getLocale(  ) );
+            String strIntervalName = st.nextToken( ).trim( );
+            String strDescription = I18nService.getLocalizedString( "calendar.interval." + strIntervalName
+                    + ".description", request.getLocale( ) );
             int nDays = AppPropertiesService.getPropertyInt( "calendar.interval." + strIntervalName + ".value", 7 );
             timeIntervalList.addItem( nDays, strDescription );
         }
@@ -340,29 +342,31 @@ public class CalendarPortletJspBean extends PortletJspBean
     }
 
     /**
-     * Helper method to determine which database agenda were chosen for the portlet
+     * Helper method to determine which database agenda were chosen for the
+     * portlet
      * in the modification form, and update the database accordingly.
      * @param nPortletId The id of the portlet
      * @param strDateBegin The start date
      * @param strDateEnd The end date
      * @param nDays The number of days calendar will be repeated
-     * @param bIntervalPeriodicity A boolean to to determine which periodicity is used
+     * @param bIntervalPeriodicity A boolean to to determine which periodicity
+     *            is used
      * @param request the HTTP request
      */
     private static void modifyCalendar( HttpServletRequest request, int nPortletId, String strDateBegin,
-        String strDateEnd, int nDays, boolean bIntervalPeriodicity )
+            String strDateEnd, int nDays, boolean bIntervalPeriodicity )
     {
-        List<String> listChosenAgendas = new ArrayList<String>(  );
+        List<String> listChosenAgendas = new ArrayList<String>( );
 
-        Enumeration enumParameterNames = request.getParameterNames(  );
+        Enumeration enumParameterNames = request.getParameterNames( );
 
-        while ( enumParameterNames.hasMoreElements(  ) )
+        while ( enumParameterNames.hasMoreElements( ) )
         {
-            String strParameterName = (String) enumParameterNames.nextElement(  );
+            String strParameterName = (String) enumParameterNames.nextElement( );
 
             if ( strParameterName.startsWith( PREFIX_CHECKBOX_NAME ) )
             {
-                String strAgendaId = strParameterName.substring( PREFIX_CHECKBOX_NAME.length(  ) );
+                String strAgendaId = strParameterName.substring( PREFIX_CHECKBOX_NAME.length( ) );
                 listChosenAgendas.add( strAgendaId );
             }
         }
@@ -373,9 +377,9 @@ public class CalendarPortletJspBean extends PortletJspBean
         {
             StringTokenizer st = new StringTokenizer( strTextAgendas, "," );
 
-            while ( st.hasMoreElements(  ) )
+            while ( st.hasMoreElements( ) )
             {
-                String strAgenda = st.nextToken(  ).trim(  );
+                String strAgenda = st.nextToken( ).trim( );
                 listChosenAgendas.add( strAgenda );
             }
         }

@@ -33,20 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.service;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.UUID;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.calendar.business.CalendarSubscriber;
 import fr.paris.lutece.plugins.calendar.business.CalendarSubscriberHome;
 import fr.paris.lutece.plugins.calendar.business.Event;
@@ -68,6 +54,20 @@ import fr.paris.lutece.portal.web.constants.Messages;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.string.StringUtil;
 import fr.paris.lutece.util.url.UrlItem;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.UUID;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -117,7 +117,7 @@ public class AgendaSubscriberService
     private static final String PROPERTY_SUBSCRIBE_HTML_LINK = "calendar.notification.subscription.link";
     private static final String PROPERTY_SUBSCRIBE_HTML_MESSAGE = "calendar.notification.subscription.message";
     private static final String PROPERTY_SUBSCRIBE_HTML_OBJECT = "calendar.notification.subscription.object";
-    
+
     //Parameters
     private static final String HTML_LINK_CLOSE = "</a>";
     private static final String HTML_LINK_OPEN_1 = "<a href=\"";
@@ -135,9 +135,9 @@ public class AgendaSubscriberService
     private static AgendaSubscriberService _singleton;
 
     /**
-    * Constructor
-    */
-    private AgendaSubscriberService(  )
+     * Constructor
+     */
+    private AgendaSubscriberService( )
     {
         if ( _singleton == null )
         {
@@ -149,11 +149,11 @@ public class AgendaSubscriberService
      * Fetches the singleton instance
      * @return The singleton instance
      */
-    public static AgendaSubscriberService getInstance(  )
+    public static AgendaSubscriberService getInstance( )
     {
         if ( _singleton == null )
         {
-            _singleton = new AgendaSubscriberService(  );
+            _singleton = new AgendaSubscriberService( );
         }
 
         return _singleton;
@@ -163,10 +163,10 @@ public class AgendaSubscriberService
      * Performs the subscription process
      * Throw a SiteMessage
      * @param request The Http request
-     * @throws fr.paris.lutece.portal.service.message.SiteMessageException The error message thrown to the user
+     * @throws fr.paris.lutece.portal.service.message.SiteMessageException The
+     *             error message thrown to the user
      */
-    public void doSubscription( HttpServletRequest request )
-        throws SiteMessageException
+    public void doSubscription( HttpServletRequest request ) throws SiteMessageException
     {
         String strEmail = request.getParameter( Constants.PARAMETER_EMAIL );
         String strAgenda = request.getParameter( Constants.PARAM_AGENDA );
@@ -176,7 +176,7 @@ public class AgendaSubscriberService
         if ( ( strEmail == null ) || !StringUtil.checkEmail( strEmail ) )
         {
             SiteMessageService.setMessage( request, PROPERTY_INVALID_MAIL_ERROR_MESSAGE,
-                PROPERTY_INVALID_MAIL_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
+                    PROPERTY_INVALID_MAIL_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
         }
 
         Plugin plugin = PluginService.getPlugin( strPluginName );
@@ -184,7 +184,7 @@ public class AgendaSubscriberService
         if ( ( strAgenda == null ) || ( strAgenda.equals( "" ) ) )
         {
             SiteMessageService.setMessage( request, PROPERTY_NO_CALENDAR_CHOSEN_ERROR_MESSAGE,
-                PROPERTY_NO_CALENDAR_CHOSEN_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
+                    PROPERTY_NO_CALENDAR_CHOSEN_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
         }
 
         //Checks if a subscriber with the same email address doesn't exist yet
@@ -193,52 +193,53 @@ public class AgendaSubscriberService
         if ( subscriber == null )
         {
             // The email doesn't exist, so create a new subcriber
-            subscriber = new CalendarSubscriber(  );
+            subscriber = new CalendarSubscriber( );
             subscriber.setEmail( strEmail );
             CalendarSubscriberHome.create( subscriber, plugin );
         }
-        CalendarSubscriberHome.addSubscriber( Integer.parseInt( strAgenda ), subscriber.getId(  ),
-                new Timestamp( new Date(  ).getTime(  ) ), plugin );
+        CalendarSubscriberHome.addSubscriber( Integer.parseInt( strAgenda ), subscriber.getId( ), new Timestamp(
+                new Date( ).getTime( ) ), plugin );
 
         SiteMessageService.setMessage( request, PROPERTY_SUBSCRIPTION_OK_ALERT_MESSAGE,
-            PROPERTY_SUBSCRIPTION_OK_TITLE_MESSAGE, SiteMessage.TYPE_INFO );
+                PROPERTY_SUBSCRIPTION_OK_TITLE_MESSAGE, SiteMessage.TYPE_INFO );
     }
 
     /**
      * Performs unsubscription process
      * Throw a SiteMessage
      * @param request The http request
-     * @throws fr.paris.lutece.portal.service.message.SiteMessageException The error message handled by the front office
+     * @param plugin The plugin
+     * @throws fr.paris.lutece.portal.service.message.SiteMessageException The
+     *             error message handled by the front office
      */
-    public void doUnSubscribe( HttpServletRequest request, Plugin plugin )
-        throws SiteMessageException
+    public void doUnSubscribe( HttpServletRequest request, Plugin plugin ) throws SiteMessageException
     {
         String strEmail = request.getParameter( Constants.PARAMETER_EMAIL );
         String strAgenda = request.getParameter( Constants.PARAM_AGENDA );
         if ( StringUtils.isNotBlank( strEmail ) )
         {
-        	if ( StringUtils.isNotBlank( strAgenda ) && StringUtils.isNumeric( strAgenda ) )
+            if ( StringUtils.isNotBlank( strAgenda ) && StringUtils.isNumeric( strAgenda ) )
             {
-        		CalendarSubscriber subscriber = CalendarSubscriberHome.findByEmail( strEmail, plugin );
+                CalendarSubscriber subscriber = CalendarSubscriberHome.findByEmail( strEmail, plugin );
 
-                CalendarSubscriberHome.removeSubscriber( subscriber.getId(  ), Integer.parseInt( strAgenda ), plugin );
-                if ( !CalendarSubscriberHome.isUserSubscribed( subscriber.getId(  ), plugin ) )
+                CalendarSubscriberHome.removeSubscriber( subscriber.getId( ), Integer.parseInt( strAgenda ), plugin );
+                if ( !CalendarSubscriberHome.isUserSubscribed( subscriber.getId( ), plugin ) )
                 {
-                	CalendarSubscriberHome.remove( subscriber.getId(  ), plugin );
+                    CalendarSubscriberHome.remove( subscriber.getId( ), plugin );
                 }
 
                 SiteMessageService.setMessage( request, PROPERTY_UNSUBSCRIPTION_OK_ALERT_MESSAGE,
-                    PROPERTY_UNSUBSCRIPTION_OK_TITLE_MESSAGE, SiteMessage.TYPE_INFO );
+                        PROPERTY_UNSUBSCRIPTION_OK_TITLE_MESSAGE, SiteMessage.TYPE_INFO );
             }
-        	else
-        	{
-        		 SiteMessageService.setMessage( request, PROPERTY_NO_CALENDAR_CHOSEN_ERROR_MESSAGE,
-                         PROPERTY_NO_CALENDAR_CHOSEN_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
-        	}
+            else
+            {
+                SiteMessageService.setMessage( request, PROPERTY_NO_CALENDAR_CHOSEN_ERROR_MESSAGE,
+                        PROPERTY_NO_CALENDAR_CHOSEN_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
+            }
         }
         else
         {
-        	SiteMessageService.setMessage( request, PROPERTY_INVALID_MAIL_ERROR_MESSAGE,
+            SiteMessageService.setMessage( request, PROPERTY_INVALID_MAIL_ERROR_MESSAGE,
                     PROPERTY_INVALID_MAIL_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
         }
     }
@@ -252,7 +253,7 @@ public class AgendaSubscriberService
      * @param strMessage The message.
      */
     public void doSendMail( String strRecipientTo, String strSenderName, String strSenderEmail, String strSubject,
-        String strMessage )
+            String strMessage )
     {
         MailService.sendMailHtml( strRecipientTo, strSenderName, strSenderEmail, strSubject, strMessage );
     }
@@ -262,19 +263,20 @@ public class AgendaSubscriberService
      * @param request the http request
      * @param listSubscribers a Collection<CalendarSubscriber>
      * @param event the event
+     * @param nCalendarId The id of the calendar
      */
     public void sendSubscriberMail( HttpServletRequest request, Collection<CalendarSubscriber> listSubscribers,
-        Event event, int nCalendarId )
+            Event event, int nCalendarId )
     {
         String strUnsubscribelink = AppPropertiesService.getProperty( PROPERTY_UNSUBSCRIBE_LINK );
         String strSenderName = AppPropertiesService.getProperty( PROPERTY_SENDER_NAME );
         String strSenderEmail = AppPropertiesService.getProperty( PROPERTY_SENDER_EMAIL );
-        String strContent = I18nService.getLocalizedString( PROPERTY_EMAIL_SUBSCRIBER_CONTENT, request.getLocale(  ) );
-        String strObject = I18nService.getLocalizedString( PROPERTY_EMAIL_SUBSCRIBER_OBJECT, request.getLocale(  ) );
+        String strContent = I18nService.getLocalizedString( PROPERTY_EMAIL_SUBSCRIBER_CONTENT, request.getLocale( ) );
+        String strObject = I18nService.getLocalizedString( PROPERTY_EMAIL_SUBSCRIBER_OBJECT, request.getLocale( ) );
 
         String strBaseUrl = AppPathService.getBaseUrl( request );
 
-        HashMap<String, Object> emailModel = new HashMap<String, Object>(  );
+        HashMap<String, Object> emailModel = new HashMap<String, Object>( );
 
         for ( CalendarSubscriber subscriber : listSubscribers )
         {
@@ -283,26 +285,27 @@ public class AgendaSubscriberService
             emailModel.put( MARK_BASE_URL, strBaseUrl );
             emailModel.put( MARK_EVENT, event );
             emailModel.put( Constants.MARK_CALENDAR_ID, nCalendarId );
-            emailModel.put( Constants.MARK_EVENT_ID, event.getId(  ) );
-            emailModel.put( MARK_SUBSCRIBER_EMAIL, subscriber.getEmail(  ) );
+            emailModel.put( Constants.MARK_EVENT_ID, event.getId( ) );
+            emailModel.put( MARK_SUBSCRIBER_EMAIL, subscriber.getEmail( ) );
             emailModel.put( Constants.PARAMETER_ACTION, Constants.ACTION_SHOW_RESULT );
 
             HtmlTemplate templateAgenda = AppTemplateService.getTemplate( TEMPLATE_SEND_NOTIFICATION_MAIL,
-                    request.getLocale(  ), emailModel );
-            String strNewsLetterCode = templateAgenda.getHtml(  );
+                    request.getLocale( ), emailModel );
+            String strNewsLetterCode = templateAgenda.getHtml( );
 
-            MailService.sendMailHtml( subscriber.getEmail(  ), strSenderName, strSenderEmail, strObject,
-                strNewsLetterCode );
-            emailModel.clear(  );
+            MailService.sendMailHtml( subscriber.getEmail( ), strSenderName, strSenderEmail, strObject,
+                    strNewsLetterCode );
+            emailModel.clear( );
         }
     }
 
     /**
      * Send the calendar to a friend
      * @param request the http request
+     * @return The next URL to redirect to
+     * @throws SiteMessageException To display an error
      */
-    public String sendFriendMail( HttpServletRequest request )
-        throws SiteMessageException
+    public String sendFriendMail( HttpServletRequest request ) throws SiteMessageException
     {
         //Form parameters
         String strFriendEmail = request.getParameter( Constants.PARAMETER_SENDER_FRIEND_EMAIL );
@@ -312,194 +315,210 @@ public class AgendaSubscriberService
         String strSenderMessage = request.getParameter( Constants.PARAMETER_SENDER_MESSAGE );
 
         // Mandatory field
-        if ( StringUtils.isNotBlank( strFriendEmail ) && StringUtils.isNotBlank( strSenderFirstName ) && 
-        		StringUtils.isNotBlank( strSenderLastName ) && StringUtils.isNotBlank( strSenderEmail ) && 
-        		StringUtils.isNotBlank( strSenderMessage ) )
+        if ( StringUtils.isNotBlank( strFriendEmail ) && StringUtils.isNotBlank( strSenderFirstName )
+                && StringUtils.isNotBlank( strSenderLastName ) && StringUtils.isNotBlank( strSenderEmail )
+                && StringUtils.isNotBlank( strSenderMessage ) )
         {
-        	if ( StringUtil.checkEmail( strFriendEmail ) )
+            if ( StringUtil.checkEmail( strFriendEmail ) )
             {
-        		if ( StringUtil.checkEmail( strSenderEmail ) )
+                if ( StringUtil.checkEmail( strSenderEmail ) )
                 {
-        			String strSenderName = strSenderFirstName + Constants.SPACE + strSenderLastName;
+                    String strSenderName = strSenderFirstName + Constants.SPACE + strSenderLastName;
 
                     //Properties
-                    String strObject = I18nService.getLocalizedString( PROPERTY_EMAIL_FRIEND_OBJECT, request.getLocale(  ) );
+                    String strObject = I18nService.getLocalizedString( PROPERTY_EMAIL_FRIEND_OBJECT,
+                            request.getLocale( ) );
                     String strBaseUrl = AppPathService.getBaseUrl( request );
 
-                    HashMap<String, Object> emailModel = new HashMap<String, Object>(  );
+                    HashMap<String, Object> emailModel = new HashMap<String, Object>( );
                     emailModel.put( MARK_SENDER_MESSAGE, strSenderMessage );
                     emailModel.put( MARK_BASE_URL, strBaseUrl );
 
                     HtmlTemplate templateAgenda = AppTemplateService.getTemplate( TEMPLATE_SEND_NOTIFICATION_MAIL,
-                            request.getLocale(  ), emailModel );
+                            request.getLocale( ), emailModel );
 
-                    String strNewsLetterCode = templateAgenda.getHtml(  );
+                    String strNewsLetterCode = templateAgenda.getHtml( );
 
-                    MailService.sendMailHtml( strFriendEmail, strSenderName, strSenderEmail, strObject, strNewsLetterCode );
+                    MailService.sendMailHtml( strFriendEmail, strSenderName, strSenderEmail, strObject,
+                            strNewsLetterCode );
                 }
-        		else
-        		{
-        			Object[] args = { strSenderEmail };
+                else
+                {
+                    Object[] args = { strSenderEmail };
                     SiteMessageService.setMessage( request, PROPERTY_INVALID_MAIL_ERROR_MESSAGE, args,
-                        PROPERTY_INVALID_MAIL_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
-        		}
+                            PROPERTY_INVALID_MAIL_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
+                }
             }
-        	else
-        	{
-        		Object[] args = { strFriendEmail };
+            else
+            {
+                Object[] args = { strFriendEmail };
                 SiteMessageService.setMessage( request, PROPERTY_INVALID_MAIL_ERROR_MESSAGE, args,
-                    PROPERTY_INVALID_MAIL_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
-        	}
+                        PROPERTY_INVALID_MAIL_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
+            }
         }
         else
         {
-        	SiteMessageService.setMessage( request, Messages.MANDATORY_FIELDS, Messages.MANDATORY_FIELDS,
+            SiteMessageService.setMessage( request, Messages.MANDATORY_FIELDS, Messages.MANDATORY_FIELDS,
                     SiteMessage.TYPE_STOP );
         }
 
         return URL_JSP_RETURN_SEND_FRIEND_MAIL;
     }
-    
+
     /**
      * Notify the subscription
+     * @param agenda The agenda
      * @param request HttpServletRequest
+     * @param plugin The plugin
      * @throws SiteMessageException site message exception
      */
     public void doNotificationSubscription( AgendaResource agenda, HttpServletRequest request, Plugin plugin )
-    	throws SiteMessageException
+            throws SiteMessageException
     {
-		String strEmail = request.getParameter( Constants.PARAMETER_EMAIL );
-		
-		CalendarNotification calendarNotification = new CalendarNotification ();
-		//Generate key
-		UUID key = java.util.UUID.randomUUID(  );
-		calendarNotification.setKey( key.toString(  ) );
-		calendarNotification.setEmail( strEmail );
-		calendarNotification.setIdAgenda( Integer.parseInt( agenda.getId(  ) ) );
-		Calendar calendar = GregorianCalendar.getInstance(  );
-		if( agenda.isNotify(  ) )
-		{
-			calendar.add( Calendar.DAY_OF_MONTH, agenda.getPeriodValidity(  ) );
-		}
-		else
-		{
-			calendar.add( Calendar.DAY_OF_MONTH, 1 );
-		}
-		calendarNotification.setDateExpiry( new Timestamp( calendar.getTimeInMillis(  ) ) );
-		CalendarNotificationHome.create( calendarNotification, plugin );
-		if(  agenda.isNotify(  ) )
-		{
-	        String strSenderName = AppPropertiesService.getProperty( PROPERTY_SENDER_NAME );
-	        String strSenderEmail = AppPropertiesService.getProperty( PROPERTY_SENDER_EMAIL );
-	        String strObject = I18nService.getLocalizedString( PROPERTY_SUBSCRIBE_HTML_OBJECT, request.getLocale(  ) );
-	        
+        String strEmail = request.getParameter( Constants.PARAMETER_EMAIL );
+
+        CalendarNotification calendarNotification = new CalendarNotification( );
+        //Generate key
+        UUID key = java.util.UUID.randomUUID( );
+        calendarNotification.setKey( key.toString( ) );
+        calendarNotification.setEmail( strEmail );
+        calendarNotification.setIdAgenda( Integer.parseInt( agenda.getId( ) ) );
+        Calendar calendar = GregorianCalendar.getInstance( );
+        if ( agenda.isNotify( ) )
+        {
+            calendar.add( Calendar.DAY_OF_MONTH, agenda.getPeriodValidity( ) );
+        }
+        else
+        {
+            calendar.add( Calendar.DAY_OF_MONTH, 1 );
+        }
+        calendarNotification.setDateExpiry( new Timestamp( calendar.getTimeInMillis( ) ) );
+        CalendarNotificationHome.create( calendarNotification, plugin );
+        if ( agenda.isNotify( ) )
+        {
+            String strSenderName = AppPropertiesService.getProperty( PROPERTY_SENDER_NAME );
+            String strSenderEmail = AppPropertiesService.getProperty( PROPERTY_SENDER_EMAIL );
+            String strObject = I18nService.getLocalizedString( PROPERTY_SUBSCRIBE_HTML_OBJECT, request.getLocale( ) );
+
             String strBaseUrl = AppPathService.getBaseUrl( request ) + URL_JSP_SUBSCRIPTION_NOTIFICATION;
             UrlItem url = new UrlItem( strBaseUrl );
-            url.addParameter( Constants.MARK_KEY, key.toString(  ) );
-            
-			String strlink = I18nService.getLocalizedString( PROPERTY_SUBSCRIBE_HTML_LINK , request.getLocale(  ) );
-			String strMessage = I18nService.getLocalizedString( PROPERTY_SUBSCRIBE_HTML_MESSAGE, request.getLocale(  ) );
-			String linkHtml = HTML_LINK_OPEN_1 + url.getUrl(  ) + HTML_LINK_OPEN_2 + strlink + HTML_LINK_CLOSE;
-	     
-	        HashMap<String, String> emailModel = new HashMap<String, String>(  );
-	        emailModel.put( MARK_MESSAGE, strMessage );
-	        emailModel.put( MARK_LINK, linkHtml );
+            url.addParameter( Constants.MARK_KEY, key.toString( ) );
+
+            String strlink = I18nService.getLocalizedString( PROPERTY_SUBSCRIBE_HTML_LINK, request.getLocale( ) );
+            String strMessage = I18nService.getLocalizedString( PROPERTY_SUBSCRIBE_HTML_MESSAGE, request.getLocale( ) );
+            String linkHtml = HTML_LINK_OPEN_1 + url.getUrl( ) + HTML_LINK_OPEN_2 + strlink + HTML_LINK_CLOSE;
+
+            HashMap<String, String> emailModel = new HashMap<String, String>( );
+            emailModel.put( MARK_MESSAGE, strMessage );
+            emailModel.put( MARK_LINK, linkHtml );
 
             HtmlTemplate templateAgenda = AppTemplateService.getTemplate( TEMPLATE_NOTIFY_SUBSCRIPTION_MAIL,
-                    request.getLocale(  ), emailModel );
-            String strEmailCode = templateAgenda.getHtml(  );
+                    request.getLocale( ), emailModel );
+            String strEmailCode = templateAgenda.getHtml( );
 
-            MailService.sendMailHtml( strEmail, strSenderName, strSenderEmail, strObject,
-            		strEmailCode );
-            emailModel.clear(  );
-            
+            MailService.sendMailHtml( strEmail, strSenderName, strSenderEmail, strObject, strEmailCode );
+            emailModel.clear( );
+
             SiteMessageService.setMessage( request, PROPERTY_SUBSCRIPTION_MAIL_SEND_ALERT_MESSAGE,
-            		PROPERTY_SUBSCRIPTION_MAIL_SEND_TITLE_MESSAGE, SiteMessage.TYPE_INFO );
-		}
-		else
-		{
-			ServletConfig config = LocalVariables.getConfig(  );
-			HttpServletResponse response = LocalVariables.getResponse(  );
-			try
-			{
-				String strAdresse = URL_JSP_SUBSCRIPTION_REDIRECTION + Constants.INTERROGATION_MARK + 
-						Constants.MARK_KEY + Constants.EQUAL + key;
-				response.sendRedirect( strAdresse );
-			}
-			catch( Exception e )
-			{
-	            SiteMessageService.setMessage( request, PROPERTY_REDIRECTION_TITLE_MESSAGE,
-	            		PROPERTY_REDIRECTION_ALERT_MESSAGE, SiteMessage.TYPE_INFO );
-			}
-			LocalVariables.setLocal( config, request, response );
-		}
+                    PROPERTY_SUBSCRIPTION_MAIL_SEND_TITLE_MESSAGE, SiteMessage.TYPE_INFO );
+        }
+        else
+        {
+            ServletConfig config = LocalVariables.getConfig( );
+            HttpServletResponse response = LocalVariables.getResponse( );
+            try
+            {
+                String strAdresse = URL_JSP_SUBSCRIPTION_REDIRECTION + Constants.INTERROGATION_MARK
+                        + Constants.MARK_KEY + Constants.EQUAL + key;
+                response.sendRedirect( strAdresse );
+            }
+            catch ( Exception e )
+            {
+                SiteMessageService.setMessage( request, PROPERTY_REDIRECTION_TITLE_MESSAGE,
+                        PROPERTY_REDIRECTION_ALERT_MESSAGE, SiteMessage.TYPE_INFO );
+            }
+            LocalVariables.setLocal( config, request, response );
+        }
     }
-    
+
     /**
      * Validate subscription
      * @param request HttpServletRequest
      * @throws SiteMessageException site message exception
      */
-    public void doValidationSubscription( HttpServletRequest request )
-    	throws SiteMessageException
+    public void doValidationSubscription( HttpServletRequest request ) throws SiteMessageException
     {
-    	String strKey = request.getParameter( Constants.MARK_KEY );    	
+        String strKey = request.getParameter( Constants.MARK_KEY );
         String strPluginName = request.getParameter( Constants.PARAMETER_PLUGIN_NAME );
         strPluginName = !( strPluginName == null ) ? strPluginName : Constants.PLUGIN_NAME;
 
         Plugin plugin = PluginService.getPlugin( strPluginName );
-    	CalendarNotification calendarNotification = CalendarNotificationHome.findByPrimaryKey( strKey, plugin );
-    	
-    	if ( calendarNotification != null )
-    	{
-			Calendar calendar = GregorianCalendar.getInstance(  );
-			Timestamp todaydate = new Timestamp( calendar.getTimeInMillis(  ));
-			if ( todaydate.before( calendarNotification.getDateExpiry(  ) ) )
-			{
-		    	String strEmail = calendarNotification.getEmail();
-		        int nIdAgenda = calendarNotification.getIdAgenda();
-		    	
-		        //Checks if a subscriber with the same email address doesn't exist yet
-		        CalendarSubscriber subscriber = CalendarSubscriberHome.findByEmail( strEmail, plugin );
-		
-		        if ( subscriber == null )
-		        {
-		            // The email doesn't exist, so create a new subcriber
-		            subscriber = new CalendarSubscriber(  );
-		            subscriber.setEmail( strEmail );
-		            CalendarSubscriberHome.create( subscriber, plugin );
-		        }
-		        CalendarSubscriberHome.addSubscriber( nIdAgenda, subscriber.getId(  ),
-		                new Timestamp( new Date(  ).getTime(  ) ), plugin );
-		
-		        CalendarNotificationHome.remove( strKey, plugin);
-		        
-		        SiteMessageService.setMessage( request, PROPERTY_SUBSCRIPTION_OK_ALERT_MESSAGE, SiteMessage.TYPE_INFO, 
-		        		AppPathService.getBaseUrl( request ) + URL_JSP_PAGE_PORTAL, 
-		        		PROPERTY_SUBSCRIPTION_OK_TITLE_MESSAGE, null );
-			}
-			else
-			{
-				SiteMessageService.setMessage( request, PROPERTY_EXPIRATION_SUBSCRIPTION_ALERT_MESSAGE, SiteMessage.TYPE_ERROR, 
-		        		AppPathService.getBaseUrl( request ) + URL_JSP_PAGE_PORTAL, 
-		        		PROPERTY_EXPIRATION_SUBSCRIPTION_TITLE_MESSAGE, null );
-			}
-    	}
-    	else
-    	{
-    		SiteMessageService.setMessage( request, PROPERTY_INVALID_KEY_SUBSCRIPTION_ALERT_MESSAGE, SiteMessage.TYPE_ERROR, 
-	        		AppPathService.getBaseUrl( request ) + URL_JSP_PAGE_PORTAL, 
-	        		PROPERTY_INVALID_KEY_SUBSCRIPTION_TITLE_MESSAGE, null );
-    	}
+        CalendarNotification calendarNotification = CalendarNotificationHome.findByPrimaryKey( strKey, plugin );
+
+        if ( calendarNotification != null )
+        {
+            Calendar calendar = GregorianCalendar.getInstance( );
+            Timestamp todaydate = new Timestamp( calendar.getTimeInMillis( ) );
+            if ( todaydate.before( calendarNotification.getDateExpiry( ) ) )
+            {
+                String strEmail = calendarNotification.getEmail( );
+                int nIdAgenda = calendarNotification.getIdAgenda( );
+
+                //Checks if a subscriber with the same email address doesn't exist yet
+                CalendarSubscriber subscriber = CalendarSubscriberHome.findByEmail( strEmail, plugin );
+
+                if ( subscriber == null )
+                {
+                    // The email doesn't exist, so create a new subcriber
+                    subscriber = new CalendarSubscriber( );
+                    subscriber.setEmail( strEmail );
+                    CalendarSubscriberHome.create( subscriber, plugin );
+                }
+                CalendarSubscriberHome.addSubscriber( nIdAgenda, subscriber.getId( ),
+                        new Timestamp( new Date( ).getTime( ) ), plugin );
+
+                CalendarNotificationHome.remove( strKey, plugin );
+
+                SiteMessageService.setMessage( request, PROPERTY_SUBSCRIPTION_OK_ALERT_MESSAGE, SiteMessage.TYPE_INFO,
+                        AppPathService.getBaseUrl( request ) + URL_JSP_PAGE_PORTAL,
+                        PROPERTY_SUBSCRIPTION_OK_TITLE_MESSAGE, null );
+            }
+            else
+            {
+                SiteMessageService.setMessage( request, PROPERTY_EXPIRATION_SUBSCRIPTION_ALERT_MESSAGE,
+                        SiteMessage.TYPE_ERROR, AppPathService.getBaseUrl( request ) + URL_JSP_PAGE_PORTAL,
+                        PROPERTY_EXPIRATION_SUBSCRIPTION_TITLE_MESSAGE, null );
+            }
+        }
+        else
+        {
+            SiteMessageService.setMessage( request, PROPERTY_INVALID_KEY_SUBSCRIPTION_ALERT_MESSAGE,
+                    SiteMessage.TYPE_ERROR, AppPathService.getBaseUrl( request ) + URL_JSP_PAGE_PORTAL,
+                    PROPERTY_INVALID_KEY_SUBSCRIPTION_TITLE_MESSAGE, null );
+        }
     }
 
+    /**
+     * Get the number of subscribers of a calendar
+     * @param nCalendarId The id of the calendar to get the number of
+     *            subscribers of
+     * @param plugin The plugin
+     * @return The number of subscribers of the calendar
+     */
     public int getSubscriberNumber( int nCalendarId, Plugin plugin )
     {
-    	return CalendarSubscriberHome.findSubscriberNumber( nCalendarId, plugin );
+        return CalendarSubscriberHome.findSubscriberNumber( nCalendarId, plugin );
     }
-    
+
+    /**
+     * Get the list of subscribers of a calendar
+     * @param nCalendarId The id of the calendar to get the list of subscribers
+     *            of
+     * @param plugin The plugin
+     * @return The list of subscribers of the calendar
+     */
     public Collection<CalendarSubscriber> getSubscribers( int nCalendarId, Plugin plugin )
     {
-    	return CalendarSubscriberHome.findSubscribers( nCalendarId, plugin );
+        return CalendarSubscriberHome.findSubscribers( nCalendarId, plugin );
     }
 }

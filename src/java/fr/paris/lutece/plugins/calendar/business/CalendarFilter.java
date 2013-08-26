@@ -33,9 +33,8 @@
  */
 package fr.paris.lutece.plugins.calendar.business;
 
-
 /**
- *Filter for calendar
+ * Filter for calendar
  */
 public class CalendarFilter
 {
@@ -51,7 +50,7 @@ public class CalendarFilter
     /**
      * @return the calendar id
      */
-    public int getIdCalendar(  )
+    public int getIdCalendar( )
     {
         return _nIdCalendar;
     }
@@ -67,7 +66,7 @@ public class CalendarFilter
     /**
      * @return the _nSortEvents
      */
-    public int getSortEvents(  )
+    public int getSortEvents( )
     {
         return _nSortEvents;
     }
@@ -81,9 +80,9 @@ public class CalendarFilter
     }
 
     /**
-    * @return the _arrayCategoriesId
-    */
-    public int[] getCategoriesId(  )
+     * @return the _arrayCategoriesId
+     */
+    public int[] getCategoriesId( )
     {
         return _arrayCategoriesId;
     }
@@ -99,7 +98,7 @@ public class CalendarFilter
     /**
      * @return the _arrayId
      */
-    public int[] getIds(  )
+    public int[] getIds( )
     {
         return _arrayId;
     }
@@ -115,13 +114,13 @@ public class CalendarFilter
     /**
      * @return the _arrayId
      */
-    public int[] getCalendarIds(  )
+    public int[] getCalendarIds( )
     {
         return _arrayCalendarId;
     }
 
     /**
-     * @param arrayId the _arrayId to set
+     * @param calendarId the _arrayId to set
      */
     public void setCalendarIds( int[] calendarId )
     {
@@ -130,45 +129,49 @@ public class CalendarFilter
 
     /**
      * Tell if the filter contains a criteria on the Category
-     * @return True if  the filter contains a criteria on the categories otherwise false
+     * @return True if the filter contains a criteria on the categories
+     *         otherwise false
      */
-    public boolean containsCategoriesCriteria(  )
+    public boolean containsCategoriesCriteria( )
     {
         return ( ( _arrayCategoriesId != null ) && ( _arrayCategoriesId.length != 0 ) );
     }
 
     /**
      * Tell if the filter contains a criteria on the Id
-     * @return True if  the filter contains a criteria on the Ids otherwise false
+     * @return True if the filter contains a criteria on the Ids otherwise false
      */
-    public boolean containsIdsCriteria(  )
+    public boolean containsIdsCriteria( )
     {
         return ( ( _arrayId != null ) && ( _arrayId.length != 0 ) );
     }
 
     /**
      * Tell if the filter contains a criteria on the calendar Ids
-     * @return True if  the filter contains a criteria on the calendar Ids otherwise false
+     * @return True if the filter contains a criteria on the calendar Ids
+     *         otherwise false
      */
-    public boolean containsCalendarIdsCriteria(  )
+    public boolean containsCalendarIdsCriteria( )
     {
         return ( ( _arrayCalendarId != null ) && ( _arrayCalendarId.length != 0 ) );
     }
 
     /**
      * Tell if the filter contains a criteria on the calendars
-     * @return True if  the filter contains a criteria on the calendars otherwise false
+     * @return True if the filter contains a criteria on the calendars otherwise
+     *         false
      */
-    public boolean containsCalendarCriteria(  )
+    public boolean containsCalendarCriteria( )
     {
         return ( _nIdCalendar != ALL_INT );
     }
 
     /**
      * Tell if the filter contains a criteria on the calendars
-     * @return True if  the filter contains a criteria on the calendars otherwise false
+     * @return True if the filter contains a criteria on the calendars otherwise
+     *         false
      */
-    public boolean containsSortCriteria(  )
+    public boolean containsSortCriteria( )
     {
         return ( _nSortEvents != ALL_INT );
     }

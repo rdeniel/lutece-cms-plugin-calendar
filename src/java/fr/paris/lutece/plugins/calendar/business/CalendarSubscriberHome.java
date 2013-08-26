@@ -37,7 +37,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 import java.sql.Timestamp;
-
 import java.util.List;
 
 
@@ -180,8 +179,8 @@ public final class CalendarSubscriberHome
 
     /**
      * Returns, for a subscriber, the number of his subscriptions
-     *
-     * @param nSubscriberId the subscriber's identifier
+     * 
+     * @param nAgendaId the agenda's identifier
      * @param plugin the plugin
      * @return the number of subscriptions
      */

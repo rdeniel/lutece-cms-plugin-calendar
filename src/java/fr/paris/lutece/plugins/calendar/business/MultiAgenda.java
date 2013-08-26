@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.plugins.calendar.business;
 
+import fr.paris.lutece.plugins.calendar.service.Utils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-
-import fr.paris.lutece.plugins.calendar.service.Utils;
 
 
 /**
@@ -47,15 +47,18 @@ import fr.paris.lutece.plugins.calendar.service.Utils;
  */
 public class MultiAgenda implements Agenda
 {
-	private static final long serialVersionUID = 564170210812312845L;
-	private String _strName;
+    private static final long serialVersionUID = 564170210812312845L;
+    private String _strName;
     private String _strKeyName;
-    private List<Agenda> _listAgendas = new ArrayList<Agenda>(  );
+    private List<Agenda> _listAgendas = new ArrayList<Agenda>( );
 
-    public MultiAgenda(  )
+    /**
+     * Default constructor
+     */
+    public MultiAgenda( )
     {
     }
-    
+
     /**
      * Indicates if the agenda gets events for a given date
      * @param strDate A date code
@@ -63,9 +66,9 @@ public class MultiAgenda implements Agenda
      */
     public boolean hasEvents( String strDate )
     {
-        for ( int i = 0; i < _listAgendas.size(  ); i++ )
+        for ( int i = 0; i < _listAgendas.size( ); i++ )
         {
-            Agenda agenda = (Agenda) _listAgendas.get( i );
+            Agenda agenda = _listAgendas.get( i );
 
             if ( agenda != null && agenda.hasEvents( strDate ) )
             {
@@ -83,12 +86,12 @@ public class MultiAgenda implements Agenda
      */
     public List<Event> getEventsByDate( String strDate )
     {
-        List<Event> list = new ArrayList<Event>(  );
-        List<Event> listEvents = getEvents(  );
+        List<Event> list = new ArrayList<Event>( );
+        List<Event> listEvents = getEvents( );
 
         for ( Event event : listEvents )
         {
-            if ( Utils.getDate( event.getDate(  ) ).equals( strDate ) )
+            if ( Utils.getDate( event.getDate( ) ).equals( strDate ) )
             {
                 list.add( event );
             }
@@ -101,18 +104,18 @@ public class MultiAgenda implements Agenda
      * Retrieves all events of the agenda
      * @return A list of events
      */
-    public List<Event> getEvents(  )
+    public List<Event> getEvents( )
     {
-        List<Event> list = new ArrayList<Event>(  );
+        List<Event> list = new ArrayList<Event>( );
 
-        for ( int i = 0; i < _listAgendas.size(  ); i++ )
+        for ( int i = 0; i < _listAgendas.size( ); i++ )
         {
-            Agenda agenda = (Agenda) _listAgendas.get( i );
-            List<Event> listEvents = agenda.getEvents(  );
+            Agenda agenda = _listAgendas.get( i );
+            List<Event> listEvents = agenda.getEvents( );
 
             for ( Event e : listEvents )
             {
-                MultiAgendaEvent event = new MultiAgendaEvent( e, agenda.getKeyName(  ) );
+                MultiAgendaEvent event = new MultiAgendaEvent( e, agenda.getKeyName( ) );
                 list.add( event );
             }
         }
@@ -124,7 +127,7 @@ public class MultiAgenda implements Agenda
      * Returns the name of the Agenda
      * @return The agenda's name
      */
-    public String getName(  )
+    public String getName( )
     {
         return _strName;
     }
@@ -149,17 +152,17 @@ public class MultiAgenda implements Agenda
 
     /**
      * Returns the KeyName
-     *
+     * 
      * @return The KeyName
      */
-    public String getKeyName(  )
+    public String getKeyName( )
     {
         return _strKeyName;
     }
 
     /**
      * Sets the KeyName
-     *
+     * 
      * @param strKeyName The KeyName
      */
     public void setKeyName( String strKeyName )
@@ -171,26 +174,26 @@ public class MultiAgenda implements Agenda
      * Gets agendas
      * @return A list that contain all agendas
      */
-    public List<Agenda> getAgendas(  )
+    public List<Agenda> getAgendas( )
     {
         return _listAgendas;
     }
 
     /**
      * Fetches the events present between two dates
-     * @param strDateBegin The start date
-     * @param strDateEnd The end date
+     * @param dateBegin The start date
+     * @param dateEnd The end date
      * @return The events
      */
     public List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )
     {
-        List<Event> listEvents = getEvents(  );
-        List<Event> list = new ArrayList<Event>(  );
+        List<Event> listEvents = getEvents( );
+        List<Event> list = new ArrayList<Event>( );
 
-        java.util.Calendar calendar = new GregorianCalendar(  );
+        java.util.Calendar calendar = new GregorianCalendar( );
         calendar.setTime( dateBegin );
 
-        java.util.Calendar calendar1 = new GregorianCalendar(  );
+        java.util.Calendar calendar1 = new GregorianCalendar( );
         calendar1.setTime( dateEnd );
 
         while ( dateBegin.compareTo( dateEnd ) != 0 )
@@ -210,27 +213,27 @@ public class MultiAgenda implements Agenda
 
         return list;
     }
-    
+
     /**
      * Fetch agenda ids
      * @return agenda ids
      */
-    public String[] getAgendaIds(  )
+    public String[] getAgendaIds( )
     {
-    	String[] arrayAgendaIds = new String[_listAgendas.size(  )];
-    	if ( !_listAgendas.isEmpty(  ) || !( _listAgendas.size(  ) == 1 && _listAgendas.get( 0 ) == null ) )
-    	{
-    		for ( int i = 0; i < _listAgendas.size(  ); i++ )
+        String[] arrayAgendaIds = new String[_listAgendas.size( )];
+        if ( !_listAgendas.isEmpty( ) || !( _listAgendas.size( ) == 1 && _listAgendas.get( 0 ) == null ) )
+        {
+            for ( int i = 0; i < _listAgendas.size( ); i++ )
             {
-                Agenda agenda = ( Agenda ) _listAgendas.get( i );
+                Agenda agenda = _listAgendas.get( i );
                 if ( agenda != null )
                 {
-                	arrayAgendaIds[i] = agenda.getKeyName(  );
+                    arrayAgendaIds[i] = agenda.getKeyName( );
                 }
-        	}
-    		return arrayAgendaIds;
-    	}
-    	
-    	return null;
+            }
+            return arrayAgendaIds;
+        }
+
+        return null;
     }
 }

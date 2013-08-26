@@ -57,7 +57,7 @@ public interface ICalendarDAO
 
     /**
      * Delete a Agenda from the table calendar_agendas
-     *
+     * 
      * @param nAgendaId The agenda Id
      * @param plugin The Plugin using this data access service
      */
@@ -68,15 +68,15 @@ public interface ICalendarDAO
      * @param event The event
      * @param plugin The Plugin using this data access service
      * @param strUserLogin user login
-     * @throws fr.paris.lutece.portal.service.util.AppException An AppException error
+     * @throws fr.paris.lutece.portal.service.util.AppException An AppException
+     *             error
      */
-    void insertEvent( SimpleEvent event, Plugin plugin, String strUserLogin )
-        throws AppException;
+    void insertEvent( SimpleEvent event, Plugin plugin, String strUserLogin ) throws AppException;
 
     /**
      * Insert a new agenda in the table calendar_agendas.
-     *
-     *
+     * 
+     * 
      * @param agenda The AgendaResource object
      * @param plugin The Plugin using this data access service
      */
@@ -84,7 +84,7 @@ public interface ICalendarDAO
 
     /**
      * Load the data of AgendaResource from the table
-     *
+     * 
      * @return the instance of the AgendaResource
      * @param nId The identifier of AgendaResource
      * @param plugin The plugin
@@ -101,8 +101,8 @@ public interface ICalendarDAO
 
     /**
      * Load the list of AgendaResources
-     *
-     *
+     * 
+     * 
      * @param plugin The plugin
      * @return The Collection of the AgendaResources
      */
@@ -116,7 +116,7 @@ public interface ICalendarDAO
      * @param nAgendaId The identifier of the agenda
      */
     List<SimpleEvent> selectEventsList( int nAgendaId, int nSortEvents, Plugin plugin );
-    
+
     /**
      * Load the list of Events
      * @return The Collection of the Events
@@ -125,11 +125,11 @@ public interface ICalendarDAO
      * @param nAgendaId The identifier of the agenda
      * @param strUserLogin user login
      */
-    List<SimpleEvent> selectEventsListByUserLogin( int nAgendaId, int nSortEvents, Plugin plugin, String strUserLogin);
+    List<SimpleEvent> selectEventsListByUserLogin( int nAgendaId, int nSortEvents, Plugin plugin, String strUserLogin );
 
     /**
      * Update the agenda in the table calendar_agendas
-     *
+     * 
      * @param agenda The reference of AgendaResource
      * @param plugin The Plugin using this data access service
      */
@@ -137,19 +137,19 @@ public interface ICalendarDAO
 
     /**
      * Update the event in the table calendar_event
-     *
+     * 
      * @param event The reference of SimpleEvent
      * @param plugin The Plugin using this data access service
-     * @param boolean 1 if periodicite is to Update, 0 if not
+     * @param periodiciteUpdated true if periodicity must be updated, 0
+     *            otherwhise
      * @throws fr.paris.lutece.portal.service.util.AppException An AppException
      */
-    void storeEvent( SimpleEvent event, Plugin plugin, boolean periodiciteUpdated )
-        throws AppException;
+    void storeEvent( SimpleEvent event, Plugin plugin, boolean periodiciteUpdated ) throws AppException;
 
     /**
      * Returns the number of following days the event should be displayed
      * @param nEventId The id of the event
-	 * @param plugin Plugin
+     * @param plugin Plugin
      * @return The number of days
      */
     int getRepetitionDays( int nEventId, Plugin plugin );
@@ -161,7 +161,7 @@ public interface ICalendarDAO
      * @param plugin The plugin
      * @param nAgendaId The identifier of the agenda
      * @param nEventId The identifier of an event
-     *
+     * 
      */
     List<OccurrenceEvent> selectOccurrencesList( int nAgendaId, int nEventId, int nSortEvents, Plugin plugin );
 
@@ -171,7 +171,7 @@ public interface ICalendarDAO
      * @param nSortEvents An integer used for sorting issues
      * @param plugin The plugin
      * @param nAgendaId The identifier of the agenda
-     *
+     * 
      */
     List<OccurrenceEvent> selectOccurrencesList( int nAgendaId, int nSortEvents, Plugin plugin );
 
@@ -181,9 +181,9 @@ public interface ICalendarDAO
      * @param nSortEvents An integer used for sorting issues
      * @param plugin The plugin
      * @param nAgendaId The identifier of the agenda
-     *
+     * 
      */
-    List<OccurrenceEvent> selectOccurrencesByIdList( int nAgendaI, Plugin plugin );
+    List<OccurrenceEvent> selectOccurrencesByIdList( int nAgendaId, Plugin plugin );
 
     /**
      * Load the data of SimpleEvent from the table
@@ -195,7 +195,7 @@ public interface ICalendarDAO
 
     /**
      * Update the occurrence in the table calendar_events_occurrences
-     *
+     * 
      * @param occurrence The reference of OccurrenceEvent
      * @param plugin The Plugin using this data access service
      */
@@ -229,7 +229,7 @@ public interface ICalendarDAO
     /**
      * Return the occurrence number for an event
      * @param nEventId The id of the event
-	 * @param plugin Plugin
+     * @param plugin Plugin
      * @return the occurrence number
      */
     int getOccurrenceNumber( int nEventId, Plugin plugin );
@@ -237,14 +237,14 @@ public interface ICalendarDAO
     /**
      * Return the image resource corresponding to the category id
      * @param nEventId The event id
-	 * @param plugin Plugin
+     * @param plugin Plugin
      * @return The image resource
      */
     ImageResource loadImageResource( int nEventId, Plugin plugin );
 
     /**
      * Load the list of Events
-     *
+     * 
      * @return The Collection of the Events
      * @param plugin The plugin
      * @param filter The CalendarFilter Object
@@ -254,6 +254,7 @@ public interface ICalendarDAO
     /**
      * Load the list of top Events
      * @param plugin The plugin
+     * @return
      */
     List<SimpleEvent> selectTopEventsList( Plugin plugin );
 
@@ -264,7 +265,7 @@ public interface ICalendarDAO
      * @return 1 if the day contains an event 0 otherwise
      */
     boolean hasOccurenceEvent( Calendar calendar, Plugin plugin );
-    
+
     /**
      * Delete the link between event and user
      * @param nEventId ID event
@@ -275,13 +276,13 @@ public interface ICalendarDAO
     /**
      * Load the list of events
      * @param nAgendaId the agenda ID
-     * @param nSortEvents An integer used for sorting issues 
+     * @param nSortEvents An integer used for sorting issues
      * @param nNextDays the number of days
      * @param plugin plugin
      * @return the list of events
      */
     List<SimpleEvent> selectEventsList( int nAgendaId, int nSortEvents, int nNextDays, Plugin plugin );
-    
+
     /**
      * Get the list of calendar IDs
      * @param plugin {@link Plugin}

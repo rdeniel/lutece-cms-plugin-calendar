@@ -36,6 +36,9 @@ package fr.paris.lutece.plugins.calendar.service;
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 
 
+/**
+ * Calendar plugin
+ */
 public class CalendarPlugin extends PluginDefaultImplementation
 {
     public static final String PLUGIN_NAME = "calendar";
@@ -43,8 +46,8 @@ public class CalendarPlugin extends PluginDefaultImplementation
     /**
      * Plugin initialization. Override the default init
      */
-    public void init(  )
+    public void init( )
     {
-    	AgendaResource.init(  );
+        AgendaResource.init( );
     }
 }

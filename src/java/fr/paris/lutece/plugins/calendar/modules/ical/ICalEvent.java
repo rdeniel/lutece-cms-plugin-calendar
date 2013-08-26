@@ -298,11 +298,19 @@ public class ICalEvent implements Event
 
     ////////////////////////////////////////////////////////////////////////////
     // Setters : scope package
+    /**
+     * Set the periodicity of the event
+     * @param nPeriodicity The periodicity of the event
+     */
     public void setPeriodicity( int nPeriodicity )
     {
         _nPeriodicity = nPeriodicity;
     }
 
+    /**
+     * Set the occurrence of the event
+     * @param nOccurrence The occurrence of the event
+     */
     public void setOccurrence( int nOccurrence )
     {
         _nOccurrence = nOccurrence;
