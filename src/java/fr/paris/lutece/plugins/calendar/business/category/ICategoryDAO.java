@@ -110,5 +110,5 @@ public interface ICategoryDAO
      * @param plugin Plugin
      * @return The Instance of the object Category
      */
-    public Collection<Category> selectByEvent( int nIdEvent, Plugin plugin );
+    Collection<Category> selectByEvent( int nIdEvent, Plugin plugin );
 }

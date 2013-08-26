@@ -288,7 +288,7 @@ public final class Constants
     public static final String MARK_CALENDAR_ID = "calendar_id";
     public static final String MARK_CALENDAR = "calendar";
     public static final String MARK_LOCALE = "locale";
-    public static final String MARK_KEY = "key"; 
+    public static final String MARK_KEY = "key";
 
     // Constants
     public static final String EMPTY_STRING = "";
@@ -328,7 +328,7 @@ public final class Constants
     public static final String VIEW_DAY = "day";
     public static final String VIEW_WEEK = "week";
     public static final String VIEW_MONTH = "month";
-    
+
     // Actions
     public static final String ACTION_MANAGE_EVENTS = "manage_events";
     public static final String ACTION_ADD_EVENT = "add_event";
@@ -350,21 +350,26 @@ public final class Constants
     public static final String ACTION_RSS = "rss";
 
     // CSS Styles
-    public static final String STYLE_CLASS_VIEW_MONTH_DAY = AppPropertiesService.getProperty("calendar.style.month.day");
-    public static final String STYLE_CLASS_VIEW_WEEK_DAY = AppPropertiesService.getProperty("calendar.style.week.day");
-    public static final String STYLE_CLASS_SMALLMONTH_DAY = AppPropertiesService.getProperty("calendar.style.smallmonth.day");
-    public static final String STYLE_CLASS_SUFFIX_OLD = AppPropertiesService.getProperty("calendar.style.suffix.old");
-    public static final String STYLE_CLASS_SUFFIX_TODAY = AppPropertiesService.getProperty("calendar.style.suffix.today");
-    public static final String STYLE_CLASS_SUFFIX_OFF = AppPropertiesService.getProperty("calendar.style.suffix.off");
-    public static final String STYLE_CLASS_SUFFIX_EVENT = AppPropertiesService.getProperty("calendar.style.suffix.event");
-    public static final String STYLE_CLASS_SELECTED_DAY = AppPropertiesService.getProperty("calendar.style.selected.day");
+    public static final String STYLE_CLASS_VIEW_MONTH_DAY = AppPropertiesService
+            .getProperty( "calendar.style.month.day" );
+    public static final String STYLE_CLASS_VIEW_WEEK_DAY = AppPropertiesService.getProperty( "calendar.style.week.day" );
+    public static final String STYLE_CLASS_SMALLMONTH_DAY = AppPropertiesService
+            .getProperty( "calendar.style.smallmonth.day" );
+    public static final String STYLE_CLASS_SUFFIX_OLD = AppPropertiesService.getProperty( "calendar.style.suffix.old" );
+    public static final String STYLE_CLASS_SUFFIX_TODAY = AppPropertiesService
+            .getProperty( "calendar.style.suffix.today" );
+    public static final String STYLE_CLASS_SUFFIX_OFF = AppPropertiesService.getProperty( "calendar.style.suffix.off" );
+    public static final String STYLE_CLASS_SUFFIX_EVENT = AppPropertiesService
+            .getProperty( "calendar.style.suffix.event" );
+    public static final String STYLE_CLASS_SELECTED_DAY = AppPropertiesService
+            .getProperty( "calendar.style.selected.day" );
 
     // Indexer fileds
     public static final String FIELD_CALENDAR_ID = "calendar_id";
     public static final String FIELD_CATEGORY = "category";
     public static final String CALENDAR_SHORT_NAME = "cld";
     public static final String DOCUMENT_SHORT_NAME = "dcld";
-    
+
     // Regex
     public static final String REG_NUMBER = "^[0-9]+$";
 }

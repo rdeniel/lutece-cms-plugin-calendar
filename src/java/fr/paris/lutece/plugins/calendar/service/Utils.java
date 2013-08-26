@@ -873,7 +873,9 @@ public final class Utils
         }
 
         for ( AgendaResource a : listAuthaurizedAgenda )
+        {
             loadAgendaOccurrences( a, plugin );
+        }
 
         return listAuthaurizedAgenda;
     }
@@ -889,7 +891,9 @@ public final class Utils
         List<AgendaResource> listCalendar = CalendarHome.findAgendaResourcesList( plugin );
 
         for ( AgendaResource a : listCalendar )
+        {
             loadAgendaOccurrences( a, plugin );
+        }
 
         return listCalendar;
     }
@@ -905,7 +909,9 @@ public final class Utils
         List<AgendaResource> listCalendar = CalendarHome.findAgendaResourcesList( plugin );
 
         for ( AgendaResource a : listCalendar )
+        {
             loadAgendaEvents( a, plugin );
+        }
 
         return listCalendar;
     }
@@ -921,7 +927,9 @@ public final class Utils
         List<AgendaResource> listCalendar = CalendarHome.findAgendaResourcesList( plugin );
 
         for ( AgendaResource a : listCalendar )
+        {
             loadAgendaOccurrencesOrderedById( a, plugin );
+        }
 
         return listCalendar;
     }
@@ -1013,7 +1021,9 @@ public final class Utils
             NodeIterator i = parser.elements( );
 
             while ( i.hasMoreNodes( ) )
+            {
                 sbText.append( i.nextNode( ).toPlainTextString( ) );
+            }
         }
         catch ( ParserException e )
         {

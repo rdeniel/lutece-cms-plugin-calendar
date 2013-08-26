@@ -221,7 +221,9 @@ public class CalendarIndexer implements SearchIndexer
             Iterator<Category> i = arrayCategories.iterator( );
 
             while ( i.hasNext( ) )
+            {
                 strCategories += ( i.next( ).getId( ) + BLANK );
+            }
         }
 
         doc.add( new Field( Constants.FIELD_CATEGORY, strCategories, Field.Store.NO, Field.Index.ANALYZED ) );

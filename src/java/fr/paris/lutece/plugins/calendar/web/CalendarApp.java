@@ -1558,10 +1558,12 @@ public class CalendarApp implements XPageApplication
         ReferenceList listAgendas = new ReferenceList( );
 
         for ( AgendaResource a : _calendarService.getAgendaResources( request ) )
+        {
             if ( a != null )
             {
                 listAgendas.addItem( a.getId( ), a.getName( ) );
             }
+        }
 
         return listAgendas;
     }

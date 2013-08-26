@@ -45,11 +45,11 @@ public interface IMiniCalendarPortletDAO extends IPortletInterfaceDAO
      * Define top events are displayed or not
      * @return true if shows top event else false
      */
-    public boolean showTopEvent( );
+    boolean showTopEvent( );
 
     /**
      * Define top events are displayed or not
      * @param top_event The top_event
      */
-    public void updateTopEvent( boolean top_event );
+    void updateTopEvent( boolean top_event );
 }

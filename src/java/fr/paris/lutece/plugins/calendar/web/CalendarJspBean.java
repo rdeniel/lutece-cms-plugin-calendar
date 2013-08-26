@@ -1651,7 +1651,9 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         int i = 0;
 
         while ( st.hasMoreElements( ) )
+        {
             list.addItem( i++, st.nextToken( ).trim( ) );
+        }
 
         return list;
     }
@@ -1900,7 +1902,9 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         if ( tableCBXOccurrence != null )
         {
             for ( int i = 0; i < tableCBXOccurrence.length; i++ )
+            {
                 strCBXOccurrence += ( tableCBXOccurrence[i] + Constants.COMMA );
+            }
 
             url.addParameter( Constants.PARAMETER_CBX_OCCURRENCE, strCBXOccurrence );
         }
@@ -2155,7 +2159,9 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         if ( tableCBXOccurrence != null )
         {
             for ( int i = 0; i < tableCBXOccurrence.length; i++ )
+            {
                 strCBXOccurrence += ( tableCBXOccurrence[i] + Constants.COMMA );
+            }
 
             url.addParameter( Constants.PARAMETER_CBX_OCCURRENCE, strCBXOccurrence );
         }
