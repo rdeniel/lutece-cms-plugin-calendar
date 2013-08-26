@@ -33,32 +33,34 @@
  */
 package fr.paris.lutece.plugins.calendar.business.stylesheet;
 
-import java.util.Collection;
-
 import fr.paris.lutece.portal.business.stylesheet.StyleSheet;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.util.Collection;
+
 
 /**
- * This class provides instances management methods (create, find, ...) for Stylesheet objects
+ * This class provides instances management methods (create, find, ...) for
+ * Stylesheet objects
  */
 public final class CalendarStyleSheetHome
 {
     // Static variable pointed to the DAO instance
-    private static ICalendarStyleSheetDAO _dao = (ICalendarStyleSheetDAO) SpringContextService.getPluginBean( "calendar",
-            "calendar.calendarStyleSheetDAO" );
+    private static ICalendarStyleSheetDAO _dao = SpringContextService.getBean( "calendar.calendarStyleSheetDAO" );
 
     /**
      * Creates a new StyleSheetHome object.
      */
-    private CalendarStyleSheetHome(  )
+    private CalendarStyleSheetHome( )
     {
     }
 
     /**
      * Creation of an instance of a Stylesheet file in the database
-     * @param stylesheet An instance of a stylesheet which contains the informations to store
+     * @param stylesheet An instance of a stylesheet which contains the
+     *            informations to store
+     * @param strExtension The extension of files generated with the stylesheet
      * @param plugin Plugin
      * @return The instance of the stylesheet which has been created.
      */
@@ -93,7 +95,8 @@ public final class CalendarStyleSheetHome
     // Finders
 
     /**
-     * Returns an instance of a stylesheet file whose identifier is specified in parameter
+     * Returns an instance of a stylesheet file whose identifier is specified in
+     * parameter
      * @param nKey the stylesheet primary key
      * @param plugin Plugin
      * @return the instance of the styleSheet whose identifier is the nKey
@@ -105,7 +108,6 @@ public final class CalendarStyleSheetHome
 
     /**
      * Returns a collection of StyleSheet objet
-     * @param nModeId The mode identifier
      * @param plugin Plugin
      * @return A collection of StyleSheet object
      */
@@ -116,6 +118,7 @@ public final class CalendarStyleSheetHome
 
     /**
      * Insertion of the extension of an export file in the database
+     * @param nId The id
      * @param strExtension the extension file
      * @param plugin Plugin
      */

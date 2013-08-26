@@ -33,6 +33,12 @@
  */
 package fr.paris.lutece.plugins.calendar.modules.ical;
 
+import fr.paris.lutece.plugins.calendar.business.Agenda;
+import fr.paris.lutece.plugins.calendar.business.Event;
+import fr.paris.lutece.plugins.calendar.service.Utils;
+import fr.paris.lutece.plugins.calendar.web.Constants;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -45,11 +51,6 @@ import java.util.Set;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
-import fr.paris.lutece.plugins.calendar.business.Agenda;
-import fr.paris.lutece.plugins.calendar.business.Event;
-import fr.paris.lutece.plugins.calendar.service.Utils;
-import fr.paris.lutece.plugins.calendar.web.Constants;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 
 /**
@@ -58,22 +59,25 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
  */
 public class ICalAgenda implements Agenda
 {
-	private static final long serialVersionUID = 331412235577651908L;
-	private String _strName;
+    private static final long serialVersionUID = 331412235577651908L;
+    private String _strName;
     private String _strKeyName;
-    private Map<String, List<Event>> _mapDays = new HashMap<String, List<Event>>(  );
-    private List<Event> _list = new ArrayList<Event>(  );
+    private Map<String, List<Event>> _mapDays = new HashMap<String, List<Event>>( );
+    private List<Event> _list = new ArrayList<Event>( );
 
-    public ICalAgenda(  )
+    /**
+     * Default constructor
+     */
+    public ICalAgenda( )
     {
-    	
+
     }
-    
+
     /**
      * Returns the name of the Agenda
      * @return The agenda's name
      */
-    public String getName(  )
+    public String getName( )
     {
         return _strName;
     }
@@ -89,17 +93,17 @@ public class ICalAgenda implements Agenda
 
     /**
      * Returns the KeyName
-     *
+     * 
      * @return The KeyName
      */
-    public String getKeyName(  )
+    public String getKeyName( )
     {
         return _strKeyName;
     }
 
     /**
      * Sets the KeyName
-     *
+     * 
      * @param strKeyName The KeyName
      */
     public void setKeyName( String strKeyName )
@@ -128,7 +132,7 @@ public class ICalAgenda implements Agenda
 
         if ( hasEvents( strDate ) )
         {
-            listEvents = (List<Event>) _mapDays.get( strDate );
+            listEvents = _mapDays.get( strDate );
         }
 
         return listEvents;
@@ -138,11 +142,11 @@ public class ICalAgenda implements Agenda
      * Retrieves all events of the agenda
      * @return A list of events
      */
-    public List<Event> getEvents(  )
+    public List<Event> getEvents( )
     {
-        _list.clear(  );
+        _list.clear( );
 
-        Set<String> listKey = _mapDays.keySet(  );
+        Set<String> listKey = _mapDays.keySet( );
 
         for ( String strDate : listKey )
         {
@@ -165,66 +169,66 @@ public class ICalAgenda implements Agenda
     {
         String strTraceEnable = AppPropertiesService.getProperty( Constants.PROPERTY_ICAL_TRACE_ENABLE );
         boolean bTrace = ( ( strTraceEnable != null ) && ( strTraceEnable.equals( "true" ) ) ) ? true : false;
-        List<Component> listComponent = calendar.getComponents(  );
+        List<Component> listComponent = calendar.getComponents( );
 
         for ( Component component : listComponent )
         {
             if ( bTrace )
             {
-                System.out.println( "Component [" + component.getName(  ) + "]" );
+                System.out.println( "Component [" + component.getName( ) + "]" );
             }
 
-            if ( component.getName(  ).equals( Component.VEVENT ) )
+            if ( component.getName( ).equals( Component.VEVENT ) )
             {
-                ICalEvent event = new ICalEvent(  );
-                List<Property> listProperty = component.getProperties(  );
+                ICalEvent event = new ICalEvent( );
+                List<Property> listProperty = component.getProperties( );
 
                 for ( Property property : listProperty )
                 {
-                    if ( property.getName(  ).equals( Property.SUMMARY ) )
+                    if ( property.getName( ).equals( Property.SUMMARY ) )
                     {
-                        event.setTitle( property.getValue(  ) );
+                        event.setTitle( property.getValue( ) );
                     }
-                    else if ( property.getName(  ).equals( Property.DTSTART ) )
+                    else if ( property.getName( ).equals( Property.DTSTART ) )
                     {
-                        event.setDateTimeStart( property.getValue(  ) );
+                        event.setDateTimeStart( property.getValue( ) );
                     }
-                    else if ( property.getName(  ).equals( Property.DTEND ) )
+                    else if ( property.getName( ).equals( Property.DTEND ) )
                     {
-                        event.setDateTimeEnd( property.getValue(  ) );
+                        event.setDateTimeEnd( property.getValue( ) );
                     }
-                    else if ( property.getName(  ).equals( Property.LOCATION ) )
+                    else if ( property.getName( ).equals( Property.LOCATION ) )
                     {
-                        event.setLocation( property.getValue(  ) );
+                        event.setLocation( property.getValue( ) );
                     }
-                    else if ( property.getName(  ).equals( Property.DESCRIPTION ) )
+                    else if ( property.getName( ).equals( Property.DESCRIPTION ) )
                     {
-                        event.setDescription( property.getValue(  ) );
+                        event.setDescription( property.getValue( ) );
                     }
-                    else if ( property.getName(  ).equals( Property.CLASS ) )
+                    else if ( property.getName( ).equals( Property.CLASS ) )
                     {
-                        event.setEventClass( property.getValue(  ) );
+                        event.setEventClass( property.getValue( ) );
                     }
-                    else if ( property.getName(  ).equals( Property.CATEGORIES ) )
+                    else if ( property.getName( ).equals( Property.CATEGORIES ) )
                     {
-                        event.setCategories( property.getValue(  ) );
+                        event.setCategories( property.getValue( ) );
                     }
-                    else if ( property.getName(  ).equals( Property.STATUS ) )
+                    else if ( property.getName( ).equals( Property.STATUS ) )
                     {
-                        event.setStatus( property.getValue(  ) );
+                        event.setStatus( property.getValue( ) );
                     }
-                    else if ( property.getName(  ).equals( Property.PRIORITY ) )
+                    else if ( property.getName( ).equals( Property.PRIORITY ) )
                     {
-                        event.setPriority( Integer.parseInt( property.getValue(  ) ) );
+                        event.setPriority( Integer.parseInt( property.getValue( ) ) );
                     }
-                    else if ( property.getName(  ).equals( Property.URL ) )
+                    else if ( property.getName( ).equals( Property.URL ) )
                     {
-                        event.setUrl( property.getValue(  ) );
+                        event.setUrl( property.getValue( ) );
                     }
 
                     if ( bTrace )
                     {
-                        System.out.println( "Property [" + property.getName(  ) + ", " + property.getValue(  ) + "]" );
+                        System.out.println( "Property [" + property.getName( ) + ", " + property.getValue( ) + "]" );
                     }
                 }
 
@@ -239,7 +243,7 @@ public class ICalAgenda implements Agenda
      */
     public void addEvent( Event event )
     {
-        String strDate = Utils.getDate( event.getDate(  ) );
+        String strDate = Utils.getDate( event.getDate( ) );
         List<Event> listEvents = null;
 
         if ( hasEvents( strDate ) )
@@ -248,7 +252,7 @@ public class ICalAgenda implements Agenda
         }
         else
         {
-            listEvents = new ArrayList<Event>(  );
+            listEvents = new ArrayList<Event>( );
             _mapDays.put( strDate, listEvents );
         }
 
@@ -257,19 +261,20 @@ public class ICalAgenda implements Agenda
 
     /**
      * The events which occur between a start and end date
-     * @param strDateBegin The start date
-     * @param strDateEnd The end date
+     * @param dateBegin The start date
+     * @param dateEnd The end date
+     * @param localeEnv The locale
      * @return The list of events
      */
     public List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )
     {
         // TODO implementer locale   
-        _list.clear(  );
+        _list.clear( );
 
-        java.util.Calendar calendar = new GregorianCalendar(  );
+        java.util.Calendar calendar = new GregorianCalendar( );
         calendar.setTime( dateBegin );
 
-        java.util.Calendar calendar1 = new GregorianCalendar(  );
+        java.util.Calendar calendar1 = new GregorianCalendar( );
         calendar1.setTime( dateEnd );
 
         while ( !Utils.getDate( calendar ).equals( Utils.getDate( calendar1 ) ) )

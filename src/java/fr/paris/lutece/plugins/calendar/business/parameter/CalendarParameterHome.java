@@ -33,25 +33,25 @@
  */
 package fr.paris.lutece.plugins.calendar.business.parameter;
 
-import java.util.Map;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.util.Map;
+
+
 /**
  * 
  * CalendarParameterHome
- *
+ * 
  */
-public final class CalendarParameterHome 
+public final class CalendarParameterHome
 {
-	// Static variable pointed at the DAO instance
-    private static ICalendarParameterDAO _dao = ( ICalendarParameterDAO ) SpringContextService.getPluginBean( 
-    		"calendar", "calendar.calendarParameterDAO" );
+    // Static variable pointed at the DAO instance
+    private static ICalendarParameterDAO _dao = SpringContextService.getBean( "calendar.calendarParameterDAO" );
 
-	/**
+    /**
      * Load the parameter value
      * @param strParameterKey the parameter key
      * @param plugin Plugin
@@ -59,20 +59,19 @@ public final class CalendarParameterHome
      */
     public static ReferenceItem findByKey( String strParameterKey, Plugin plugin )
     {
-    	return _dao.load( strParameterKey, plugin );
+        return _dao.load( strParameterKey, plugin );
     }
-    
+
     /**
      * Update the parameter value
-     * @param strParameterKey The parameter key
+     * @param userParam The parameter key
      * @param plugin Plugin
-     * @param strParameterValue The parameter value 
      */
     public static void update( ReferenceItem userParam, Plugin plugin )
     {
-    	_dao.store( userParam, plugin );
+        _dao.store( userParam, plugin );
     }
-    
+
     /**
      * Find all parameters
      * @param plugin Plugin
@@ -80,9 +79,9 @@ public final class CalendarParameterHome
      */
     public static Map<String, String> findAll( Plugin plugin )
     {
-    	return _dao.selectAll( plugin );
+        return _dao.selectAll( plugin );
     }
-    
+
     /**
      * Select all the parameters
      * @param plugin plugin
@@ -90,6 +89,6 @@ public final class CalendarParameterHome
      */
     public static ReferenceList findParametersList( Plugin plugin )
     {
-    	return _dao.selectParametersList( plugin );
+        return _dao.selectParametersList( plugin );
     }
 }

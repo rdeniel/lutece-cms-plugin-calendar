@@ -40,7 +40,8 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 
 
 /**
- * This class provides instances management methods for Mini CalendarPortlet objects
+ * This class provides instances management methods for Mini CalendarPortlet
+ * objects
  */
 public class MiniCalendarPortletHome extends PortletHome
 {
@@ -48,13 +49,12 @@ public class MiniCalendarPortletHome extends PortletHome
     private static MiniCalendarPortletHome _singleton;
 
     // Static variable pointed at the DAO instance
-    private static IMiniCalendarPortletDAO _dao = (MiniCalendarPortletDAO) SpringContextService.getPluginBean( "calendar",
-            "calendar.miniCalendarPortletDAO" );
+    private static IMiniCalendarPortletDAO _dao = SpringContextService.getBean( "calendar.miniCalendarPortletDAO" );
 
     /**
      * Constructor
      */
-    public MiniCalendarPortletHome(  )
+    public MiniCalendarPortletHome( )
     {
         if ( _singleton == null )
         {
@@ -64,27 +64,27 @@ public class MiniCalendarPortletHome extends PortletHome
 
     /**
      * Returns the identifier of the portlet type
-     *
+     * 
      * @return the portlet type identifier
      */
-    public String getPortletTypeId(  )
+    public String getPortletTypeId( )
     {
-        String strCurrentClassName = this.getClass(  ).getName(  );
+        String strCurrentClassName = this.getClass( ).getName( );
         String strPortletTypeId = PortletTypeHome.getPortletTypeId( strCurrentClassName );
 
         return strPortletTypeId;
     }
 
     /**
-     * Returns the instance of  NewsLetterArchive Portlet
-     *
+     * Returns the instance of NewsLetterArchive Portlet
+     * 
      * @return the Archive Portlet instance
      */
-    public static PortletHome getInstance(  )
+    public static PortletHome getInstance( )
     {
         if ( _singleton == null )
         {
-            _singleton = new MiniCalendarPortletHome(  );
+            _singleton = new MiniCalendarPortletHome( );
         }
 
         return _singleton;
@@ -92,10 +92,10 @@ public class MiniCalendarPortletHome extends PortletHome
 
     /**
      * Returns the instance of the portlet DAO singleton
-     *
+     * 
      * @return the instance of the DAO singleton
      */
-    public IPortletInterfaceDAO getDAO(  )
+    public IPortletInterfaceDAO getDAO( )
     {
         return _dao;
     }
@@ -104,15 +104,14 @@ public class MiniCalendarPortletHome extends PortletHome
      * Define top events are displayed or not
      * @return true if shows top event else false
      */
-    public static boolean showTopEvent(  )
+    public static boolean showTopEvent( )
     {
-        return _dao.showTopEvent(  );
+        return _dao.showTopEvent( );
     }
 
     /**
      * Define top events are displayed or not
      * @param top_event The top_event
-     * @return true if shows top event else false
      */
     public static void updateTopEvent( boolean top_event )
     {

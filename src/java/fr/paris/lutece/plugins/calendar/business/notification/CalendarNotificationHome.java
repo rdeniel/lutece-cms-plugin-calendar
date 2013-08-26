@@ -46,20 +46,19 @@ import java.util.List;
 public final class CalendarNotificationHome
 {
     // Static variable pointed at the DAO instance
-    private static ICalendarNotificationDAO _dao = (ICalendarNotificationDAO) SpringContextService.getPluginBean( 
-    		"calendar", "calendar.calendarNotificationDAO" );
+    private static ICalendarNotificationDAO _dao = SpringContextService.getBean( "calendar.calendarNotificationDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private CalendarNotificationHome(  )
+    private CalendarNotificationHome( )
     {
     }
 
     /**
      * Insert new calendarNotification
-     *
-     * @param resourceKey object CalendarNotification
+     * 
+     * @param calendarNotification object CalendarNotification
      * @param plugin the plugin
      */
     public static void create( CalendarNotification calendarNotification, Plugin plugin )
@@ -69,7 +68,7 @@ public final class CalendarNotificationHome
 
     /**
      * Update a CalendarNotification
-     *
+     * 
      * @param calendarNotification object CalendarNotification
      * @param plugin the plugin
      */
@@ -93,11 +92,11 @@ public final class CalendarNotificationHome
      * @param strKey key
      * @param plugin the plugin
      * @return a CalendarNotification
-     *
+     * 
      */
     public static CalendarNotification findByPrimaryKey( String strKey, Plugin plugin )
     {
-    	CalendarNotification calendarNotification = _dao.load( strKey, plugin );
+        CalendarNotification calendarNotification = _dao.load( strKey, plugin );
 
         return calendarNotification;
     }
@@ -105,6 +104,7 @@ public final class CalendarNotificationHome
     /**
      * Delete a CalendarNotification expiry
      * @param plugin the plugin
+     * @return The list of calendar notifications
      */
     public static List<CalendarNotification> selectNotificationExpiry( Plugin plugin )
     {

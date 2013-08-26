@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
-import java.util.Date;
-import java.util.List;
-
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
 import fr.paris.lutece.portal.business.portlet.IPortletInterfaceDAO;
 import fr.paris.lutece.portal.business.portlet.PortletHome;
 import fr.paris.lutece.portal.business.portlet.PortletTypeHome;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -52,13 +52,12 @@ public class CalendarPortletHome extends PortletHome
     private static CalendarPortletHome _singleton;
 
     // Static variable pointed at the DAO instance
-    private static ICalendarPortletDAO _dao = (CalendarPortletDAO) SpringContextService.getPluginBean( "calendar",
-            "calendar.calendarPortletDAO" );
+    private static ICalendarPortletDAO _dao = SpringContextService.getBean( "calendar.calendarPortletDAO" );
 
     /**
      * Constructor
      */
-    public CalendarPortletHome(  )
+    public CalendarPortletHome( )
     {
         if ( _singleton == null )
         {
@@ -68,27 +67,27 @@ public class CalendarPortletHome extends PortletHome
 
     /**
      * Returns the identifier of the portlet type
-     *
+     * 
      * @return the portlet type identifier
      */
-    public String getPortletTypeId(  )
+    public String getPortletTypeId( )
     {
-        String strCurrentClassName = this.getClass(  ).getName(  );
+        String strCurrentClassName = this.getClass( ).getName( );
         String strPortletTypeId = PortletTypeHome.getPortletTypeId( strCurrentClassName );
 
         return strPortletTypeId;
     }
 
     /**
-     * Returns the instance of  NewsLetterArchive Portlet
-     *
+     * Returns the instance of NewsLetterArchive Portlet
+     * 
      * @return the Archive Portlet instance
      */
-    public static PortletHome getInstance(  )
+    public static PortletHome getInstance( )
     {
         if ( _singleton == null )
         {
-            _singleton = new CalendarPortletHome(  );
+            _singleton = new CalendarPortletHome( );
         }
 
         return _singleton;
@@ -96,10 +95,10 @@ public class CalendarPortletHome extends PortletHome
 
     /**
      * Returns the instance of the portlet DAO singleton
-     *
+     * 
      * @return the instance of the DAO singleton
      */
-    public IPortletInterfaceDAO getDAO(  )
+    public IPortletInterfaceDAO getDAO( )
     {
         return _dao;
     }

@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.SimpleEvent;
@@ -61,6 +49,18 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -82,7 +82,7 @@ public class MiniCalendarPortlet extends Portlet
     private static final String TAG_EVENT_DESCRIPTION = "event-description";
     private static final String TAG_DATE = "date";
     private static final String TAG_DATE_END = "date-end";
-    
+
     //JSP
     private static final String JSP_PORTAL_URL = "jsp/site/Portal.jsp";
 
@@ -96,7 +96,7 @@ public class MiniCalendarPortlet extends Portlet
 
     /**
      * Sets the name of the plugin associated with this portlet.
-     *
+     * 
      * @param strPluginName The plugin name.
      */
     public void setPluginName( String strPluginName )
@@ -106,52 +106,52 @@ public class MiniCalendarPortlet extends Portlet
 
     /**
      * Returns the Xml code of the Archive portlet with XML heading
-     *
+     * 
      * @param request The HTTP servlet request
      * @return the Xml code of the Archive portlet
      */
     public String getXmlDocument( HttpServletRequest request )
     {
-        return XmlUtil.getXmlHeader(  ) + getXml( request );
+        return XmlUtil.getXmlHeader( ) + getXml( request );
     }
 
     /**
      * Returns the Xml code of the Calendar portlet without XML heading
-     *
+     * 
      * @param request The HTTP servlet request
      * @return the Xml code of the Archive portlet content
      */
     public String getXml( HttpServletRequest request )
     {
-        StringBuffer strXml = new StringBuffer(  );
+        StringBuffer strXml = new StringBuffer( );
         Locale locale = null;
 
         if ( _cal == null )
         {
-            _cal = new GregorianCalendar(  );
+            _cal = new GregorianCalendar( );
         }
 
         if ( request != null )
         {
-            locale = request.getLocale(  );
+            locale = request.getLocale( );
 
-            if ( ( request.getParameter( Constants.PARAMETER_MONTH ) != null ) &&
-                    ( request.getParameter( Constants.PARAMETER_MONTH ) ).equals( Constants.PARAMETER_NEXT ) )
+            if ( ( request.getParameter( Constants.PARAMETER_MONTH ) != null )
+                    && ( request.getParameter( Constants.PARAMETER_MONTH ) ).equals( Constants.PARAMETER_NEXT ) )
             {
                 _cal.add( Calendar.MONTH, 1 );
             }
-            else if ( ( request.getParameter( Constants.PARAMETER_MONTH ) != null ) &&
-                    ( request.getParameter( Constants.PARAMETER_MONTH ) ).equals( Constants.PARAMETER_PREV ) )
+            else if ( ( request.getParameter( Constants.PARAMETER_MONTH ) != null )
+                    && ( request.getParameter( Constants.PARAMETER_MONTH ) ).equals( Constants.PARAMETER_PREV ) )
             {
                 _cal.add( Calendar.MONTH, -1 );
             }
 
-            XmlUtil.addElement( strXml, TAG_URL,
-                AppPathService.getBaseUrl( request ) + JSP_PORTAL_URL + POINT_INTERROGATION + PARAM_PAGE_ID + EGAL );
+            XmlUtil.addElement( strXml, TAG_URL, AppPathService.getBaseUrl( request ) + JSP_PORTAL_URL
+                    + POINT_INTERROGATION + PARAM_PAGE_ID + EGAL );
         }
         else
         {
-            locale = I18nService.getDefaultLocale(  );
+            locale = I18nService.getDefaultLocale( );
         }
 
         //Load the xml calendar	    	
@@ -160,132 +160,134 @@ public class MiniCalendarPortlet extends Portlet
         //Top event section            
         Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
 
-        boolean top_event = MiniCalendarPortletHome.showTopEvent(  );
+        boolean top_event = MiniCalendarPortletHome.showTopEvent( );
 
         if ( top_event )
         {
             XmlUtil.beginElement( strXml, TAG_TOP_EVENTS );
 
             List<SimpleEvent> listEvents = CalendarHome.findTopEventList( plugin );
-            Iterator<SimpleEvent> i = listEvents.iterator(  );
+            Iterator<SimpleEvent> i = listEvents.iterator( );
 
-            while ( i.hasNext(  ) )
+            while ( i.hasNext( ) )
             {
                 XmlUtil.beginElement( strXml, TAG_TOP_EVENT );
 
-                SimpleEvent event = (SimpleEvent) i.next(  );
-                XmlUtil.addElement( strXml, TAG_TOP_EVENT_TITLE,
-                    ( event.getTitle(  ) != null ) ? event.getTitle(  ) : "" );
-                XmlUtil.addElement( strXml, TAG_EVENT_ID, event.getId(  ) );
-                XmlUtil.addElement( strXml, TAG_AGENDA_ID, event.getIdCalendar(  ) );
+                SimpleEvent event = i.next( );
+                XmlUtil.addElement( strXml, TAG_TOP_EVENT_TITLE, ( event.getTitle( ) != null ) ? event.getTitle( ) : "" );
+                XmlUtil.addElement( strXml, TAG_EVENT_ID, event.getId( ) );
+                XmlUtil.addElement( strXml, TAG_AGENDA_ID, event.getIdCalendar( ) );
                 XmlUtil.endElement( strXml, TAG_TOP_EVENT );
                 //Register the image
-                EventImageResourceService.getInstance(  ).getResourceImageEvent( event.getId(  ) );
+                EventImageResourceService.getInstance( ).getResourceImageEvent( event.getId( ) );
             }
 
             XmlUtil.endElement( strXml, TAG_TOP_EVENTS );
         }
 
-        String strDateBegin = request.getParameter( Constants.PARAMETER_DATE );
-        
+        String strDateBegin = request != null ? request.getParameter( Constants.PARAMETER_DATE ) : StringUtils.EMPTY;
+
         // If there is no date begin in the parameter, then get today's date
         if ( StringUtils.isBlank( strDateBegin ) )
         {
-        	strDateBegin = DateUtil.getCurrentDateString( locale );
+            strDateBegin = DateUtil.getCurrentDateString( locale );
         }
-        
+
         String[] arrayCategory = null;
         String[] arrayCalendar = Utils.getCalendarIds( request );
         String strQuery = StringUtils.EMPTY;
         List<Event> listEvent = null;
         Plugin pluginCalendar = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
-        
-        Date dateBegin = DateUtil.formatDate( strDateBegin, request.getLocale(  ) );
+
+        Date dateBegin = DateUtil.formatDate( strDateBegin,
+                request != null ? request.getLocale( ) : Locale.getDefault( ) );
         // If there is a date end, then it is a search on a date interval
-        String strDateEnd = request.getParameter( Constants.PARAMETER_DATE_END );
+        String strDateEnd = request != null ? request.getParameter( Constants.PARAMETER_DATE_END ) : StringUtils.EMPTY;
         Date dateEnd = null;
         if ( StringUtils.isNotBlank( strDateEnd ) )
         {
-        	dateEnd = DateUtil.formatDate( strDateEnd, request.getLocale(  ) );
+            dateEnd = DateUtil.formatDate( strDateEnd, request != null ? request.getLocale( ) : Locale.getDefault( ) );
         }
         if ( dateEnd == null )
         {
-        	dateEnd = dateBegin;
+            dateEnd = dateBegin;
         }
-        
-        listEvent = CalendarSearchService.getInstance(  )
-        .getSearchResults( arrayCalendar, arrayCategory, strQuery, dateBegin,
-        		dateEnd, request, pluginCalendar );
+
+        listEvent = CalendarSearchService.getInstance( ).getSearchResults( arrayCalendar, arrayCategory, strQuery,
+                dateBegin, dateEnd, request, pluginCalendar );
         if ( listEvent != null )
         {
-        	//Sort events by DateTimeStart using bubble sort
-        	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        	boolean bisModification;
-        	Date date1;
-        	Date date2;
-        	Event temporaryEvent;
-        	do
-        	{
-        		bisModification = true;
-        		for(int j=0; j<listEvent.size()-1;j++)
-        		{
-        			try{
-        				
-        		        date1 = sdf.parse(listEvent.get(j).getDateTimeStart());
-        			}
-        			catch(Exception e)
-        			{
-        				date1 = new Date(0);
-        			}
-        			try{
-        				
-        		        date2 = sdf.parse(listEvent.get(j+1).getDateTimeStart());
-        			}
-        			catch(Exception e)
-        			{
-        				date2 =  new Date(0);
-        			}
-        			if(date1.after(date2))
-        			{
-        				temporaryEvent = listEvent.get(j+1);
-        				listEvent.set(j+1, listEvent.get(j));
-        				listEvent.set(j, temporaryEvent);
-        				bisModification = false;
-        			}
-        			
-        		}
-        		
-        	}while(!bisModification);
-        
-        	XmlUtil.beginElement( strXml, TAG_EVENTS );
-        	for ( Event event : listEvent )
-        	{
-        		XmlUtil.beginElement( strXml, TAG_EVENT );
-        		// Search on date interval, then display date begin and date end
-        		if ( StringUtils.isNotBlank( strDateEnd ) && !strDateBegin.equals( strDateEnd ) )
-        		{
-        			XmlUtil.addElement( strXml, TAG_DATE, DateUtil.getDateString( event.getDate(  ), locale ) );
-        			XmlUtil.addElement( strXml, TAG_DATE_END, DateUtil.getDateString( event.getDateEnd(  ), locale ) );
-        		}
-        		// Else only display the date on which the user has clicked
-        		else
-        		{
-        			XmlUtil.addElement( strXml, TAG_DATE, strDateBegin );
-        			XmlUtil.addElement( strXml, TAG_DATE_END, StringUtils.EMPTY );
-        		}
-        		XmlUtil.addElement( strXml, TAG_EVENT_TITLE,
-                        ( event.getTitle(  ) != null ) ? event.getTitle(  ) : StringUtils.EMPTY );
-        		XmlUtil.addElement( strXml, TAG_EVENT_DATETIME_BEGIN,
-                        ( event.getDateTimeStart() != null ) ? event.getDateTimeStart(  ) : StringUtils.EMPTY );
-        		XmlUtil.addElement( strXml, TAG_EVENT_DESCRIPTION,
-                        ( event.getDescription() != null ) ? event.getDescription() : StringUtils.EMPTY );
-        		XmlUtil.addElement( strXml, TAG_EVENT_ID,event.getId());
-        		XmlUtil.endElement( strXml, TAG_EVENT );
-        		
-        	}
-        	XmlUtil.endElement( strXml, TAG_EVENTS );
+            //Sort events by DateTimeStart using bubble sort
+            SimpleDateFormat sdf = new SimpleDateFormat( "HH:mm" );
+            boolean bisModification;
+            Date date1;
+            Date date2;
+            Event temporaryEvent;
+            do
+            {
+                bisModification = true;
+                for ( int j = 0; j < listEvent.size( ) - 1; j++ )
+                {
+                    try
+                    {
+
+                        date1 = sdf.parse( listEvent.get( j ).getDateTimeStart( ) );
+                    }
+                    catch ( Exception e )
+                    {
+                        date1 = new Date( 0 );
+                    }
+                    try
+                    {
+
+                        date2 = sdf.parse( listEvent.get( j + 1 ).getDateTimeStart( ) );
+                    }
+                    catch ( Exception e )
+                    {
+                        date2 = new Date( 0 );
+                    }
+                    if ( date1.after( date2 ) )
+                    {
+                        temporaryEvent = listEvent.get( j + 1 );
+                        listEvent.set( j + 1, listEvent.get( j ) );
+                        listEvent.set( j, temporaryEvent );
+                        bisModification = false;
+                    }
+
+                }
+
+            }
+            while ( !bisModification );
+
+            XmlUtil.beginElement( strXml, TAG_EVENTS );
+            for ( Event event : listEvent )
+            {
+                XmlUtil.beginElement( strXml, TAG_EVENT );
+                // Search on date interval, then display date begin and date end
+                if ( StringUtils.isNotBlank( strDateEnd ) && !strDateBegin.equals( strDateEnd ) )
+                {
+                    XmlUtil.addElement( strXml, TAG_DATE, DateUtil.getDateString( event.getDate( ), locale ) );
+                    XmlUtil.addElement( strXml, TAG_DATE_END, DateUtil.getDateString( event.getDateEnd( ), locale ) );
+                }
+                // Else only display the date on which the user has clicked
+                else
+                {
+                    XmlUtil.addElement( strXml, TAG_DATE, strDateBegin );
+                    XmlUtil.addElement( strXml, TAG_DATE_END, StringUtils.EMPTY );
+                }
+                XmlUtil.addElement( strXml, TAG_EVENT_TITLE, ( event.getTitle( ) != null ) ? event.getTitle( )
+                        : StringUtils.EMPTY );
+                XmlUtil.addElement( strXml, TAG_EVENT_DATETIME_BEGIN,
+                        ( event.getDateTimeStart( ) != null ) ? event.getDateTimeStart( ) : StringUtils.EMPTY );
+                XmlUtil.addElement( strXml, TAG_EVENT_DESCRIPTION,
+                        ( event.getDescription( ) != null ) ? event.getDescription( ) : StringUtils.EMPTY );
+                XmlUtil.addElement( strXml, TAG_EVENT_ID, event.getId( ) );
+                XmlUtil.endElement( strXml, TAG_EVENT );
+
+            }
+            XmlUtil.endElement( strXml, TAG_EVENTS );
         }
-        
+
         String str = addPortletTags( strXml );
 
         return str;
@@ -294,16 +296,16 @@ public class MiniCalendarPortlet extends Portlet
     /**
      * Updates the current instance of the CalendarPortlet object
      */
-    public void update(  )
+    public void update( )
     {
-        MiniCalendarPortletHome.getInstance(  ).update( this );
+        MiniCalendarPortletHome.getInstance( ).update( this );
     }
 
     /**
      * Removes the current instance of the CalendarPortlet object
      */
-    public void remove(  )
+    public void remove( )
     {
-        MiniCalendarPortletHome.getInstance(  ).remove( this );
+        MiniCalendarPortletHome.getInstance( ).remove( this );
     }
 }

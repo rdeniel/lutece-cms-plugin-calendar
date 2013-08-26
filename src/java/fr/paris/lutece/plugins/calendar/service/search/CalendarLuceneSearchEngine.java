@@ -33,6 +33,14 @@
  */
 package fr.paris.lutece.plugins.calendar.service.search;
 
+import fr.paris.lutece.plugins.calendar.service.Utils;
+import fr.paris.lutece.plugins.calendar.web.Constants;
+import fr.paris.lutece.portal.service.search.IndexationService;
+import fr.paris.lutece.portal.service.search.SearchItem;
+import fr.paris.lutece.portal.service.search.SearchResult;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -56,14 +64,6 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.TopDocs;
-
-import fr.paris.lutece.plugins.calendar.service.Utils;
-import fr.paris.lutece.plugins.calendar.web.Constants;
-import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.search.SearchItem;
-import fr.paris.lutece.portal.service.search.SearchResult;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 
 /**
@@ -89,13 +89,13 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
      * @return Results as a collection of SearchResult
      */
     public List<SearchResult> getSearchResults( String[] arrayAgendaIds, String[] arrayCategory, String strContent,
-        Date dateBegin, Date dateEnd, HttpServletRequest request )
+            Date dateBegin, Date dateEnd, HttpServletRequest request )
     {
-        ArrayList<SearchItem> listResults = new ArrayList<SearchItem>(  );
-        
-        if ( arrayAgendaIds == null || ( arrayAgendaIds != null && arrayAgendaIds.length == 0 ) )
+        ArrayList<SearchItem> listResults = new ArrayList<SearchItem>( );
+
+        if ( arrayAgendaIds == null || arrayAgendaIds.length == 0 )
         {
-        	return new ArrayList<SearchResult>(  );
+            return new ArrayList<SearchResult>( );
         }
         Searcher searcher = null;
 
@@ -104,17 +104,17 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
 
         try
         {
-            searcher = new IndexSearcher( IndexationService.getDirectoryIndex(  ), true );
+            searcher = new IndexSearcher( IndexationService.getDirectoryIndex( ), true );
 
-            Collection<String> queriesForSearchInContent = new ArrayList<String>(  );
-            Collection<String> queriesForSearchInTitle = new ArrayList<String>(  );
-            Collection<String> fieldsForSearchInContent = new ArrayList<String>(  );
-            Collection<String> fieldsForSearchInTitle = new ArrayList<String>(  );
-            Collection<BooleanClause.Occur> flagsForSearchInContent = new ArrayList<BooleanClause.Occur>(  );
-            Collection<BooleanClause.Occur> flagsForSearchInTitle = new ArrayList<BooleanClause.Occur>(  );
+            Collection<String> queriesForSearchInContent = new ArrayList<String>( );
+            Collection<String> queriesForSearchInTitle = new ArrayList<String>( );
+            Collection<String> fieldsForSearchInContent = new ArrayList<String>( );
+            Collection<String> fieldsForSearchInTitle = new ArrayList<String>( );
+            Collection<BooleanClause.Occur> flagsForSearchInContent = new ArrayList<BooleanClause.Occur>( );
+            Collection<BooleanClause.Occur> flagsForSearchInTitle = new ArrayList<BooleanClause.Occur>( );
 
             //Calendar Id
-            if ( arrayAgendaIds != null && arrayAgendaIds.length > 0 )
+            if ( arrayAgendaIds.length > 0 )
             {
                 String strQueryCalendar = OPEN_PARENTHESIS;
                 int intMoreCalendar = 0;
@@ -133,8 +133,8 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
                 strQueryCalendar += CLOSE_PARENTHESIS;
 
                 Query queryAgendaId = new TermQuery( new Term( Constants.FIELD_CALENDAR_ID, strQueryCalendar ) );
-                queriesForSearchInContent.add( queryAgendaId.toString(  ) );
-                queriesForSearchInTitle.add( queryAgendaId.toString(  ) );
+                queriesForSearchInContent.add( queryAgendaId.toString( ) );
+                queriesForSearchInTitle.add( queryAgendaId.toString( ) );
                 fieldsForSearchInContent.add( Constants.FIELD_CALENDAR_ID );
                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
                 fieldsForSearchInTitle.add( Constants.FIELD_CALENDAR_ID );
@@ -161,8 +161,8 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
                 strQueryCategory += CLOSE_PARENTHESIS;
 
                 Query queryAgendaId = new TermQuery( new Term( Constants.FIELD_CATEGORY, strQueryCategory ) );
-                queriesForSearchInContent.add( queryAgendaId.toString(  ) );
-                queriesForSearchInTitle.add( queryAgendaId.toString(  ) );
+                queriesForSearchInContent.add( queryAgendaId.toString( ) );
+                queriesForSearchInTitle.add( queryAgendaId.toString( ) );
                 fieldsForSearchInContent.add( Constants.FIELD_CATEGORY );
                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
                 fieldsForSearchInTitle.add( Constants.FIELD_CATEGORY );
@@ -170,10 +170,10 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             }
 
             //Type (=calendar)
-            PhraseQuery queryType = new PhraseQuery(  );
+            PhraseQuery queryType = new PhraseQuery( );
             queryType.add( new Term( SearchItem.FIELD_TYPE, Constants.PLUGIN_NAME ) );
-            queriesForSearchInContent.add( queryType.toString(  ) );
-            queriesForSearchInTitle.add( queryType.toString(  ) );
+            queriesForSearchInContent.add( queryType.toString( ) );
+            queriesForSearchInTitle.add( queryType.toString( ) );
             fieldsForSearchInContent.add( SearchItem.FIELD_TYPE );
             flagsForSearchInContent.add( BooleanClause.Occur.MUST );
             fieldsForSearchInTitle.add( SearchItem.FIELD_TYPE );
@@ -183,7 +183,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             if ( ( strContent != null ) && !strContent.equals( EMPTY_STRING ) )
             {
                 Query queryContent = new TermQuery( new Term( SearchItem.FIELD_CONTENTS, strContent ) );
-                queriesForSearchInTitle.add( queryContent.toString(  ) );
+                queriesForSearchInTitle.add( queryContent.toString( ) );
                 fieldsForSearchInContent.add( SearchItem.FIELD_CONTENTS );
                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
             }
@@ -194,8 +194,8 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
                 String strDateBegin = Utils.getDate( dateBegin );
                 String strDateEnd = Utils.getDate( dateEnd );
                 Query queryDate = new TermRangeQuery( SearchItem.FIELD_DATE, strDateBegin, strDateEnd, true, true );
-                queriesForSearchInContent.add( queryDate.toString(  ) );
-                queriesForSearchInTitle.add( queryDate.toString(  ) );
+                queriesForSearchInContent.add( queryDate.toString( ) );
+                queriesForSearchInTitle.add( queryDate.toString( ) );
                 fieldsForSearchInContent.add( SearchItem.FIELD_DATE );
                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
                 fieldsForSearchInTitle.add( SearchItem.FIELD_DATE );
@@ -206,66 +206,69 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             if ( ( strContent != null ) && !strContent.equals( EMPTY_STRING ) )
             {
                 Query queryTitle = new TermQuery( new Term( SearchItem.FIELD_TITLE, strContent ) );
-                queriesForSearchInContent.add( queryTitle.toString(  ) );
+                queriesForSearchInContent.add( queryTitle.toString( ) );
                 fieldsForSearchInTitle.add( SearchItem.FIELD_TITLE );
                 flagsForSearchInTitle.add( BooleanClause.Occur.MUST );
             }
 
             //Search in contents
-            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION, (String[]) queriesForSearchInContent.toArray( 
-                        new String[queriesForSearchInContent.size(  )] ),
-                    (String[]) fieldsForSearchInContent.toArray( new String[fieldsForSearchInContent.size(  )] ),
-                    (BooleanClause.Occur[]) flagsForSearchInContent.toArray( 
-                        new BooleanClause.Occur[flagsForSearchInContent.size(  )] ), IndexationService.getAnalyser(  ) );
+            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION,
+                    queriesForSearchInContent.toArray( new String[queriesForSearchInContent.size( )] ),
+                    fieldsForSearchInContent.toArray( new String[fieldsForSearchInContent.size( )] ),
+                    flagsForSearchInContent.toArray( new BooleanClause.Occur[flagsForSearchInContent.size( )] ),
+                    IndexationService.getAnalyser( ) );
 
             // Get results documents
             TopDocs hits = null;
-            
+
             int nLimit = Integer.parseInt( AppPropertiesService.getProperty( PROPERTY_RESULTS_LIMIT ) );
             hits = searcher.search( queryMulti, filterRole, nLimit );
 
-            for(int i = 0; hits.totalHits > i; i++)
+            for ( int i = 0; hits.totalHits > i; i++ )
             {
                 ScoreDoc hit = hits.scoreDocs[i];
-                Document document = searcher.doc(hit.doc);
+                Document document = searcher.doc( hit.doc );
                 SearchItem si = new SearchItem( document );
                 listResults.add( si );
             }
 
             //Search in titles
-            Query queryMultiTitle = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION, (String[]) queriesForSearchInTitle.toArray( 
-                        new String[queriesForSearchInTitle.size(  )] ),
-                    (String[]) fieldsForSearchInTitle.toArray( new String[fieldsForSearchInTitle.size(  )] ),
-                    (BooleanClause.Occur[]) flagsForSearchInTitle.toArray( 
-                        new BooleanClause.Occur[flagsForSearchInTitle.size(  )] ), IndexationService.getAnalyser(  ) );
+            Query queryMultiTitle = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION,
+                    queriesForSearchInTitle.toArray( new String[queriesForSearchInTitle.size( )] ),
+                    fieldsForSearchInTitle.toArray( new String[fieldsForSearchInTitle.size( )] ),
+                    flagsForSearchInTitle.toArray( new BooleanClause.Occur[flagsForSearchInTitle.size( )] ),
+                    IndexationService.getAnalyser( ) );
 
             // Get results documents
             TopDocs hitsTitle = null;
 
             hitsTitle = searcher.search( queryMultiTitle, filterRole, nLimit );
 
-            for(int i = 0; hitsTitle.totalHits > i; i++)
+            for ( int i = 0; hitsTitle.totalHits > i; i++ )
             {
-            	ScoreDoc hit = hitsTitle.scoreDocs[i];
-            	Document document = searcher.doc(hit.doc);
+                ScoreDoc hit = hitsTitle.scoreDocs[i];
+                Document document = searcher.doc( hit.doc );
                 SearchItem si = new SearchItem( document );
                 listResults.add( si );
             }
         }
         catch ( Exception e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
         finally
         {
-        	try
-        	{
-        		searcher.close(  );
-        	}
-        	catch ( IOException ioe )
-        	{
-        		AppLogService.error( ioe.getMessage(), ioe );
-        	}
+            try
+            {
+                if ( searcher != null )
+                {
+                    searcher.close( );
+                }
+            }
+            catch ( IOException ioe )
+            {
+                AppLogService.error( ioe.getMessage( ), ioe );
+            }
         }
 
         return convertList( listResults );
@@ -277,54 +280,59 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
      * @return The {@link Filter} by Lutece Role
      */
     /*
-    private Filter getFilterRoles( HttpServletRequest request )
-    {
-        Filter filterRole = null;
-        boolean bFilterResult = false;
-        LuteceUser user = null;
+     * private Filter getFilterRoles( HttpServletRequest request )
+     * {
+     * Filter filterRole = null;
+     * boolean bFilterResult = false;
+     * LuteceUser user = null;
+     * 
+     * if ( SecurityService.isAuthenticationEnable( ) )
+     * {
+     * user = SecurityService.getInstance( ).getRegisteredUser( request );
+     * 
+     * Filter[] filtersRole = null;
+     * 
+     * if ( user != null )
+     * {
+     * String[] userRoles = SecurityService.getInstance( ).getRolesByUser( user
+     * );
+     * 
+     * if ( userRoles != null )
+     * {
+     * filtersRole = new Filter[userRoles.length + 1];
+     * 
+     * for ( int i = 0; i < userRoles.length; i++ )
+     * {
+     * Query queryRole = new TermQuery( new Term( SearchItem.FIELD_ROLE,
+     * userRoles[i] ) );
+     * filtersRole[i] = new CachingWrapperFilter( new QueryWrapperFilter(
+     * queryRole ) );
+     * }
+     * }
+     * else
+     * {
+     * bFilterResult = true;
+     * }
+     * }
+     * else
+     * {
+     * filtersRole = new Filter[1];
+     * }
+     * 
+     * if ( !bFilterResult )
+     * {
+     * Query queryRole = new TermQuery( new Term( SearchItem.FIELD_ROLE,
+     * Page.ROLE_NONE ) );
+     * filtersRole[filtersRole.length - 1] = new CachingWrapperFilter( new
+     * QueryWrapperFilter( queryRole ) );
+     * filterRole = new ChainedFilter( filtersRole, ChainedFilter.OR );
+     * }
+     * }
+     * 
+     * return filterRole;
+     * }
+     */
 
-        if ( SecurityService.isAuthenticationEnable(  ) )
-        {
-            user = SecurityService.getInstance(  ).getRegisteredUser( request );
-
-            Filter[] filtersRole = null;
-
-            if ( user != null )
-            {
-                String[] userRoles = SecurityService.getInstance(  ).getRolesByUser( user );
-
-                if ( userRoles != null )
-                {
-                    filtersRole = new Filter[userRoles.length + 1];
-
-                    for ( int i = 0; i < userRoles.length; i++ )
-                    {
-                        Query queryRole = new TermQuery( new Term( SearchItem.FIELD_ROLE, userRoles[i] ) );
-                        filtersRole[i] = new CachingWrapperFilter( new QueryWrapperFilter( queryRole ) );
-                    }
-                }
-                else
-                {
-                    bFilterResult = true;
-                }
-            }
-            else
-            {
-                filtersRole = new Filter[1];
-            }
-
-            if ( !bFilterResult )
-            {
-                Query queryRole = new TermQuery( new Term( SearchItem.FIELD_ROLE, Page.ROLE_NONE ) );
-                filtersRole[filtersRole.length - 1] = new CachingWrapperFilter( new QueryWrapperFilter( queryRole ) );
-                filterRole = new ChainedFilter( filtersRole, ChainedFilter.OR );
-            }
-        }
-
-        return filterRole;
-    }
-	*/
-    
     /**
      * Convert the SearchItem list on SearchResult list
      * @param listSource The source list
@@ -332,27 +340,27 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
      */
     private List<SearchResult> convertList( List<SearchItem> listSource )
     {
-        List<SearchResult> listDest = new ArrayList<SearchResult>(  );
+        List<SearchResult> listDest = new ArrayList<SearchResult>( );
 
         for ( SearchItem item : listSource )
         {
-            SearchResult result = new SearchResult(  );
-            result.setId( item.getId(  ) );
+            SearchResult result = new SearchResult( );
+            result.setId( item.getId( ) );
 
             try
             {
-                result.setDate( DateTools.stringToDate( item.getDate(  ) ) );
+                result.setDate( DateTools.stringToDate( item.getDate( ) ) );
             }
             catch ( ParseException e )
             {
-                AppLogService.error( "Bad Date Format for indexed item \"" + item.getTitle(  ) + "\" : " +
-                    e.getMessage(  ) );
+                AppLogService.error( "Bad Date Format for indexed item \"" + item.getTitle( ) + "\" : "
+                        + e.getMessage( ) );
             }
 
-            result.setUrl( item.getUrl(  ) );
-            result.setTitle( item.getTitle(  ) );
-            result.setSummary( item.getSummary(  ) );
-            result.setType( item.getType(  ) );
+            result.setUrl( item.getUrl( ) );
+            result.setTitle( item.getTitle( ) );
+            result.setSummary( item.getSummary( ) );
+            result.setType( item.getType( ) );
             listDest.add( result );
         }
 

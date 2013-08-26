@@ -41,17 +41,18 @@ import java.util.Collection;
 
 
 /**
- * This class provides instances management methods (create, find, ...) for Category objects
+ * This class provides instances management methods (create, find, ...) for
+ * Category objects
  */
 public final class CategoryHome
 {
     // Static variable pointed at the DAO instance
-    private static ICategoryDAO _dao = (ICategoryDAO) SpringContextService.getPluginBean( "calendar", "calendar.categoryDAO" );
+    private static ICategoryDAO _dao = (ICategoryDAO) SpringContextService.getBean( "calendar.categoryDAO" );
 
     /**
      * Private constructor - this class need not be instantiated
      */
-    private CategoryHome(  )
+    private CategoryHome( )
     {
     }
 

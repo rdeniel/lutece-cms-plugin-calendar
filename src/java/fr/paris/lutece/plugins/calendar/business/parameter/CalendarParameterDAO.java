@@ -33,25 +33,26 @@
  */
 package fr.paris.lutece.plugins.calendar.business.parameter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
  * 
  * CalendarParameterDAO
- *
+ * 
  */
-public class CalendarParameterDAO implements ICalendarParameterDAO 
+public class CalendarParameterDAO implements ICalendarParameterDAO
 {
-	private static final String SQL_QUERY_SELECT = " SELECT parameter_value FROM calendar_parameter WHERE parameter_key = ? ";
-	private static final String SQL_QUERY_UPDATE = " UPDATE calendar_parameter SET parameter_value = ? WHERE parameter_key = ? ";
-	private static final String SQL_QUERY_SELECT_ALL = " SELECT parameter_key, parameter_value FROM calendar_parameter ORDER BY parameter_key";
-	
+    private static final String SQL_QUERY_SELECT = " SELECT parameter_value FROM calendar_parameter WHERE parameter_key = ? ";
+    private static final String SQL_QUERY_UPDATE = " UPDATE calendar_parameter SET parameter_value = ? WHERE parameter_key = ? ";
+    private static final String SQL_QUERY_SELECT_ALL = " SELECT parameter_key, parameter_value FROM calendar_parameter ORDER BY parameter_key";
+
     /**
      * Load the parameter value
      * @param strParameterKey the parameter key
@@ -59,39 +60,39 @@ public class CalendarParameterDAO implements ICalendarParameterDAO
      */
     public ReferenceItem load( String strParameterKey, Plugin plugin )
     {
-    	ReferenceItem userParam = null;
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
+        ReferenceItem userParam = null;
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
         daoUtil.setString( 1, strParameterKey );
-        daoUtil.executeQuery(  );
-        
-        if ( daoUtil.next(  ) )
+        daoUtil.executeQuery( );
+
+        if ( daoUtil.next( ) )
         {
-        	userParam = new ReferenceItem(  );
-        	userParam.setCode( strParameterKey );
-        	userParam.setName( daoUtil.getString( 1 ) );
+            userParam = new ReferenceItem( );
+            userParam.setCode( strParameterKey );
+            userParam.setName( daoUtil.getString( 1 ) );
         }
-        
-        daoUtil.free(  );
-        
+
+        daoUtil.free( );
+
         return userParam;
     }
-    
+
     /**
      * Update the parameter value
-     * @param strParameterValue The parameter value 
-     * @param strParameterKey The parameter key
+     * @param userParam The parameter value
+     * @param plugin The plugin
      */
     public void store( ReferenceItem userParam, Plugin plugin )
     {
-    	 DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-         daoUtil.setString( 1, userParam.getName(  ) );
-         daoUtil.setString( 2, userParam.getCode(  ) );
+        daoUtil.setString( 1, userParam.getName( ) );
+        daoUtil.setString( 2, userParam.getCode( ) );
 
-         daoUtil.executeUpdate(  );
-         daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
-    
+
     /**
      * Select all the parameters
      * @param plugin Plugin
@@ -99,21 +100,21 @@ public class CalendarParameterDAO implements ICalendarParameterDAO
      */
     public Map<String, String> selectAll( Plugin plugin )
     {
-    	Map<String, String> parametersList = new HashMap<String, String>(  );
-    	
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
-        daoUtil.executeQuery(  );
-        
-        while ( daoUtil.next(  ) )
+        Map<String, String> parametersList = new HashMap<String, String>( );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
         {
-        	parametersList.put( daoUtil.getString( 1 ), daoUtil.getString( 2 ) );
+            parametersList.put( daoUtil.getString( 1 ), daoUtil.getString( 2 ) );
         }
-        
-        daoUtil.free(  );
-        
+
+        daoUtil.free( );
+
         return parametersList;
     }
-    
+
     /**
      * Select all the parameters
      * @param plugin plugin
@@ -121,18 +122,18 @@ public class CalendarParameterDAO implements ICalendarParameterDAO
      */
     public ReferenceList selectParametersList( Plugin plugin )
     {
-    	ReferenceList parametersList = new ReferenceList(  );
-    	
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
-        daoUtil.executeQuery(  );
-        
-        while ( daoUtil.next(  ) )
+        ReferenceList parametersList = new ReferenceList( );
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
         {
-        	parametersList.addItem( daoUtil.getString( 1 ), daoUtil.getString( 2 ) );
+            parametersList.addItem( daoUtil.getString( 1 ), daoUtil.getString( 2 ) );
         }
-        
-        daoUtil.free(  );
-        
+
+        daoUtil.free( );
+
         return parametersList;
     }
 }

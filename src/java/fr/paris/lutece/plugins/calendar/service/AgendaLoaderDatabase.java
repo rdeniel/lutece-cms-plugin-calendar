@@ -48,7 +48,7 @@ import java.util.List;
 
 
 /**
- *  This loader fetches agendas stored in a database
+ * This loader fetches agendas stored in a database
  */
 public class AgendaLoaderDatabase implements ResourceLoader
 {
@@ -58,16 +58,16 @@ public class AgendaLoaderDatabase implements ResourceLoader
     /**
      * The loader which fetches agendas from the database
      */
-    public AgendaLoaderDatabase(  )
+    public AgendaLoaderDatabase( )
     {
-        super(  );
+        super( );
     }
 
     /**
      * Gets all the agenda resources from the database
      * @return A collection of agenda resource
      */
-    public Collection<AgendaResource> getResources(  )
+    public Collection<AgendaResource> getResources( )
     {
         if ( _plugin == null )
         {
@@ -97,7 +97,7 @@ public class AgendaLoaderDatabase implements ResourceLoader
             _plugin = PluginService.getPlugin( _strPluginName );
         }
 
-        AgendaResource agenda = new AgendaResource(  );
+        AgendaResource agenda = new AgendaResource( );
 
         try
         {
@@ -118,19 +118,16 @@ public class AgendaLoaderDatabase implements ResourceLoader
      */
     public void loadAgenda( AgendaResource agenda )
     {
-        SimpleAgenda a = new SimpleAgenda(  );
+        SimpleAgenda a = new SimpleAgenda( );
 
-        for ( SimpleEvent event : CalendarHome.findEventsList( Integer.parseInt( agenda.getId(  ) ), 1, _plugin ) )
+        for ( SimpleEvent event : CalendarHome.findEventsList( Integer.parseInt( agenda.getId( ) ), 1, _plugin ) )
         {
             a.addEvent( event );
         }
 
-        if ( a != null )
-        {
-            a.setName( agenda.getName(  ) );
-            a.setKeyName( agenda.getId(  ) );
-            agenda.setAgenda( a );
-            agenda.setResourceType( AppPropertiesService.getProperty( Constants.PROPERTY_READ_WRITE ) );
-        }
+        a.setName( agenda.getName( ) );
+        a.setKeyName( agenda.getId( ) );
+        agenda.setAgenda( a );
+        agenda.setResourceType( AppPropertiesService.getProperty( Constants.PROPERTY_READ_WRITE ) );
     }
 }

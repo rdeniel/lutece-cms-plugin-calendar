@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.calendar.business.stylesheet;
 
-import java.util.Collection;
-
 import fr.paris.lutece.portal.business.stylesheet.StyleSheet;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+import java.util.Collection;
+
 
 /**
- *
+ * 
  * @author LEVY
  */
 public interface ICalendarStyleSheetDAO
@@ -73,7 +73,8 @@ public interface ICalendarStyleSheetDAO
      * Load the list of stylesheet
      * @param nModeId The Mode identifier
      * @param plugin Plugin
-     * @return the list of the StyleSheet in form of a collection of StyleSheet objects
+     * @return the list of the StyleSheet in form of a collection of StyleSheet
+     *         objects
      */
     Collection<StyleSheet> selectStyleSheetList( Plugin plugin );
 
@@ -86,6 +87,7 @@ public interface ICalendarStyleSheetDAO
 
     /**
      * Insertion of the extension of an export file in the database
+     * @param nId The id
      * @param strExtension the extension file
      * @param plugin Plugin
      */

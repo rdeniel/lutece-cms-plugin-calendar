@@ -46,18 +46,9 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-import org.apache.commons.lang.StringUtils;
-import org.htmlparser.Parser;
-
-import org.htmlparser.lexer.Lexer;
-
-import org.htmlparser.util.NodeIterator;
-import org.htmlparser.util.ParserException;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -67,14 +58,24 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+import org.htmlparser.Parser;
+import org.htmlparser.lexer.Lexer;
+import org.htmlparser.util.NodeIterator;
+import org.htmlparser.util.ParserException;
+
 
 /**
- * This class provides utils features to manipulate and convert calendars, date as string, ...
+ * This class provides utils features to manipulate and convert calendars, date
+ * as string, ...
  */
 public final class Utils
 {
-	private static String DATE_PATTERN = "yyyyMMdd";
-	
+    /**
+     * Date pattern yyyyMMdd
+     */
+    private static String DATE_PATTERN = "yyyyMMdd";
+
     /**
      * Constructs a 8 digits date string code YYYYMMDD
      * @param nYear The Year
@@ -102,16 +103,16 @@ public final class Utils
     public static String getDate( Calendar calendar )
     {
         return getDate( calendar.get( Calendar.YEAR ), calendar.get( Calendar.MONTH ),
-            calendar.get( Calendar.DAY_OF_MONTH ) );
+                calendar.get( Calendar.DAY_OF_MONTH ) );
     }
 
     /**
      * Returns a the date code of today
      * @return The date code
      */
-    public static String getDateToday(  )
+    public static String getDateToday( )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
 
         return getDate( calendar );
     }
@@ -123,18 +124,18 @@ public final class Utils
      */
     public static int getYear( String strDate )
     {
-    	SimpleDateFormat format = new SimpleDateFormat( DATE_PATTERN );
-    	Date date = null;
-    	try
-    	{
-    		 date = format.parse( strDate );
-    	}
-    	catch( ParseException ex )
-    	{
-    		return -1;
-    	}
-    	GregorianCalendar calendar = new GregorianCalendar(  );
-    	calendar.setTime( date );
+        SimpleDateFormat format = new SimpleDateFormat( DATE_PATTERN );
+        Date date = null;
+        try
+        {
+            date = format.parse( strDate );
+        }
+        catch ( ParseException ex )
+        {
+            return -1;
+        }
+        GregorianCalendar calendar = new GregorianCalendar( );
+        calendar.setTime( date );
         return calendar.get( Calendar.YEAR );
     }
 
@@ -145,18 +146,18 @@ public final class Utils
      */
     public static int getMonth( String strDate )
     {
-    	SimpleDateFormat format = new SimpleDateFormat( DATE_PATTERN );
-    	Date date = null;
-    	try
-    	{
-    		 date = format.parse( strDate );
-    	}
-    	catch( ParseException ex )
-    	{
-    		return -1;
-    	}
-    	GregorianCalendar calendar = new GregorianCalendar(  );
-    	calendar.setTime( date );
+        SimpleDateFormat format = new SimpleDateFormat( DATE_PATTERN );
+        Date date = null;
+        try
+        {
+            date = format.parse( strDate );
+        }
+        catch ( ParseException ex )
+        {
+            return -1;
+        }
+        GregorianCalendar calendar = new GregorianCalendar( );
+        calendar.setTime( date );
         return calendar.get( Calendar.MONTH );
     }
 
@@ -167,18 +168,18 @@ public final class Utils
      */
     public static int getDay( String strDate )
     {
-    	SimpleDateFormat format = new SimpleDateFormat( DATE_PATTERN );
-    	Date date = null;
-    	try
-    	{
-    		 date = format.parse( strDate );
-    	}
-    	catch( ParseException ex )
-    	{
-    		return -1;
-    	}
-    	GregorianCalendar calendar = new GregorianCalendar(  );
-    	calendar.setTime( date );
+        SimpleDateFormat format = new SimpleDateFormat( DATE_PATTERN );
+        Date date = null;
+        try
+        {
+            date = format.parse( strDate );
+        }
+        catch ( ParseException ex )
+        {
+            return -1;
+        }
+        GregorianCalendar calendar = new GregorianCalendar( );
+        calendar.setTime( date );
         return calendar.get( Calendar.DAY_OF_MONTH );
     }
 
@@ -190,12 +191,12 @@ public final class Utils
      */
     public static String getMonthLabel( String strDate, Locale locale )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), 1 );
 
         String strFormat = AppPropertiesService.getProperty( Constants.PROPERTY_LABEL_FORMAT_MONTH );
         DateFormat formatDate = new SimpleDateFormat( strFormat, locale );
-        String strLabel = formatDate.format( calendar.getTime(  ) );
+        String strLabel = formatDate.format( calendar.getTime( ) );
 
         return strLabel;
     }
@@ -208,9 +209,9 @@ public final class Utils
      */
     public static String getWeekLabel( String strDate, Locale locale )
     {
-        Calendar calendar = new GregorianCalendar(  );
-        Calendar calendarFirstDay = new GregorianCalendar(  );
-        Calendar calendarLastDay = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
+        Calendar calendarFirstDay = new GregorianCalendar( );
+        Calendar calendarLastDay = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
 
         int nDayOfWeek = calendar.get( Calendar.DAY_OF_WEEK );
@@ -219,31 +220,32 @@ public final class Utils
         {
             nDayOfWeek = 8;
         }
-        
+
         calendarFirstDay = calendar;
         calendarFirstDay.add( Calendar.DATE, Calendar.MONDAY - nDayOfWeek );
-        calendarLastDay = (GregorianCalendar) calendarFirstDay.clone(  );
+        calendarLastDay = (GregorianCalendar) calendarFirstDay.clone( );
         calendarLastDay.add( Calendar.DATE, 6 );
 
         String strFormat = AppPropertiesService.getProperty( Constants.PROPERTY_LABEL_FORMAT_DATE_OF_DAY );
         DateFormat formatDate = new SimpleDateFormat( strFormat, locale );
-        String strLabelFirstDay = formatDate.format( calendarFirstDay.getTime(  ) );
-        String strLabelLastDay = formatDate.format( calendarLastDay.getTime(  ) );
-        calendarFirstDay.clear(  );
-        calendarLastDay.clear(  );
+        String strLabelFirstDay = formatDate.format( calendarFirstDay.getTime( ) );
+        String strLabelLastDay = formatDate.format( calendarLastDay.getTime( ) );
+        calendarFirstDay.clear( );
+        calendarLastDay.clear( );
 
         return strLabelFirstDay + "-" + strLabelLastDay;
     }
 
     /**
-     * Returns the first monday of a week as a formatted string corresponding to the date code
+     * Returns the first monday of a week as a formatted string corresponding to
+     * the date code
      * @param strDate The date code
      * @return The first day label
      */
     public static Calendar getFirstDayOfWeek( String strDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
-        Calendar calendarFirstDay = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
+        Calendar calendarFirstDay = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
 
         int nDayOfWeek = calendar.get( Calendar.DAY_OF_WEEK );
@@ -260,7 +262,8 @@ public final class Utils
     }
 
     /**
-     * Returns the day as an international formatted string corresponding to the date code
+     * Returns the day as an international formatted string corresponding to the
+     * date code
      * @return The day as a string
      * @param locale The locale used for display settings
      * @param strDate The date code
@@ -273,11 +276,12 @@ public final class Utils
         String strFormat = AppPropertiesService.getProperty( Constants.PROPERTY_LABEL_FORMAT_DAY );
         DateFormat formatDate = new SimpleDateFormat( strFormat, locale );
 
-        return formatDate.format( calendar.getTime(  ) );
+        return formatDate.format( calendar.getTime( ) );
     }
 
     /**
-     * Returns the day as an international formatted string corresponding to the date code
+     * Returns the day as an international formatted string corresponding to the
+     * date code
      * @return The day as a string
      * @param locale The locale used for display settings
      * @param strDate The date code
@@ -290,7 +294,7 @@ public final class Utils
         String strFormat = AppPropertiesService.getProperty( Constants.PROPERTY_LABEL_FORMAT_WEEK_DAY );
         DateFormat formatDate = new SimpleDateFormat( strFormat, locale );
 
-        return formatDate.format( calendar.getTime(  ) );
+        return formatDate.format( calendar.getTime( ) );
     }
 
     /**
@@ -298,14 +302,9 @@ public final class Utils
      * @param strDate The date code
      * @return A date code one month later
      */
-
-    /**
-     * @param strDate
-     * @return
-     */
     public static String getNextMonth( String strDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
         calendar.add( Calendar.MONTH, 1 );
 
@@ -313,13 +312,14 @@ public final class Utils
     }
 
     /**
-     * Returns a date code corresponding to a calendar roll of one month backward
+     * Returns a date code corresponding to a calendar roll of one month
+     * backward
      * @param strDate The date code
      * @return A new date code one month earlier
      */
     public static String getPreviousMonth( String strDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
         calendar.add( Calendar.MONTH, -1 );
 
@@ -333,7 +333,7 @@ public final class Utils
      */
     public static String getPreviousWeek( String strDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
         calendar.add( Calendar.DATE, -7 );
 
@@ -347,7 +347,7 @@ public final class Utils
      */
     public static String getNextWeek( String strDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
         calendar.add( Calendar.DATE, 7 );
 
@@ -361,7 +361,7 @@ public final class Utils
      */
     public static String getNextDay( String strDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
         calendar.add( Calendar.DATE, 1 );
 
@@ -375,7 +375,7 @@ public final class Utils
      */
     public static String getPreviousDay( String strDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
         calendar.add( Calendar.DATE, -1 );
 
@@ -394,7 +394,7 @@ public final class Utils
             return false;
         }
 
-        if ( strDate.length(  ) != 8 )
+        if ( strDate.length( ) != 8 )
         {
             return false;
         }
@@ -451,7 +451,8 @@ public final class Utils
     }
 
     /**
-     * Return a boolean: if the time is well formed  return true, else return false
+     * Return a boolean: if the time is well formed return true, else return
+     * false
      * @return a boolean
      * @param strTime The time
      */
@@ -463,7 +464,7 @@ public final class Utils
         {
             bCheck = true;
         }
-        else if ( strTime.length(  ) == 5 )
+        else if ( strTime.length( ) == 5 )
         {
             try
             {
@@ -492,14 +493,14 @@ public final class Utils
      */
     public static String getDayAfter( String strDate, int n )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
         calendar.add( Calendar.DATE, n );
 
         return getDate( calendar );
     }
 
-    /*  Added in version 2.1.1*/
+    /* Added in version 2.1.1 */
     /**
      * Returns a date code corresponding to a calendar roll of n days forward
      * @return A new date code with n days forward
@@ -508,93 +509,96 @@ public final class Utils
      */
     public static Date getDayAfter( Date dateDayAfter, int n )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.setTime( dateDayAfter );
         calendar.add( Calendar.DATE, n );
 
-        return calendar.getTime(  );
+        return calendar.getTime( );
     }
 
     /**
      * Returns a date code corresponding to a calendar roll of n days forward
      * @return A new date code one month earlier
      * @param dateDay the reference date
-     * @param periodicity the frequence of an occurrence day, week, month
+     * @param nPeriodicity the frequence of an occurrence day, week, month
      * @param nOccurrence the number of occurrences
      * @param arrayExcludedDays list of excluded days
      */
     public static Date getDateForward( Date dateDay, int nPeriodicity, int nOccurrence, String[] arrayExcludedDays )
     {
-    	int nOccurrenceDiff;
-    	int nOccurrenceInit = nOccurrence;
-        Calendar calendar = new GregorianCalendar(  );
+        int nOccurrenceDiff;
+        int nOccurrenceInit = nOccurrence;
+        Calendar calendar = new GregorianCalendar( );
         calendar.setTime( dateDay );
-        
+
         // All days are excluded
         if ( arrayExcludedDays != null && arrayExcludedDays.length == 7 )
         {
-        	calendar.add( Calendar.DATE, -1 );
-        	return calendar.getTime(  );
+            calendar.add( Calendar.DATE, -1 );
+            return calendar.getTime( );
         }
 
         //the very first occurrence is omitted for the final count
         if ( nOccurrenceInit != 0 )
         {
-        	nOccurrenceInit -= 1;
+            nOccurrenceInit -= 1;
         }
 
         switch ( nPeriodicity )
         {
-            case Constants.PARAM_DAY:
-                calendar.add( Calendar.DATE, nOccurrenceInit );
-                do
+        case Constants.PARAM_DAY:
+            calendar.add( Calendar.DATE, nOccurrenceInit );
+            do
+            {
+                nOccurrenceDiff = getOccurrenceWithinTwoDates( dateDay, calendar.getTime( ), arrayExcludedDays );
+                if ( nOccurrenceDiff < nOccurrence )
                 {
-                	nOccurrenceDiff = getOccurrenceWithinTwoDates( dateDay, calendar.getTime(  ), arrayExcludedDays );
-                	if ( nOccurrenceDiff < nOccurrence )
-                	{
-                		calendar.add( Calendar.DATE, nOccurrence - nOccurrenceDiff );
-                	}
-                } while ( nOccurrenceDiff < nOccurrence && nOccurrenceDiff != 0 );
+                    calendar.add( Calendar.DATE, nOccurrence - nOccurrenceDiff );
+                }
+            }
+            while ( nOccurrenceDiff < nOccurrence && nOccurrenceDiff != 0 );
 
-                break;
+            break;
 
-            case Constants.PARAM_WEEK:
-            	String strDate = getDate( dateDay );
-            	if ( !isDayExcluded( getDayOfWeek( strDate ), arrayExcludedDays ) )
-            	{
-            		calendar.add( Calendar.DATE, nOccurrenceInit * 7 );
-            	}
+        case Constants.PARAM_WEEK:
+            String strDate = getDate( dateDay );
+            if ( !isDayExcluded( getDayOfWeek( strDate ), arrayExcludedDays ) )
+            {
+                calendar.add( Calendar.DATE, nOccurrenceInit * 7 );
+            }
 
-                break;
+            break;
 
-            case Constants.PARAM_MONTH:
-                calendar.add( Calendar.MONTH, nOccurrenceInit );
-                do
+        case Constants.PARAM_MONTH:
+            calendar.add( Calendar.MONTH, nOccurrenceInit );
+            do
+            {
+                nOccurrenceDiff = getOccurrenceWithinTwoDates( dateDay, calendar.getTime( ), arrayExcludedDays );
+                if ( nOccurrenceDiff < nOccurrence )
                 {
-                	nOccurrenceDiff = getOccurrenceWithinTwoDates( dateDay, calendar.getTime(  ), arrayExcludedDays );
-                	if ( nOccurrenceDiff < nOccurrence )
-                	{
-                		calendar.add( Calendar.MONTH, nOccurrence - nOccurrenceDiff );
-                	}
-                } while ( nOccurrenceDiff < nOccurrence && nOccurrenceDiff != 0 );
+                    calendar.add( Calendar.MONTH, nOccurrence - nOccurrenceDiff );
+                }
+            }
+            while ( nOccurrenceDiff < nOccurrence && nOccurrenceDiff != 0 );
 
-                break;
+            break;
 
-            default:
-                calendar.add( Calendar.DATE, nOccurrenceInit );
-                do
+        default:
+            calendar.add( Calendar.DATE, nOccurrenceInit );
+            do
+            {
+                nOccurrenceDiff = getOccurrenceWithinTwoDates( dateDay, calendar.getTime( ), arrayExcludedDays );
+                if ( nOccurrenceDiff < nOccurrence )
                 {
-                	nOccurrenceDiff = getOccurrenceWithinTwoDates( dateDay, calendar.getTime(  ), arrayExcludedDays );
-                	if ( nOccurrenceDiff < nOccurrence )
-                	{
-                		calendar.add( Calendar.DATE, nOccurrence - nOccurrenceDiff );
-                	}
-                } while ( nOccurrenceDiff < nOccurrence && nOccurrenceDiff != 0 );
+                    calendar.add( Calendar.DATE, nOccurrence - nOccurrenceDiff );
+                }
+            }
+            while ( nOccurrenceDiff < nOccurrence && nOccurrenceDiff != 0 );
 
-                break;
+            break;
         }
 
-        return calendar.getTime(  );
+        return calendar.getTime( );
     }
 
     /**
@@ -604,15 +608,15 @@ public final class Utils
      */
     public static Date getDate( String strDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDate ), Utils.getMonth( strDate ), Utils.getDay( strDate ) );
 
-        return calendar.getTime(  );
+        return calendar.getTime( );
     }
 
     /**
      * Constructs a digit string from a date object
-     * @param The date code
+     * @param dateDigit The date code
      * @return strDate a 8 digits date string YYYYMMDD
      */
     public static String getDate( Date dateDigit )
@@ -621,24 +625,21 @@ public final class Utils
         {
             return "";
         }
+        Calendar calendar = new GregorianCalendar( );
+        calendar.setTime( dateDigit );
 
-        else
-        {
-            Calendar calendar = new GregorianCalendar(  );
-            calendar.setTime( dateDigit );
-
-            return getDate( calendar );
-        }
+        return getDate( calendar );
     }
 
     /**
      * Returns a date code corresponding to a calendar roll of one month
      * @param strDateRef The date reference
+     * @param nCptDate The number of month to add
      * @return A date code incremented with strDateRef parameter
      */
     public static String getNextMonth( String strDateRef, int nCptDate )
     {
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( Utils.getYear( strDateRef ), Utils.getMonth( strDateRef ), Utils.getDay( strDateRef ) );
         calendar.add( Calendar.MONTH, nCptDate );
 
@@ -655,27 +656,27 @@ public final class Utils
     public static int getOccurrenceWithinTwoDates( Date dateStart, Date dateEnd, String[] arrayExcludedDays )
     {
         int cptDate = 0;
-        Calendar calendar1 = new GregorianCalendar(  );
-        Calendar calendar2 = new GregorianCalendar(  );
+        Calendar calendar1 = new GregorianCalendar( );
+        Calendar calendar2 = new GregorianCalendar( );
         calendar1.setTime( dateStart );
         calendar2.setTime( dateEnd );
 
         if ( calendar1.equals( calendar2 ) )
         {
-        	String strDate = getDate( dateStart );
-        	if ( isDayExcluded( getDayOfWeek( strDate ), arrayExcludedDays ) )
-			{
-        		return cptDate;
-			}
+            String strDate = getDate( dateStart );
+            if ( isDayExcluded( getDayOfWeek( strDate ), arrayExcludedDays ) )
+            {
+                return cptDate;
+            }
             return ++cptDate;
         }
 
         while ( !calendar1.after( calendar2 ) )
         {
-        	if ( !isDayExcluded( calendar1.get( Calendar.DAY_OF_WEEK ), arrayExcludedDays ) )
-			{
-        		++cptDate;
-			}
+            if ( !isDayExcluded( calendar1.get( Calendar.DAY_OF_WEEK ), arrayExcludedDays ) )
+            {
+                ++cptDate;
+            }
             calendar1.add( Calendar.DATE, 1 );
         }
 
@@ -684,13 +685,14 @@ public final class Utils
 
     /**
      * Get a specified agenda from database with events
+     * @param strAgenda The name of the agenda to get
      * @param request The HTTP request
      * @return An agenda object
      */
     public static Agenda getAgendaWithEvents( String strAgenda, HttpServletRequest request )
     {
-    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
-        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
+        CalendarService calendarService = (CalendarService) SpringContextService
+                .getBean( Constants.BEAN_CALENDAR_CALENDARSERVICE );
         Agenda agenda = null;
 
         if ( strAgenda != null )
@@ -700,20 +702,20 @@ public final class Utils
 
             if ( agendaResource != null )
             {
-                a = agendaResource.getAgenda(  );
+                a = agendaResource.getAgenda( );
             }
 
             if ( a != null )
             {
                 // Check security access
-                String strRole = agendaResource.getRole(  );
+                String strRole = agendaResource.getRole( );
 
-                if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
-                        ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
+                if ( StringUtils.isNotBlank( strRole ) && ( request != null )
+                        && ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                 {
-                    if ( SecurityService.isAuthenticationEnable(  ) )
+                    if ( SecurityService.isAuthenticationEnable( ) )
                     {
-                        if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
+                        if ( SecurityService.getInstance( ).isUserInRole( request, strRole ) )
                         {
                             agenda = a;
                         }
@@ -727,7 +729,7 @@ public final class Utils
         }
         else
         {
-            agenda = new SimpleAgenda(  );
+            agenda = new SimpleAgenda( );
         }
 
         return agenda;
@@ -735,6 +737,7 @@ public final class Utils
 
     /**
      * Get a specified agenda from database with occurrences
+     * @param strAgenda The agenda to get
      * @param request The HTTP request
      * @return An agenda object
      */
@@ -744,28 +747,23 @@ public final class Utils
 
         if ( strAgenda != null )
         {
-            for ( AgendaResource agendaResource : getAgendaResourcesWithOccurrences(  ) )
+            for ( AgendaResource agendaResource : getAgendaResourcesWithOccurrences( ) )
             {
-                if ( agendaResource.getAgenda(  ).getKeyName(  ).equals( strAgenda ) )
+                if ( agendaResource.getAgenda( ).getKeyName( ).equals( strAgenda ) )
                 {
-                    Agenda a = null;
-
-                    if ( agendaResource != null )
-                    {
-                        a = agendaResource.getAgenda(  );
-                    }
+                    Agenda a = agendaResource.getAgenda( );
 
                     if ( a != null )
                     {
                         // Check security access
-                        String strRole = agendaResource.getRole(  );
+                        String strRole = agendaResource.getRole( );
 
-                        if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
-                                ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
+                        if ( StringUtils.isNotBlank( strRole ) && ( request != null )
+                                && ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                         {
-                            if ( SecurityService.isAuthenticationEnable(  ) )
+                            if ( SecurityService.isAuthenticationEnable( ) )
                             {
-                                if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
+                                if ( SecurityService.getInstance( ).isUserInRole( request, strRole ) )
                                 {
                                     agenda = a;
                                 }
@@ -781,7 +779,7 @@ public final class Utils
         }
         else
         {
-            agenda = new SimpleAgenda(  );
+            agenda = new SimpleAgenda( );
         }
 
         return agenda;
@@ -789,6 +787,7 @@ public final class Utils
 
     /**
      * Get a specified agenda from database with occurrences
+     * @param strAgenda The agenda to get
      * @param request The HTTP request
      * @return An agenda object
      */
@@ -798,28 +797,23 @@ public final class Utils
 
         if ( strAgenda != null )
         {
-            for ( AgendaResource agendaResource : getAgendaResourcesWithOccurrencesIds(  ) )
+            for ( AgendaResource agendaResource : getAgendaResourcesWithOccurrencesIds( ) )
             {
-                if ( agendaResource.getAgenda(  ).getKeyName(  ).equals( strAgenda ) )
+                if ( agendaResource.getAgenda( ).getKeyName( ).equals( strAgenda ) )
                 {
-                    Agenda a = null;
-
-                    if ( agendaResource != null )
-                    {
-                        a = agendaResource.getAgenda(  );
-                    }
+                    Agenda a = agendaResource.getAgenda( );
 
                     if ( a != null )
                     {
                         // Check security access
-                        String strRole = agendaResource.getRole(  );
+                        String strRole = agendaResource.getRole( );
 
-                        if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
-                                ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
+                        if ( StringUtils.isNotBlank( strRole ) && ( request != null )
+                                && ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                         {
-                            if ( SecurityService.isAuthenticationEnable(  ) )
+                            if ( SecurityService.isAuthenticationEnable( ) )
                             {
-                                if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
+                                if ( SecurityService.getInstance( ).isUserInRole( request, strRole ) )
                                 {
                                     agenda = a;
                                 }
@@ -835,7 +829,7 @@ public final class Utils
         }
         else
         {
-            agenda = new SimpleAgenda(  );
+            agenda = new SimpleAgenda( );
         }
 
         return agenda;
@@ -843,6 +837,7 @@ public final class Utils
 
     /**
      * Get all agendas from database checkin the security
+     * @param request The request
      * @return An agenda object
      */
     public static List<AgendaResource> getAgendaResourcesWithOccurrences( HttpServletRequest request )
@@ -850,21 +845,21 @@ public final class Utils
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
 
         List<AgendaResource> listCalendar = CalendarHome.findAgendaResourcesList( plugin );
-        List<AgendaResource> listAuthaurizedAgenda = new ArrayList<AgendaResource>(  );
+        List<AgendaResource> listAuthaurizedAgenda = new ArrayList<AgendaResource>( );
 
         for ( AgendaResource a : listCalendar )
         {
             if ( a != null )
             {
                 // Check security access
-                String strRole = a.getRole(  );
+                String strRole = a.getRole( );
 
-                if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
-                        ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
+                if ( StringUtils.isNotBlank( strRole ) && ( request != null )
+                        && ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                 {
-                    if ( SecurityService.isAuthenticationEnable(  ) )
+                    if ( SecurityService.isAuthenticationEnable( ) )
                     {
-                        if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
+                        if ( SecurityService.getInstance( ).isUserInRole( request, strRole ) )
                         {
                             listAuthaurizedAgenda.add( a );
                         }
@@ -887,7 +882,7 @@ public final class Utils
      * Get the multi agenda from database
      * @return An agenda object
      */
-    public static List<AgendaResource> getAgendaResourcesWithOccurrences(  )
+    public static List<AgendaResource> getAgendaResourcesWithOccurrences( )
     {
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
 
@@ -903,7 +898,7 @@ public final class Utils
      * Get the multi agenda from database
      * @return An agenda object
      */
-    public static List<AgendaResource> getAgendaResourcesWithEvents(  )
+    public static List<AgendaResource> getAgendaResourcesWithEvents( )
     {
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
 
@@ -919,7 +914,7 @@ public final class Utils
      * Get the multi agenda from database with occurrences ordered by id
      * @return An agenda object
      */
-    public static List<AgendaResource> getAgendaResourcesWithOccurrencesIds(  )
+    public static List<AgendaResource> getAgendaResourcesWithOccurrencesIds( )
     {
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
 
@@ -934,69 +929,62 @@ public final class Utils
     /**
      * Return the agenda
      * @param agenda The agenda
+     * @param plugin The plugin
      */
     public static void loadAgendaOccurrences( AgendaResource agenda, Plugin plugin )
     {
-        SimpleAgenda a = new SimpleAgenda(  );
+        SimpleAgenda a = new SimpleAgenda( );
 
-        for ( OccurrenceEvent occurrence : CalendarHome.findOccurrencesList( Integer.parseInt( agenda.getId(  ) ), 1,
+        for ( OccurrenceEvent occurrence : CalendarHome.findOccurrencesList( Integer.parseInt( agenda.getId( ) ), 1,
                 plugin ) )
         {
             a.addEvent( occurrence );
         }
 
-        if ( a != null )
-        {
-            a.setName( agenda.getName(  ) );
-            a.setKeyName( agenda.getId(  ) );
-            agenda.setAgenda( a );
-            agenda.setResourceType( AppPropertiesService.getProperty( Constants.PROPERTY_READ_WRITE ) );
-        }
+        a.setName( agenda.getName( ) );
+        a.setKeyName( agenda.getId( ) );
+        agenda.setAgenda( a );
+        agenda.setResourceType( AppPropertiesService.getProperty( Constants.PROPERTY_READ_WRITE ) );
     }
 
     /**
      * Return the occurrences of an agenda ordered by id
      * @param agenda The agenda
+     * @param plugin The plugin
      */
     public static void loadAgendaOccurrencesOrderedById( AgendaResource agenda, Plugin plugin )
     {
-        SimpleAgenda a = new SimpleAgenda(  );
+        SimpleAgenda a = new SimpleAgenda( );
 
-        for ( OccurrenceEvent occurrence : CalendarHome.findOccurrencesByIdList( Integer.parseInt( agenda.getId(  ) ),
+        for ( OccurrenceEvent occurrence : CalendarHome.findOccurrencesByIdList( Integer.parseInt( agenda.getId( ) ),
                 plugin ) )
         {
             a.addEvent( occurrence );
         }
 
-        if ( a != null )
-        {
-            a.setName( agenda.getName(  ) );
-            a.setKeyName( agenda.getId(  ) );
-            agenda.setAgenda( a );
-            agenda.setResourceType( AppPropertiesService.getProperty( Constants.PROPERTY_READ_WRITE ) );
-        }
+        a.setName( agenda.getName( ) );
+        a.setKeyName( agenda.getId( ) );
+        agenda.setAgenda( a );
+        agenda.setResourceType( AppPropertiesService.getProperty( Constants.PROPERTY_READ_WRITE ) );
     }
 
     /**
      * Return the agenda
      * @param agenda The agenda
+     * @param plugin The plugin
      */
     public static void loadAgendaEvents( AgendaResource agenda, Plugin plugin )
     {
-        SimpleAgenda a = new SimpleAgenda(  );
+        SimpleAgenda a = new SimpleAgenda( );
 
-        for ( SimpleEvent event : CalendarHome.findEventsList( Integer.parseInt( agenda.getId(  ) ), 1, plugin ) )
+        for ( SimpleEvent event : CalendarHome.findEventsList( Integer.parseInt( agenda.getId( ) ), 1, plugin ) )
         {
             a.addEvent( event );
         }
-
-        if ( a != null )
-        {
-            a.setName( agenda.getName(  ) );
-            a.setKeyName( agenda.getId(  ) );
-            agenda.setAgenda( a );
-            agenda.setResourceType( AppPropertiesService.getProperty( Constants.PROPERTY_READ_WRITE ) );
-        }
+        a.setName( agenda.getName( ) );
+        a.setKeyName( agenda.getId( ) );
+        agenda.setAgenda( a );
+        agenda.setResourceType( AppPropertiesService.getProperty( Constants.PROPERTY_READ_WRITE ) );
     }
 
     /**
@@ -1009,27 +997,32 @@ public final class Utils
         return isValid( getDate( dateEvent ) );
     }
 
+    /**
+     * Parse a HTML string into plain text
+     * @param strHTML The HTMl to parse
+     * @return The Plain text describing the given HTML
+     */
     public static String ParseHtmlToPlainTextString( String strHTML )
     {
-        StringBuilder sbText = new StringBuilder(  );
+        StringBuilder sbText = new StringBuilder( );
 
         try
         {
             Lexer lexer = new Lexer( strHTML );
             Parser parser = new Parser( lexer );
-            NodeIterator i = parser.elements(  );
+            NodeIterator i = parser.elements( );
 
-            while ( i.hasMoreNodes(  ) )
-                sbText.append( i.nextNode(  ).toPlainTextString(  ) );
+            while ( i.hasMoreNodes( ) )
+                sbText.append( i.nextNode( ).toPlainTextString( ) );
         }
         catch ( ParserException e )
         {
-            AppLogService.error( "Parsing html to plain text error : " + e.getMessage(  ), e );
+            AppLogService.error( "Parsing html to plain text error : " + e.getMessage( ), e );
         }
 
-        return sbText.toString(  );
+        return sbText.toString( );
     }
-    
+
     /**
      * Get all calendar ids that the user is authorized to visualize
      * @param request HttpServletRequest
@@ -1037,87 +1030,94 @@ public final class Utils
      */
     public static String[] getCalendarIds( HttpServletRequest request )
     {
-    	String[] arrayCalendarIds = null;
-    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
-        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
+        String[] arrayCalendarIds = null;
+        CalendarService calendarService = (CalendarService) SpringContextService
+                .getBean( Constants.BEAN_CALENDAR_CALENDARSERVICE );
 
         List<AgendaResource> listCalendar = calendarService.getAgendaResources( request );
-        List<String> listCalendarIds = new ArrayList<String>(  );
+        List<String> listCalendarIds = new ArrayList<String>( );
 
         for ( AgendaResource a : listCalendar )
         {
             // Check security access
-            String strRole = a.getRole(  );
+            String strRole = a.getRole( );
 
-            if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
-                    ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
+            if ( StringUtils.isNotBlank( strRole ) && ( request != null )
+                    && ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
             {
-                if ( SecurityService.isAuthenticationEnable(  ) )
+                if ( SecurityService.isAuthenticationEnable( ) )
                 {
-                    if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
+                    if ( SecurityService.getInstance( ).isUserInRole( request, strRole ) )
                     {
-                        listCalendarIds.add( a.getAgenda(  ).getKeyName(  ) );
+                        listCalendarIds.add( a.getAgenda( ).getKeyName( ) );
                     }
                 }
             }
             else
             {
-            	listCalendarIds.add( a.getAgenda(  ).getKeyName(  ) );
+                listCalendarIds.add( a.getAgenda( ).getKeyName( ) );
             }
         }
-        if ( listCalendarIds.size(  ) != 0 )
+        if ( listCalendarIds.size( ) != 0 )
         {
-        	arrayCalendarIds = new String[ listCalendarIds.size(  ) ];
-        	for ( int i = 0; i < listCalendarIds.size(  ); i++ )
-        	{
-        		arrayCalendarIds[i] = listCalendarIds.get( i );
-        	}
+            arrayCalendarIds = new String[listCalendarIds.size( )];
+            for ( int i = 0; i < listCalendarIds.size( ); i++ )
+            {
+                arrayCalendarIds[i] = listCalendarIds.get( i );
+            }
         }
-        
+
         return arrayCalendarIds;
     }
-    
+
+    /**
+     * Get the day of week of a given date using the pattern
+     * {@link #DATE_PATTERN }
+     * @param strDate The date to parse
+     * @return The day of week of the given date, or -1 if the date could not be
+     *         parsed
+     */
     public static int getDayOfWeek( String strDate )
     {
-    	SimpleDateFormat format = new SimpleDateFormat( DATE_PATTERN );
-    	Date date = null;
-    	try
-    	{
-    		 date = format.parse( strDate );
-    	}
-    	catch( ParseException ex )
-    	{
-    		return -1;
-    	}
-    	GregorianCalendar calendar = new GregorianCalendar(  );
-    	calendar.setTime( date );
+        SimpleDateFormat format = new SimpleDateFormat( DATE_PATTERN );
+        Date date = null;
+        try
+        {
+            date = format.parse( strDate );
+        }
+        catch ( ParseException ex )
+        {
+            return -1;
+        }
+        GregorianCalendar calendar = new GregorianCalendar( );
+        calendar.setTime( date );
         return calendar.get( Calendar.DAY_OF_WEEK );
     }
-    
+
     /**
      * Check if a day is in the list of excluded days
      * @param nDayOfWeek the day to check
-     * @param listExcludedDays the list of excluded days
+     * @param arrayExcludedDays the array of excluded days
      * @return true if it is excluded, false otherwise
      */
     public static boolean isDayExcluded( int nDayOfWeek, String[] arrayExcludedDays )
     {
-    	if ( arrayExcludedDays == null || arrayExcludedDays.length == 0 )
-    	{
-    		return false;
-    	}
-    	
-    	for ( int i = 0; i < arrayExcludedDays.length; i++ )
-    	{
-    		if ( StringUtils.isNotBlank( arrayExcludedDays[i] ) && StringUtils.isNumeric( arrayExcludedDays[i] ) )
-    		{
-    			int nExcludedDay = Integer.parseInt( arrayExcludedDays[i] );
-    			if ( nDayOfWeek == nExcludedDay )
-        		{
-        			return true;
-        		}
-    		}
-    	}
-    	return false;
+        if ( arrayExcludedDays == null || arrayExcludedDays.length == 0 )
+        {
+            return false;
+        }
+
+        for ( int i = 0; i < arrayExcludedDays.length; i++ )
+        {
+            if ( StringUtils.isNotBlank( arrayExcludedDays[i] ) && StringUtils.isNumeric( arrayExcludedDays[i] ) )
+            {
+                int nExcludedDay = Integer.parseInt( arrayExcludedDays[i] );
+                if ( nDayOfWeek == nExcludedDay )
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

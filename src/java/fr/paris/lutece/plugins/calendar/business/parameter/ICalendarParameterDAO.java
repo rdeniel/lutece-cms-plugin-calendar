@@ -33,42 +33,43 @@
  */
 package fr.paris.lutece.plugins.calendar.business.parameter;
 
-import java.util.Map;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.util.Map;
+
+
 /**
  * 
  * ICalendarParameterDAO
- *
+ * 
  */
-public interface ICalendarParameterDAO 
+public interface ICalendarParameterDAO
 {
-	/**
+    /**
      * Load the parameter value
      * @param strParameterKey the parameter key
      * @param plugin Plugin
      * @return The parameter value
      */
     ReferenceItem load( String strParameterKey, Plugin plugin );
-    
+
     /**
      * Update the parameter value
-     * @param strParameterValue The parameter value 
+     * @param userParam The parameter value
      * @param plugin Plugin
      * @param strParameterKey The parameter key
      */
     void store( ReferenceItem userParam, Plugin plugin );
-    
+
     /**
      * Select all the parameters
      * @param plugin plugin
      * @return all the parameters
      */
     Map<String, String> selectAll( Plugin plugin );
-    
+
     /**
      * Select all the parameters
      * @param plugin plugin

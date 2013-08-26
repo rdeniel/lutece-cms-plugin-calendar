@@ -44,17 +44,18 @@ import java.util.List;
 
 
 /**
- * This class provides instances management methods (selectEventsList, findByPrimaryKey, findAgendasList ...) for
+ * This class provides instances management methods (selectEventsList,
+ * findByPrimaryKey, findAgendasList ...) for
  * Calendar objects ( AgendaResource, Events, ...)
  */
 public class CalendarHome
 {
     // Static variable pointed at the DAO instance
-    private static ICalendarDAO _dao = (ICalendarDAO) SpringContextService.getPluginBean( "calendar", "calendar.calendarDAO" );
+    private static ICalendarDAO _dao = SpringContextService.getBean( "calendar.calendarDAO" );
 
     /**
      * Insert a new agenda in the table calendar_agendas.
-     *
+     * 
      * @param agenda The AgendaResource object
      * @param plugin The Plugin using this data access service
      */
@@ -85,7 +86,7 @@ public class CalendarHome
 
     /**
      * Load the list of AgendaResources
-     *
+     * 
      * @param plugin The plugin
      * @return The Collection of the AgendaResources
      */
@@ -95,8 +96,9 @@ public class CalendarHome
     }
 
     /**
-     * Returns an instance of a AgendaResource whose identifier is specified in parameter
-     *
+     * Returns an instance of a AgendaResource whose identifier is specified in
+     * parameter
+     * 
      * @param nKey The Primary key of the contact
      * @param plugin The Plugin object
      * @return an instance of AgendaResource
@@ -113,19 +115,18 @@ public class CalendarHome
      * @param strUserLogin user login
      * @throws fr.paris.lutece.portal.service.util.AppException AppException
      */
-    public static void createEvent( SimpleEvent event, Plugin plugin, String strUserLogin )
-        throws AppException
+    public static void createEvent( SimpleEvent event, Plugin plugin, String strUserLogin ) throws AppException
     {
         _dao.insertEvent( event, plugin, strUserLogin );
     }
 
     /**
      * Update the event in the table calendar_event
-     * @param strTitle The title of the event
      * @param event The reference of SimpleEvent
      * @param strDate the old event date
      * @param plugin The Plugin using this data access service
-     * @throws fr.paris.lutece.portal.service.util.AppException Exception thrown if an error is detected
+     * @throws fr.paris.lutece.portal.service.util.AppException Exception thrown
+     *             if an error is detected
      */
     public static void updateEvent( SimpleEvent event, boolean bPeriodiciteUpdated, Plugin plugin )
     {
@@ -166,7 +167,7 @@ public class CalendarHome
     {
         return _dao.selectEventsList( nAgendaId, nSortEvents, plugin );
     }
-    
+
     /**
      * Load the list of Events
      * @return The Collection of the Events
@@ -175,7 +176,8 @@ public class CalendarHome
      * @param nAgendaId The identifier of the agenda
      * @param strUserLogin user login
      */
-    public static List<SimpleEvent> findEventsListByUserLogin( int nAgendaId, int nSortEvents, Plugin plugin, String strUserLogin )
+    public static List<SimpleEvent> findEventsListByUserLogin( int nAgendaId, int nSortEvents, Plugin plugin,
+            String strUserLogin )
     {
         return _dao.selectEventsListByUserLogin( nAgendaId, nSortEvents, plugin, strUserLogin );
     }
@@ -187,7 +189,7 @@ public class CalendarHome
      * @param plugin The plugin
      * @param nAgendaId The identifier of the agenda
      * @param nEventId The identifier of an event
-     *
+     * 
      */
     public static List<OccurrenceEvent> findOccurrencesList( int nAgendaId, int nEventId, int nSortEvents, Plugin plugin )
     {
@@ -196,12 +198,11 @@ public class CalendarHome
 
     /**
      * Load the list of Occurrences
-     * @return The Collection of the Occurrences
      * @param nSortEvents An integer used for sorting issues
      * @param plugin The plugin
      * @param nAgendaId The identifier of the agenda
-     * @param nEventId The identifier of an event
-     *
+     * @return The Collection of the Occurrences
+     * 
      */
     public static List<OccurrenceEvent> findOccurrencesList( int nAgendaId, int nSortEvents, Plugin plugin )
     {
@@ -211,11 +212,9 @@ public class CalendarHome
     /**
      * Load the list of Occurrences ordered by occurrences id
      * @return The Collection of the Occurrences
-     * @param nSortEvents An integer used for sorting issues
      * @param plugin The plugin
      * @param nAgendaId The identifier of the agenda
-     * @param nEventId The identifier of an event
-     *
+     * 
      */
     public static List<OccurrenceEvent> findOccurrencesByIdList( int nAgendaId, Plugin plugin )
     {
@@ -235,7 +234,7 @@ public class CalendarHome
 
     /**
      * Update the occurrence in the table calendar_events_occurrences
-     *
+     * 
      * @param occurrence The reference of OccurrenceEvent
      * @param plugin The Plugin using this data access service
      */
@@ -247,7 +246,7 @@ public class CalendarHome
     /**
      * Returns the number of days within which the events will occur
      * @param nEventId The id of the event
-	 * @param plugin Plugin
+     * @param plugin Plugin
      * @return Returns the number of days
      */
     public static int getRepetitionDays( int nEventId, Plugin plugin )
@@ -259,6 +258,7 @@ public class CalendarHome
      * Returns the number of occurrence for an event
      * @param nEventId The id of the event
      * @return Returns the number of occurrence
+     * @param plugin The Plugin using this data access service
      */
     public static int getOccurrenceNumber( int nEventId, Plugin plugin )
     {
@@ -268,6 +268,8 @@ public class CalendarHome
     /**
      * Delete an Event from the table calendar_events
      * @param nOccurrenceId The occurrence id
+     * @param nEventId The identifier of an event
+     * @param nAgendaId The id of the agenda
      * @param plugin The Plugin using this data access service
      */
     public static void removeOccurrence( int nOccurrenceId, int nEventId, int nAgendaId, Plugin plugin )
@@ -278,7 +280,7 @@ public class CalendarHome
     /**
      * Return the image resource for the specified category id
      * @param nCategoryId The identifier of Category object
-	 * @param plugin Plugin
+     * @param plugin Plugin
      * @return ImageResource
      */
     public static ImageResource getImageResource( int nCategoryId, Plugin plugin )
@@ -288,7 +290,7 @@ public class CalendarHome
 
     /**
      * Load the list of Events
-     *
+     * 
      * @return The Collection of the Events
      * @param plugin The plugin
      * @param filter The CalendarFilter Object
@@ -301,6 +303,7 @@ public class CalendarHome
     /**
      * Load the list of top Events
      * @param plugin The plugin
+     * @return The list of events
      */
     public static List<SimpleEvent> findTopEventList( Plugin plugin )
     {
@@ -321,14 +324,14 @@ public class CalendarHome
     /**
      * Load the list of events
      * @param nAgendaId the agenda ID
-     * @param nSortEvents An integer used for sorting issues 
+     * @param nSortEvents An integer used for sorting issues
      * @param nNextDays the number of days
      * @param plugin plugin
      * @return the list of events
      */
     public static List<SimpleEvent> findEventsList( int nAgendaId, int nSortEvents, int nNextDays, Plugin plugin )
     {
-    	return _dao.selectEventsList( nAgendaId, nSortEvents, nNextDays, plugin );
+        return _dao.selectEventsList( nAgendaId, nSortEvents, nNextDays, plugin );
     }
 
     /**
@@ -338,6 +341,6 @@ public class CalendarHome
      */
     public static List<Integer> findCalendarIds( Plugin plugin )
     {
-    	return _dao.selectCalendarIds( plugin );
+        return _dao.selectCalendarIds( plugin );
     }
 }

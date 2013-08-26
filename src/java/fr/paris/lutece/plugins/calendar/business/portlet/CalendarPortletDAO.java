@@ -33,17 +33,16 @@
  */
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
-import fr.paris.lutece.plugins.calendar.service.CalendarPlugin;
 import fr.paris.lutece.plugins.calendar.service.CalendarService;
 import fr.paris.lutece.plugins.calendar.web.Constants;
 import fr.paris.lutece.portal.business.portlet.Portlet;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -68,8 +67,8 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
 
     /**
      * Inserts a new record in the table. Not implemented.
-     *
-     * @param portlet    the object to be inserted
+     * 
+     * @param portlet the object to be inserted
      */
     public void insert( Portlet portlet )
     {
@@ -80,43 +79,43 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      * Deletes a record from the table.
      * @param nPortletId the portlet id
      */
-    public void delete( int nPortletId  )
+    public void delete( int nPortletId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE );
         daoUtil.setInt( 1, nPortletId );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
      * Loads the data of the portlet from the table.
-     *
+     * 
      * @param nPortletId the portlet id
      * @return the Portlet object
      */
     public Portlet load( int nPortletId )
     {
-        CalendarPortlet portlet = new CalendarPortlet(  );
+        CalendarPortlet portlet = new CalendarPortlet( );
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
 
         daoUtil.setInt( 1, nPortletId );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
             portlet.setId( nPortletId );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return portlet;
     }
 
     /**
      * Updates the record in the table. Not implemented.
-     *
+     * 
      * @param portlet
      *            the instance of Portlet class to be updated
      */
@@ -140,8 +139,8 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
         daoUtil.setString( 3, dDateBegin );
         daoUtil.setString( 4, dDateEnd );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -155,8 +154,8 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
         daoUtil.setInt( 1, nPortletId );
         daoUtil.setString( 2, strAgendaId );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -166,23 +165,22 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      */
     public List<AgendaResource> findAgendasInPortlet( int nPortletId )
     {
-    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
-        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
-        List<AgendaResource> listSelectedAgendas = new ArrayList<AgendaResource>(  );
+        CalendarService calendarService = SpringContextService.getBean( Constants.BEAN_CALENDAR_CALENDARSERVICE );
+        List<AgendaResource> listSelectedAgendas = new ArrayList<AgendaResource>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDAS_BY_PORTLET );
         daoUtil.setInt( 1, nPortletId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             AgendaResource agendaResource = calendarService.getAgendaResource( daoUtil.getString( 1 ) );
             if ( agendaResource != null )
             {
-            	listSelectedAgendas.add( agendaResource );
+                listSelectedAgendas.add( agendaResource );
             }
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listSelectedAgendas;
     }
@@ -196,23 +194,22 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
      */
     public List<AgendaResource> findAgendaBetween( int nPortletId, Date dateBegin, Date dateEnd )
     {
-    	CalendarService calendarService = (CalendarService) SpringContextService.getPluginBean( CalendarPlugin.PLUGIN_NAME, 
-        		Constants.BEAN_CALENDAR_CALENDARSERVICE );
-        List<AgendaResource> listSelectedAgendas = new ArrayList<AgendaResource>(  );
+        CalendarService calendarService = SpringContextService.getBean( Constants.BEAN_CALENDAR_CALENDARSERVICE );
+        List<AgendaResource> listSelectedAgendas = new ArrayList<AgendaResource>( );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_AGENDAS_BY_PORTLET_BY_DATE );
         daoUtil.setInt( 1, nPortletId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             AgendaResource agendaResource = calendarService.getAgendaResource( daoUtil.getString( 1 ) );
             if ( agendaResource != null )
             {
-            	listSelectedAgendas.add( agendaResource );
+                listSelectedAgendas.add( agendaResource );
             }
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return listSelectedAgendas;
     }
@@ -227,22 +224,20 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
         Date dateBegin = null;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_BEGIN_DATE_BY_PORTLET );
         daoUtil.setInt( 1, nPortletId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             try
             {
-                dateBegin = new Date( daoUtil.getDate( 1 ).getTime(  ) );
+                dateBegin = new Date( daoUtil.getDate( 1 ).getTime( ) );
             }
             catch ( NullPointerException e )
             {
             }
-
-            ;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return dateBegin;
     }
@@ -257,28 +252,27 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
         Date dateEnd = null;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_END_DATE_BY_PORTLET );
         daoUtil.setInt( 1, nPortletId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             try
             {
-                dateEnd = new Date( daoUtil.getDate( 1 ).getTime(  ) );
+                dateEnd = new Date( daoUtil.getDate( 1 ).getTime( ) );
             }
             catch ( NullPointerException e )
             {
             }
-
-            ;
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return dateEnd;
     }
 
     /**
-     * Fetches the number of future days during which the events of the agenda will be displayed
+     * Fetches the number of future days during which the events of the agenda
+     * will be displayed
      * @param nPortletId The id of the portlet
      * @return The number of days
      */
@@ -287,20 +281,21 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
         int nNumberDays = 0;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NUMBER_DAYS_BY_PORTLET );
         daoUtil.setInt( 1, nPortletId );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
             nNumberDays = daoUtil.getInt( 1 );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return nNumberDays;
     }
 
     /**
-     * Inserts a calendar which will be displayed into the portlet for the following n days
+     * Inserts a calendar which will be displayed into the portlet for the
+     * following n days
      * @param nPortletId The id of the portlet
      * @param strAgendaId The id of the agenda
      * @param nDays The number of days the events will be displayed
@@ -313,7 +308,7 @@ public final class CalendarPortletDAO implements ICalendarPortletDAO
         daoUtil.setInt( 3, nDays );
         daoUtil.setString( 4, Constants.EMPTY_NULL );
         daoUtil.setString( 5, Constants.EMPTY_NULL );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }
