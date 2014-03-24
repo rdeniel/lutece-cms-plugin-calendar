@@ -1,105 +1,103 @@
-<#include "/admin/util/calendar/calendar.html" />
-
 <#-- Number of items per page selector - Radio List implementation -->
 <#macro NbItemsPerPageSelectorRadioList nb_items_per_page>
-	<#list [ "5" , "10" , "20" , "50" ] as nb>
-		<label class="radio inline" for="items_per_page${nb}">
-			<input value="${nb}" id="items_per_page${nb}" name="items_per_page" class="radio" type="radio" <#if nb = nb_items_per_page >checked</#if>> ${nb}
-		</label>
-	</#list>
+    <#list [ "5" , "10" , "20" , "50" ] as nb>
+        <label class="radio inline" for="items_per_page${nb}">
+            <input value="${nb}" id="items_per_page${nb}" name="items_per_page" class="radio" type="radio" <#if nb = nb_items_per_page >checked</#if>> ${nb}
+        </label>
+    </#list>
 </#macro>
 
 <#escape x as x?html>
 <div class="row">
-	<div class="span9">
-		<fieldset>
-		<legend>#i18n{calendar.search.event.title}</legend>
-			<div class="well well-small">
-				<form class="form" method="post" name="search_event" id="searchForm" action="jsp/site/Portal.jsp">		
-				<input type="hidden" name="page" value="calendar" > 
-				<input type="hidden" name="action" value="do_search" >
-				<label for="event_search">#i18n{calendar.search.event.label.search}</label>
-				<div class="input-append">	
-					<input type="text" id="event_search" name="query" value="<#if query?has_content>${query}</#if>" class="span3" maxlength="120" />
-					<button class="btn" type="submit" title="#i18n{calendar.search.event.button.search}">
-						<i class="icon-search"></i>
-					</button>      
-				</div>	
-				<#-- Number of documents per page selector -->
-				#i18n{portal.search.search_results.labelNbDocsPerPage}
-				<@NbItemsPerPageSelectorRadioList nb_items_per_page />
-				<p>
-				<button class="btn" type="button" id="advparam">
-					<i id="ico" class="icon-chevron-down"></i>&nbsp;#i18n{portal.util.labelMore}...
-				</button>
-				</p>
-				<div id="advanced_parameters">
-					<#if calendar_list?has_content>
-						<h4>#i18n{calendar.search.event.label.calendar_choice}</h4>     
-						<#list calendar_list as agenda >
-							<label class="checkbox inline">
-								<input class="checkbox" type="checkbox" name="calendar_id" <#if agenda.isChecked()> checked="checked"</#if> value="${agenda.code}" />
-								${agenda.name}&nbsp;
-							</label>
-						 </#list>
-					</#if>
-					<#if category_list?has_content>
-						<h4>#i18n{calendar.create_event.category}</h4>
-						<#list category_list as category >
-						<label class="checkbox inline">
-							<input class="checkbox" type="checkbox" name="category" <#if category.isChecked()> checked="checked"</#if> value="${category.code}">
-							${category.name}&nbsp;
-						</label>
-						</#list>
-					</#if>
-					<h4>#i18n{calendar.search.event.label.criteria}</h4>
-					<label class="radio inline" for="radio_0">
-						<input type="radio" class="radio radio_" name="period" value="0" id="radio_0"<#if period?exists> <#if period ="0" > checked="checked"</#if></#if>>
-						#i18n{calendar.search.event.label.period_none}
-					</label>
-					<label class="radio inline" for="radio_1">
-						<input type="radio" class="radio radio_" name="period" value="1" id="radio_1" <#if period?exists> <#if period ="1"> checked="checked" </#if></#if> >#i18n{calendar.search.event.label.period_today}
-					</label>
-					<label class="radio inline" for="radio_2">
-						<input type="radio" class="radio radio_" name="period" value="2" id="radio_2" <#if period?exists> <#if period ="2"> checked="checked" </#if></#if> >
-						#i18n{calendar.search.event.label.period_week}
-					</label>
-					<label class="radio" for="radio_3">
-						<input type="radio" class="radio radio_" name="period" value="3" id="radio_3" <#if period?exists> <#if period ="3"> checked="checked" </#if></#if>>
-						#i18n{calendar.search.event.label.period_range}
-							<label for="event_date_begin">#i18n{calendar.search.event.label.datebegin}</label>
-							<input type="text" id="date_start" name="date_start" class="input-small" maxlength="10" <#if period?exists> <#if period !="3"> disabled="disabled" class="disabled-date" </#if></#if> value="<#if date_start?has_content>${date_start}</#if>" />
-							<label for="event_date_end">#i18n{calendar.search.event.label.dateend}</label>
-							<input type="text" id="date_end" name="date_end" class="input-small" maxlength="10" <#if period?exists> <#if period !="3"> disabled="disabled" class="disabled-date" </#if></#if> value="<#if date_end?has_content>${date_end}</#if>"/>
-					</label>
-				</div>
-			</form>
-		</fieldset>	
-	</div>
+    <div class="span9">
+        <fieldset>
+        <legend>#i18n{calendar.search.event.title}</legend>
+            <div class="well well-small">
+                <form class="form" method="post" name="search_event" id="searchForm" action="jsp/site/Portal.jsp">      
+                <input type="hidden" name="page" value="calendar" > 
+                <input type="hidden" name="action" value="do_search" >
+                <label for="event_search">#i18n{calendar.search.event.label.search}</label>
+                <div class="input-append">  
+                    <input type="text" id="event_search" name="query" value="<#if query?has_content>${query}</#if>" class="span3" maxlength="120" />
+                    <button class="btn" type="submit" title="#i18n{calendar.search.event.button.search}">
+                        <i class="icon-search"></i>
+                    </button>      
+                </div>  
+                <#-- Number of documents per page selector -->
+                #i18n{portal.search.search_results.labelNbDocsPerPage}
+                <@NbItemsPerPageSelectorRadioList nb_items_per_page />
+                <p>
+                <button class="btn" type="button" id="advparam">
+                    <i id="ico" class="icon-chevron-down"></i>&nbsp;#i18n{portal.util.labelMore}...
+                </button>
+                </p>
+                <div id="advanced_parameters">
+                    <#if calendar_list?has_content>
+                        <h4>#i18n{calendar.search.event.label.calendar_choice}</h4>     
+                        <#list calendar_list as agenda >
+                            <label class="checkbox inline">
+                                <input class="checkbox" type="checkbox" name="calendar_id" <#if agenda.isChecked()> checked="checked"</#if> value="${agenda.code}" />
+                                ${agenda.name}&nbsp;
+                            </label>
+                         </#list>
+                    </#if>
+                    <#if category_list?has_content>
+                        <h4>#i18n{calendar.create_event.category}</h4>
+                        <#list category_list as category >
+                        <label class="checkbox inline">
+                            <input class="checkbox" type="checkbox" name="category" <#if category.isChecked()> checked="checked"</#if> value="${category.code}">
+                            ${category.name}&nbsp;
+                        </label>
+                        </#list>
+                    </#if>
+                    <h4>#i18n{calendar.search.event.label.criteria}</h4>
+                    <label class="radio inline" for="radio_0">
+                        <input type="radio" class="radio radio_" name="period" value="0" id="radio_0"<#if period?exists> <#if period ="0" > checked="checked"</#if></#if>>
+                        #i18n{calendar.search.event.label.period_none}
+                    </label>
+                    <label class="radio inline" for="radio_1">
+                        <input type="radio" class="radio radio_" name="period" value="1" id="radio_1" <#if period?exists> <#if period ="1"> checked="checked" </#if></#if> >#i18n{calendar.search.event.label.period_today}
+                    </label>
+                    <label class="radio inline" for="radio_2">
+                        <input type="radio" class="radio radio_" name="period" value="2" id="radio_2" <#if period?exists> <#if period ="2"> checked="checked" </#if></#if> >
+                        #i18n{calendar.search.event.label.period_week}
+                    </label>
+                    <label class="radio" for="radio_3">
+                        <input type="radio" class="radio radio_" name="period" value="3" id="radio_3" <#if period?exists> <#if period ="3"> checked="checked" </#if></#if>>
+                        #i18n{calendar.search.event.label.period_range}
+                            <label for="event_date_begin">#i18n{calendar.search.event.label.datebegin}</label>
+                            <input type="text" id="date_start" name="date_start" class="input-small" maxlength="10" <#if period?exists> <#if period !="3"> disabled="disabled" class="disabled-date" </#if></#if> value="<#if date_start?has_content>${date_start}</#if>" />
+                            <label for="event_date_end">#i18n{calendar.search.event.label.dateend}</label>
+                            <input type="text" id="date_end" name="date_end" class="input-small" maxlength="10" <#if period?exists> <#if period !="3"> disabled="disabled" class="disabled-date" </#if></#if> value="<#if date_end?has_content>${date_end}</#if>"/>
+                    </label>
+                </div>
+            </form>
+        </fieldset> 
+    </div>
 </div>
 </#escape>
 <script>
 $(document).ready( function(){
-	$(".radio_").click( function(){
-		if( $(this).attr("id")=="radio_3" ){
-			$("#date_start").removeAttr("disabled")
-			$("#date_end").removeAttr("disabled")
-		} else {
-			$("#date_start").attr("disabled","disabled")
-			$("#date_end").attr("disabled","disabled")
-		}
-	});
-	$("#advanced_parameters").toggle();
-	$("#advparam").click( function(){
-		$("#advanced_parameters").toggle();
-		if( $("#ico").hasClass('icon-chevron-down') ){
-			$("#ico").addClass("icon-chevron-up");
-			$("#ico").removeClass("icon-chevron-down");
-		} else {
-			$("#ico").addClass("icon-chevron-down");
-			$("#ico").removeClass("icon-chevron-up");
-		}
-	});
+    $(".radio_").click( function(){
+        if( $(this).attr("id")=="radio_3" ){
+            $("#date_start").removeAttr("disabled")
+            $("#date_end").removeAttr("disabled")
+        } else {
+            $("#date_start").attr("disabled","disabled")
+            $("#date_end").attr("disabled","disabled")
+        }
+    });
+    $("#advanced_parameters").toggle();
+    $("#advparam").click( function(){
+        $("#advanced_parameters").toggle();
+        if( $("#ico").hasClass('icon-chevron-down') ){
+            $("#ico").addClass("icon-chevron-up");
+            $("#ico").removeClass("icon-chevron-down");
+        } else {
+            $("#ico").addClass("icon-chevron-down");
+            $("#ico").removeClass("icon-chevron-up");
+        }
+    });
  });  
 </script>
 <script src="js/jquery/plugins/ui/jquery-ui-1.9.2.custom.min.js"></script>
