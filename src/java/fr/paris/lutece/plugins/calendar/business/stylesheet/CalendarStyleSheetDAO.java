@@ -93,6 +93,7 @@ public final class CalendarStyleSheetDAO implements ICalendarStyleSheetDAO
     /**
      * Insert a new record in the table.
      * @param stylesheet The StyleSheet object
+     * @param strExtension the extension
      * @param plugin The plugin
      */
     public synchronized void insert( StyleSheet stylesheet, String strExtension, Plugin plugin )
@@ -201,6 +202,7 @@ public final class CalendarStyleSheetDAO implements ICalendarStyleSheetDAO
 
     /**
      * Insertion of the extension of an export file in the database
+     * @param nId the id
      * @param strExtension the extension file
      * @param plugin Plugin
      */

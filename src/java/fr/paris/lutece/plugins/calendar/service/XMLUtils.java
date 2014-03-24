@@ -145,6 +145,13 @@ public final class XMLUtils
     private static final String LOGGER_CALENDAR_EXPORT_XML_CONTENT = "lutece.debug.calendar.export.xmlContent";
 
     /**
+     * Default constructor
+     */
+    private XMLUtils( )
+    {
+    }
+
+    /**
      * Returns the Xml code of a calendar events
      * 
      * @param strAgenda The id of the agenda
@@ -241,10 +248,10 @@ public final class XMLUtils
 
                 if ( event.getListCategories( ) != null )
                 {
-                    Collection<Category> _listCategories = event.getListCategories( );
+                    Collection<Category> listCategories = event.getListCategories( );
                     String strCategories = PROPERTY_SPACE;
 
-                    for ( Category category : _listCategories )
+                    for ( Category category : listCategories )
                     {
                         if ( strCategories.equals( PROPERTY_SPACE ) )
                         {

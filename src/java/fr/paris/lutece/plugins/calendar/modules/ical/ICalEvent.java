@@ -206,11 +206,17 @@ public class ICalEvent implements Event
         return _strUrl;
     }
 
+    /**
+     * @return the periodicity
+     */
     public int getPeriodicity( )
     {
         return _nPeriodicity;
     }
 
+    /**
+     * @return the occurence
+     */
     public int getOccurrence( )
     {
         return _nOccurrence;
@@ -434,12 +440,11 @@ public class ICalEvent implements Event
 
     /**
      * Sets the Date End
-     * 
-     * @param DateEnd The Date End
+     * @param dateEnd The Date End
      */
-    public void setDateEnd( Date DateEnd )
+    public void setDateEnd( Date dateEnd )
     {
-        _dateEnd = DateEnd;
+        _dateEnd = dateEnd;
     }
 
     /**
@@ -603,7 +608,7 @@ public class ICalEvent implements Event
     }
 
     /**
-     * Return the id of calendar
+     * @return the id of calendar
      */
     public int getIdCalendar( )
     {

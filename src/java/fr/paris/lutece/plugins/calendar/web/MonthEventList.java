@@ -68,6 +68,7 @@ public class MonthEventList implements EventList
      * @param locale The locale
      * @param strMonthDate The date of the event list
      * @param agenda The multi agenda object
+     * @param request the request
      */
     public String getEventList( String strMonthDate, MultiAgenda agenda, Locale locale, HttpServletRequest request )
     {

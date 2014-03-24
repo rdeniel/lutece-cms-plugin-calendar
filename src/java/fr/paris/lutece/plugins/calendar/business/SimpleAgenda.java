@@ -177,6 +177,7 @@ public class SimpleAgenda implements Agenda
      * Fetches the events by date
      * @param dateBegin The start date
      * @param dateEnd The end date
+     * @param localeEnv the locale
      * @return The list of events
      */
     public List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )

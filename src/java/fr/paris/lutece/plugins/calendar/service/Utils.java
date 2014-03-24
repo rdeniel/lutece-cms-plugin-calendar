@@ -74,7 +74,14 @@ public final class Utils
     /**
      * Date pattern yyyyMMdd
      */
-    private static String DATE_PATTERN = "yyyyMMdd";
+    private static final String DATE_PATTERN = "yyyyMMdd";
+
+    /**
+     * Default constructor
+     */
+    private Utils( )
+    {
+    }
 
     /**
      * Constructs a 8 digits date string code YYYYMMDD
@@ -1010,7 +1017,7 @@ public final class Utils
      * @param strHTML The HTMl to parse
      * @return The Plain text describing the given HTML
      */
-    public static String ParseHtmlToPlainTextString( String strHTML )
+    public static String parseHtmlToPlainTextString( String strHTML )
     {
         StringBuilder sbText = new StringBuilder( );
 

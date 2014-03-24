@@ -103,6 +103,9 @@ public class CalendarApp implements XPageApplication
     public static final String PROPERTY_INVALID_MAIL_TITLE_MESSAGE = "calendar.siteMessage.invalid_mail.title";
     public static final String PROPERTY_INVALID_MAIL_ERROR_MESSAGE = "calendar.siteMessage.invalid_mail.message";
 
+    /** serial id */
+    private static final long serialVersionUID = 3326962245456630378L;
+
     //Templates
     private static final String TEMPLATE_CALENDAR = "skin/plugins/calendar/calendar.html";
     private static final String TEMPLATE_CALENDAR_LEGEND = "skin/plugins/calendar/calendar_legend.html";
@@ -166,6 +169,7 @@ public class CalendarApp implements XPageApplication
      * @param plugin The plugin object
      * @throws fr.paris.lutece.portal.service.message.SiteMessageException A
      *             message exception treated on front
+     * @throws UserNotSignedException user not signed
      */
     public XPage getPage( HttpServletRequest request, int nMode, Plugin plugin ) throws SiteMessageException,
             UserNotSignedException
@@ -178,7 +182,6 @@ public class CalendarApp implements XPageApplication
         {
             strPluginName = CalendarPlugin.PLUGIN_NAME;
         }
-        plugin = PluginService.getPlugin( strPluginName );
 
         if ( StringUtils.isNotBlank( strAction ) )
         {
@@ -491,7 +494,7 @@ public class CalendarApp implements XPageApplication
      * @param plugin The plugin
      * @throws fr.paris.lutece.portal.service.message.SiteMessageException
      *             Exception used by the front Message mechanism
-     * @throws UserNotSignedException
+     * @throws UserNotSignedException user not signed
      */
     private void getRemoveEvent( HttpServletRequest request, Plugin plugin ) throws SiteMessageException,
             UserNotSignedException
@@ -702,9 +705,10 @@ public class CalendarApp implements XPageApplication
             break;
 
         case Constants.PROPERTY_PERIOD_TODAY:
-            dateBegin = dateEnd = new Date( );
-            strDateBegin = strDateEnd = DateUtil.getDateString( new Date( ), request.getLocale( ) );
-
+            dateBegin = new Date( );
+            dateEnd = new Date( );
+            strDateBegin = DateUtil.getDateString( new Date( ), request.getLocale( ) );
+            strDateEnd = DateUtil.getDateString( new Date( ), request.getLocale( ) );
             break;
 
         case Constants.PROPERTY_PERIOD_WEEK:
@@ -748,6 +752,8 @@ public class CalendarApp implements XPageApplication
                 errorDateFormat( request );
             }
 
+            break;
+        default:
             break;
         }
 
@@ -1159,7 +1165,6 @@ public class CalendarApp implements XPageApplication
 
     /**
      * The Creation action of an event
-     * @param strCalendarId The identifier of the Calendar
      * @param request The HttpRequest
      * @param plugin The Plugin
      * @throws fr.paris.lutece.portal.service.message.SiteMessageException
@@ -1260,7 +1265,7 @@ public class CalendarApp implements XPageApplication
      * @param plugin The plugin
      * @throws fr.paris.lutece.portal.service.message.SiteMessageException
      *             Exception used by the front Message mechanism
-     * @throws UserNotSignedException
+     * @throws UserNotSignedException user not signed
      */
     private void doModifyEvent( HttpServletRequest request, Plugin plugin ) throws SiteMessageException,
             UserNotSignedException
@@ -1364,6 +1369,12 @@ public class CalendarApp implements XPageApplication
         }
     }
 
+    /**
+     * Verify subscription
+     * @param request the request
+     * @param plugin the plugin
+     * @throws SiteMessageException site exception
+     */
     private void doVerifySubscription( HttpServletRequest request, Plugin plugin ) throws SiteMessageException
     {
         String strEmail = request.getParameter( Constants.PARAMETER_EMAIL );
@@ -1415,7 +1426,7 @@ public class CalendarApp implements XPageApplication
      * @param nEventId The id of the event
      * @param plugin Plugin
      * @return True if the user has the right, false otherwise
-     * @throws UserNotSignedException
+     * @throws UserNotSignedException user not signed
      */
     private boolean verifiyUserAccess( HttpServletRequest request, int nCalendarId, int nEventId, Plugin plugin )
             throws UserNotSignedException

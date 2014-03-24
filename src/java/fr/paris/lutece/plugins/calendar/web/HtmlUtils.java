@@ -47,11 +47,18 @@ import org.apache.commons.lang.StringUtils;
 /**
  * An Utility class to manipulate html code.
  */
-public class HtmlUtils
+public final class HtmlUtils
 {
     private static final String HTML_START = "<";
     private static final String HTML_BR = "<br />";
     private static final String LINEFEED = "\\n";
+
+    /**
+     * Default constructor
+     */
+    private HtmlUtils( )
+    {
+    }
 
     /**
      * Remove the part of the string that contains HTML

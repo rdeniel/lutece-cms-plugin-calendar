@@ -178,7 +178,6 @@ public interface ICalendarDAO
     /**
      * Load the list of Occurrences ordered by occurence id
      * @return The Collection of the Occurrences
-     * @param nSortEvents An integer used for sorting issues
      * @param plugin The plugin
      * @param nAgendaId The identifier of the agenda
      * 
@@ -188,7 +187,7 @@ public interface ICalendarDAO
     /**
      * Load the data of SimpleEvent from the table
      * @return the instance of the SimpleEvent
-     * @param nEventId The id of the event
+     * @param nOccurenceId The id of the occurence
      * @param plugin The plugin
      */
     OccurrenceEvent loadOccurrence( int nOccurenceId, Plugin plugin );
@@ -213,6 +212,7 @@ public interface ICalendarDAO
      * Delete an Event from the table calendar_events_occurrences
      * @param nEventId The id of the occurrence
      * @param nOccurrenceId The occurrence Id
+     * @param nAgendaId the agenda id
      * @param plugin The Plugin using this data access service
      */
     void deleteOccurrence( int nOccurrenceId, int nEventId, int nAgendaId, Plugin plugin );
@@ -254,7 +254,7 @@ public interface ICalendarDAO
     /**
      * Load the list of top Events
      * @param plugin The plugin
-     * @return
+     * @return the list of eventw
      */
     List<SimpleEvent> selectTopEventsList( Plugin plugin );
 

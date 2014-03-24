@@ -59,7 +59,6 @@ public interface ICalendarParameterDAO
      * Update the parameter value
      * @param userParam The parameter value
      * @param plugin Plugin
-     * @param strParameterKey The parameter key
      */
     void store( ReferenceItem userParam, Plugin plugin );
 

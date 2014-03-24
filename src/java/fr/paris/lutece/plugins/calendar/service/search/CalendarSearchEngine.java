@@ -38,8 +38,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.portal.service.search.SearchResult;
-
 
 /**
  * Interface for calendar event search engine
@@ -56,6 +54,6 @@ public interface CalendarSearchEngine
      * @param request The {@link HttpServletRequest}
      * @return Results as a collection of SearchResult
      */
-    List<SearchResult> getSearchResults( String[] arrayCalendar, String[] arrayCategory, String strQuery,
-        Date dateBegin, Date dateEnd, HttpServletRequest request );
+    List<CalendarSearchResult> getSearchResults( String[] arrayCalendar, String[] arrayCategory, String strQuery,
+            Date dateBegin, Date dateEnd, HttpServletRequest request );
 }

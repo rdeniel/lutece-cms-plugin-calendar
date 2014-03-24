@@ -31,62 +31,31 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.calendar.business;
+package fr.paris.lutece.plugins.calendar.service.search;
+
+import fr.paris.lutece.portal.service.search.SearchResult;
+
 
 /**
- * Occurence event
+ * Custom calendar search result
  */
-public class OccurrenceEvent extends SimpleEvent
+public class CalendarSearchResult extends SearchResult
 {
-    private static final long serialVersionUID = 4979315059166094219L;
-    private int _nEventId;
+    private String _strHtmlSummary;
 
     /**
-     * Default constructor
+     * @return the _strHtmlSummary
      */
-    public OccurrenceEvent( )
+    public String getHtmlSummary( )
     {
+        return this._strHtmlSummary;
     }
 
     /**
-     * Constructor
-     * @param event The event
-     * @param nOccurrenceId The id of an occurrence
+     * @param strHtmlSummary the _strHtmlSummary to set
      */
-    public OccurrenceEvent( SimpleEvent event, int nOccurrenceId )
+    public void setHtmlSummary( String strHtmlSummary )
     {
-        setDate( event.getDate( ) );
-        setEventClass( event.getEventClass( ) );
-        setTitle( event.getTitle( ) );
-        setDescription( event.getDescription( ) );
-        setDateTimeStart( event.getDateTimeStart( ) );
-        setDateTimeEnd( event.getDateTimeEnd( ) );
-        setStatus( event.getStatus( ) );
-        setPriority( event.getPriority( ) );
-        setUrl( event.getUrl( ) );
-        setLocation( event.getLocation( ) );
-        setId( nOccurrenceId );
-        setEventId( event.getId( ) );
-        setListCategories( event.getListCategories( ) );
-    }
-
-    /**
-     * Returns the id of the event
-     * 
-     * @return The id
-     */
-    public int getEventId( )
-    {
-        return _nEventId;
-    }
-
-    /**
-     * Sets the id of the event
-     * 
-     * @param eventId The id of the event
-     */
-    public void setEventId( int eventId )
-    {
-        _nEventId = eventId;
+        this._strHtmlSummary = strHtmlSummary;
     }
 }

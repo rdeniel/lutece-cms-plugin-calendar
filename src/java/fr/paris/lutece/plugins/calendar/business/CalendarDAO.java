@@ -264,9 +264,9 @@ public class CalendarDAO implements ICalendarDAO
 
     /**
      * Update the event in the table calendar_event
-     * 
      * @param event The reference of SimpleEvent
      * @param plugin The Plugin using this data access service
+     * @param bPeriodiciteUpdated true if periodicite, false otherwise
      */
     public void storeEvent( SimpleEvent event, Plugin plugin, boolean bPeriodiciteUpdated )
     {
@@ -796,6 +796,7 @@ public class CalendarDAO implements ICalendarDAO
     /**
      * Delete an occurrence from the table calendar_events_occurrences
      * @param nOccurrenceId The id of the occurrence
+     * @param nEventId the event id
      * @param nAgendaId The agenda Id
      * @param plugin The Plugin using this data access service
      */
@@ -865,6 +866,7 @@ public class CalendarDAO implements ICalendarDAO
      * UPDATE the occurrence number from the table calendar_events
      * @param nEventId The id of the occurrence
      * @param nAgendaId The agenda Id
+     * @param nNewNumberOccurrence the new number occurences
      * @param plugin The Plugin using this data access service
      */
     public void updateNumberOccurrence( int nEventId, int nAgendaId, Plugin plugin, int nNewNumberOccurrence )
@@ -966,7 +968,12 @@ public class CalendarDAO implements ICalendarDAO
         return occurrence;
     }
 
-    public void insertFeature( Plugin plugin, SimpleEvent event )
+    /**
+     * Insert feature
+     * @param plugin the plugin
+     * @param event the event
+     */
+    private void insertFeature( Plugin plugin, SimpleEvent event )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_FEATURE, plugin );
         int nIdFeature = getNewPrimaryKey( plugin, SQL_QUERY_NEW_PK_FEATURE );
@@ -1012,7 +1019,12 @@ public class CalendarDAO implements ICalendarDAO
         daoUtil.free( );
     }
 
-    public void updateFeature( Plugin plugin, SimpleEvent event )
+    /**
+     * Update feature
+     * @param plugin the plugin
+     * @param event the event
+     */
+    private void updateFeature( Plugin plugin, SimpleEvent event )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_FEATURE, plugin );
         daoUtil.setString( 1, event.getDescription( ) );
@@ -1056,7 +1068,12 @@ public class CalendarDAO implements ICalendarDAO
         daoUtil.free( );
     }
 
-    public void deleteFeature( Plugin plugin, int nEventId )
+    /**
+     * Delete feature
+     * @param plugin the plugin
+     * @param nEventId the event id
+     */
+    private void deleteFeature( Plugin plugin, int nEventId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_FEATURE, plugin );
         daoUtil.setInt( 1, nEventId );
@@ -1064,7 +1081,13 @@ public class CalendarDAO implements ICalendarDAO
         daoUtil.free( );
     }
 
-    public void getFeature( Plugin plugin, int nIdEvent, SimpleEvent event )
+    /**
+     * Get a feature
+     * @param plugin the plugin
+     * @param nIdEvent the event id
+     * @param event the event
+     */
+    private void getFeature( Plugin plugin, int nIdEvent, SimpleEvent event )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_FEATURE, plugin );
         daoUtil.setInt( 1, nIdEvent );
@@ -1124,7 +1147,12 @@ public class CalendarDAO implements ICalendarDAO
         }
     }
 
-    public void deleteLinkCategories( Plugin plugin, int nEventId )
+    /**
+     * Delete link category
+     * @param plugin the plugin
+     * @param nEventId the event id
+     */
+    private void deleteLinkCategories( Plugin plugin, int nEventId )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_LINK_CATEGORY_CALENDAR, plugin );
         daoUtil.setInt( 1, nEventId );

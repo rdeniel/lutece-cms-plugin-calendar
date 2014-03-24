@@ -56,7 +56,7 @@ import java.util.List;
  * This classe provide services for Category
  * 
  */
-public class CategoryService implements ImageResourceProvider
+public final class CategoryService implements ImageResourceProvider
 {
     private static CategoryService _singleton;
     private static final String IMAGE_RESOURCE_TYPE_ID = "icon_category";

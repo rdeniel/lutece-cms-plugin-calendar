@@ -33,13 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -51,6 +44,13 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * This class provides a calendar view by Day.
@@ -61,46 +61,51 @@ public class DayCalendarView implements CalendarView
     private static final String TEMPLATE_VIEW_DAY_EVENT = "skin/plugins/calendar/calendar_view_day_event.html";
 
     /**
-     * Returns the HTML view of the Month corresponding to the given date and displaying
+     * Returns the HTML view of the Month corresponding to the given date and
+     * displaying
      * events of a given agenda
      * @return The view in HTML
      * @param options The options
      * @param strDate The date code
      * @param agenda An agenda
+     * @param request the request
      */
-    public String getCalendarView( String strDate, MultiAgenda agenda, CalendarUserOptions options, HttpServletRequest request )
+    public String getCalendarView( String strDate, MultiAgenda agenda, CalendarUserOptions options,
+            HttpServletRequest request )
     {
-        Map<String, Object> dayModel = new HashMap<String, Object>(  );
-        StringBuffer sbEvents = new StringBuffer(  );
+        Map<String, Object> dayModel = new HashMap<String, Object>( );
+        StringBuffer sbEvents = new StringBuffer( );
 
         if ( agenda.hasEvents( strDate ) )
         {
             Date date = Utils.getDate( strDate );
             Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
-            List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
-            	.getSearchResults( agenda.getAgendaIds(  ), null, "", date, date, request, plugin );
-            
+            List<Event> listIndexedEvents = CalendarSearchService.getInstance( ).getSearchResults(
+                    agenda.getAgendaIds( ), null, "", date, date, request, plugin );
+
             for ( Event event : listIndexedEvents )
             {
-            	MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar(  ) ) );
-            	Map<String, Object> eventModel = new HashMap<String, Object>(  );
+                MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event,
+                        String.valueOf( event.getIdCalendar( ) ) );
+                Map<String, Object> eventModel = new HashMap<String, Object>( );
                 HtmlUtils.fillEventTemplate( eventModel, multiAgendaEvent, strDate );
 
-                HtmlTemplate tEvent = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY_EVENT, options.getLocale(  ),
+                HtmlTemplate tEvent = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY_EVENT, options.getLocale( ),
                         eventModel );
-                sbEvents.append( tEvent.getHtml(  ) );
+                sbEvents.append( tEvent.getHtml( ) );
             }
         }
 
-        dayModel.put( Constants.MARK_EVENTS, sbEvents.toString(  ) );
+        dayModel.put( Constants.MARK_EVENTS, sbEvents.toString( ) );
 
-        HtmlTemplate tDay = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY, options.getLocale(  ), dayModel );
+        HtmlTemplate tDay = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY, options.getLocale( ), dayModel );
 
-        return tDay.getHtml(  );
+        return tDay.getHtml( );
     }
 
     /**
-     * Returns the next code date corresponding to the current view and the current date
+     * Returns the next code date corresponding to the current view and the
+     * current date
      * @param strDate The current date code
      * @return The next code date
      */
@@ -110,7 +115,8 @@ public class DayCalendarView implements CalendarView
     }
 
     /**
-     * Returns the previous code date corresponding to the current view and the current date
+     * Returns the previous code date corresponding to the current view and the
+     * current date
      * @param strDate The current date code
      * @return The previous code date
      */
@@ -127,7 +133,7 @@ public class DayCalendarView implements CalendarView
      */
     public String getTitle( String strDate, CalendarUserOptions options )
     {
-        return Utils.getDayLabel( strDate, options.getLocale(  ) );
+        return Utils.getDayLabel( strDate, options.getLocale( ) );
     }
 
     /**
@@ -145,7 +151,7 @@ public class DayCalendarView implements CalendarView
      * Returns the view type
      * @return The view type
      */
-    public int getType(  )
+    public int getType( )
     {
         return CalendarView.TYPE_DAY;
     }

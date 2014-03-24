@@ -35,18 +35,16 @@ package fr.paris.lutece.plugins.calendar.modules.ical;
 
 import fr.paris.lutece.plugins.calendar.business.Agenda;
 import fr.paris.lutece.plugins.calendar.service.AgendaLoader;
-
-//import fr.paris.lutece.plugins.icalreader.*;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
-
-import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.data.ParserException;
-import net.fortuna.ical4j.model.Calendar;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import net.fortuna.ical4j.data.CalendarBuilder;
+import net.fortuna.ical4j.data.ParserException;
+import net.fortuna.ical4j.model.Calendar;
 
 
 /**
@@ -63,29 +61,39 @@ public class ICalAgendaLoader implements AgendaLoader
     public Agenda load( String strParameter )
     {
         Agenda agenda = null;
-        String strFile = AppPathService.getWebAppPath(  ) + strParameter;
-
+        String strFile = AppPathService.getWebAppPath( ) + strParameter;
+        FileInputStream fis = null;
         try
         {
-            FileInputStream fis = new FileInputStream( strFile );
-            CalendarBuilder builder = new CalendarBuilder(  );
+            fis = new FileInputStream( strFile );
+            CalendarBuilder builder = new CalendarBuilder( );
             Calendar calendar = builder.build( fis );
-            ICalAgenda a = new ICalAgenda(  );
+            ICalAgenda a = new ICalAgenda( );
             a.setEvents( calendar );
             agenda = a;
-            fis.close(  );
         }
         catch ( ParserException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
         catch ( FileNotFoundException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
         catch ( IOException e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
+        }
+        finally
+        {
+            try
+            {
+                fis.close( );
+            }
+            catch ( IOException e )
+            {
+                AppLogService.error( e.getMessage( ), e );
+            }
         }
 
         return agenda;

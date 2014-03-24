@@ -92,7 +92,7 @@ public class MiniCalendarPortlet extends Portlet
     private static final String PARAM_PAGE_ID = "page_id";
 
     //Session variable
-    private static Calendar _cal = null;
+    private static Calendar _cal;
 
     /**
      * Sets the name of the plugin associated with this portlet.

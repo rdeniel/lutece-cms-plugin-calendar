@@ -71,7 +71,6 @@ public interface ICalendarStyleSheetDAO
 
     /**
      * Load the list of stylesheet
-     * @param nModeId The Mode identifier
      * @param plugin Plugin
      * @return the list of the StyleSheet in form of a collection of StyleSheet
      *         objects

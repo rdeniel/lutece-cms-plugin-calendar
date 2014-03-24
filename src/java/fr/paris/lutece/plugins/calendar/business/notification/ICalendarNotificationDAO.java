@@ -54,7 +54,7 @@ public interface ICalendarNotificationDAO
 
     /**
      * Update object CalendarNotification
-     * @param calendarNotification
+     * @param calendarNotification the calendar notification
      * @param plugin the plugin
      */
     void store( CalendarNotification calendarNotification, Plugin plugin );

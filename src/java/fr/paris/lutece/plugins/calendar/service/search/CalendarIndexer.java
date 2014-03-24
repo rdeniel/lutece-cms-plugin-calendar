@@ -110,7 +110,7 @@ public class CalendarIndexer implements SearchIndexer
 
             String strAgenda = agenda.getId( );
 
-            for ( Object oEvent : agenda.getAgenda( ).getEvents( ) )
+            for ( Event oEvent : agenda.getAgenda( ).getEvents( ) )
             {
                 indexSubject( oEvent, sRoleKey, strAgenda );
             }
@@ -119,11 +119,13 @@ public class CalendarIndexer implements SearchIndexer
 
     /**
      * Recursive method for indexing a calendar event
-     * 
+     * @param oEvent the event
+     * @param sRoleKey the role key
+     * @param strAgenda the agenda
      * @throws IOException I/O Exception
      * @throws InterruptedException interruptedException
      */
-    public void indexSubject( Object oEvent, String sRoleKey, String strAgenda ) throws IOException,
+    public void indexSubject( Event oEvent, String sRoleKey, String strAgenda ) throws IOException,
             InterruptedException
     {
         OccurrenceEvent occurrence = (OccurrenceEvent) oEvent;
@@ -284,23 +286,16 @@ public class CalendarIndexer implements SearchIndexer
 
         // Add the description as a summary field, so that index can be incrementally maintained.
         // This field is stored, but it is not indexed
-        String strDescription = occurrence.getDescription( );
-        strDescription = Utils.ParseHtmlToPlainTextString( strDescription );
+        int length = AppPropertiesService.getPropertyInt( PROPERTY_DESCRIPTION_MAX_CHARACTERS, 200 );
+        String strDescription = Utils.parseHtmlToPlainTextString( occurrence.getDescription( ) );
 
-        try
+        if ( strDescription.length( ) > length )
         {
-            strDescription = strDescription.substring( 0,
-                    AppPropertiesService.getPropertyInt( PROPERTY_DESCRIPTION_MAX_CHARACTERS, 200 ) )
-                    + PROPERTY_DESCRIPTION_ETC;
-        }
-        catch ( StringIndexOutOfBoundsException e )
-        {
-        }
-        catch ( NullPointerException e )
-        {
+            strDescription = strDescription.substring( 0, length ) + PROPERTY_DESCRIPTION_ETC;
         }
 
         doc.add( new Field( SearchItem.FIELD_SUMMARY, strDescription, TextField.TYPE_STORED ) );
+        doc.add( new Field( CalendarSearchItem.FIELD_HTML_SUMMARY, occurrence.getDescription( ), TextField.TYPE_STORED ) );
 
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.

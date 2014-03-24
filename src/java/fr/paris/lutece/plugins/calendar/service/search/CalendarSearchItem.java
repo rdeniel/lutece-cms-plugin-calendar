@@ -31,62 +31,46 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.calendar.business;
+package fr.paris.lutece.plugins.calendar.service.search;
+
+import fr.paris.lutece.portal.service.search.SearchItem;
+
+import org.apache.lucene.document.Document;
+
 
 /**
- * Occurence event
+ * Custom search item class for calendar
+ * 
  */
-public class OccurrenceEvent extends SimpleEvent
+public class CalendarSearchItem extends SearchItem
 {
-    private static final long serialVersionUID = 4979315059166094219L;
-    private int _nEventId;
+    public static final String FIELD_HTML_SUMMARY = "html_summary";
 
-    /**
-     * Default constructor
-     */
-    public OccurrenceEvent( )
-    {
-    }
+    private String _strHtmlSummary;
 
     /**
      * Constructor
-     * @param event The event
-     * @param nOccurrenceId The id of an occurrence
+     * @param document the document to create
      */
-    public OccurrenceEvent( SimpleEvent event, int nOccurrenceId )
+    public CalendarSearchItem( Document document )
     {
-        setDate( event.getDate( ) );
-        setEventClass( event.getEventClass( ) );
-        setTitle( event.getTitle( ) );
-        setDescription( event.getDescription( ) );
-        setDateTimeStart( event.getDateTimeStart( ) );
-        setDateTimeEnd( event.getDateTimeEnd( ) );
-        setStatus( event.getStatus( ) );
-        setPriority( event.getPriority( ) );
-        setUrl( event.getUrl( ) );
-        setLocation( event.getLocation( ) );
-        setId( nOccurrenceId );
-        setEventId( event.getId( ) );
-        setListCategories( event.getListCategories( ) );
+        super( document );
+        this._strHtmlSummary = document.get( FIELD_HTML_SUMMARY );
     }
 
     /**
-     * Returns the id of the event
-     * 
-     * @return The id
+     * @return the _strFullSummary
      */
-    public int getEventId( )
+    public String getHtmlSummary( )
     {
-        return _nEventId;
+        return this._strHtmlSummary;
     }
 
     /**
-     * Sets the id of the event
-     * 
-     * @param eventId The id of the event
+     * @param strHtmlSummary the strHtmlSummary to set
      */
-    public void setEventId( int eventId )
+    public void setHtmlSummary( String strHtmlSummary )
     {
-        _nEventId = eventId;
+        this._strHtmlSummary = strHtmlSummary;
     }
 }

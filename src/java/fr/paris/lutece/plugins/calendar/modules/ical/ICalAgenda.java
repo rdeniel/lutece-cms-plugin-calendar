@@ -37,6 +37,7 @@ import fr.paris.lutece.plugins.calendar.business.Agenda;
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.plugins.calendar.web.Constants;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import java.util.ArrayList;
@@ -175,7 +176,7 @@ public class ICalAgenda implements Agenda
         {
             if ( bTrace )
             {
-                System.out.println( "Component [" + component.getName( ) + "]" );
+                AppLogService.info( "Component [" + component.getName( ) + "]" );
             }
 
             if ( component.getName( ).equals( Component.VEVENT ) )
@@ -228,7 +229,7 @@ public class ICalAgenda implements Agenda
 
                     if ( bTrace )
                     {
-                        System.out.println( "Property [" + property.getName( ) + ", " + property.getValue( ) + "]" );
+                        AppLogService.info( "Property [" + property.getName( ) + ", " + property.getValue( ) + "]" );
                     }
                 }
 

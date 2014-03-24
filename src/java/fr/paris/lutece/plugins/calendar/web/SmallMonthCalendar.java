@@ -62,13 +62,20 @@ import java.util.Map;
 /**
  * This class provides a Small Html Month calendar.
  */
-public class SmallMonthCalendar
+public final class SmallMonthCalendar
 {
     // Templates
     private static final String TEMPLATE_VIEW_MONTH = "skin/plugins/calendar/small_month_calendar.html";
     private static final String TEMPLATE_WEEK = "skin/plugins/calendar/small_month_calendar_week.html";
     private static final String TEMPLATE_DAY = "skin/plugins/calendar/small_month_calendar_day.html";
     private static final String TEMPLATE_EMPTY_DAY = "skin/plugins/calendar/small_month_calendar_empty_day.html";
+
+    /**
+     * Default constructor
+     */
+    private SmallMonthCalendar( )
+    {
+    }
 
     /**
      * Provides a small HTML month calendar displaying days with links

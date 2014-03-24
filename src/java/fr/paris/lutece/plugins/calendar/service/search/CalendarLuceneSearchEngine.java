@@ -37,7 +37,6 @@ import fr.paris.lutece.plugins.calendar.service.Utils;
 import fr.paris.lutece.plugins.calendar.web.Constants;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.SearchItem;
-import fr.paris.lutece.portal.service.search.SearchResult;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
@@ -89,14 +88,14 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
      * @param request The {@link HttpServletRequest}
      * @return Results as a collection of SearchResult
      */
-    public List<SearchResult> getSearchResults( String[] arrayAgendaIds, String[] arrayCategory, String strContent,
-            Date dateBegin, Date dateEnd, HttpServletRequest request )
+    public List<CalendarSearchResult> getSearchResults( String[] arrayAgendaIds, String[] arrayCategory,
+            String strContent, Date dateBegin, Date dateEnd, HttpServletRequest request )
     {
-        ArrayList<SearchItem> listResults = new ArrayList<SearchItem>( );
+        ArrayList<CalendarSearchItem> listResults = new ArrayList<CalendarSearchItem>( );
 
         if ( arrayAgendaIds == null || arrayAgendaIds.length == 0 )
         {
-            return new ArrayList<SearchResult>( );
+            return new ArrayList<CalendarSearchResult>( );
         }
         IndexSearcher searcher = null;
 
@@ -230,7 +229,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             {
                 ScoreDoc hit = hits.scoreDocs[i];
                 Document document = searcher.doc( hit.doc );
-                SearchItem si = new SearchItem( document );
+                CalendarSearchItem si = new CalendarSearchItem( document );
                 listResults.add( si );
             }
 
@@ -250,7 +249,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             {
                 ScoreDoc hit = hitsTitle.scoreDocs[i];
                 Document document = searcher.doc( hit.doc );
-                SearchItem si = new SearchItem( document );
+                CalendarSearchItem si = new CalendarSearchItem( document );
                 listResults.add( si );
             }
         }
@@ -263,76 +262,17 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
     }
 
     /**
-     * Generate the Lutece role filter if necessary
-     * @param request The {@link HttpServletRequest}
-     * @return The {@link Filter} by Lutece Role
-     */
-    /*
-     * private Filter getFilterRoles( HttpServletRequest request )
-     * {
-     * Filter filterRole = null;
-     * boolean bFilterResult = false;
-     * LuteceUser user = null;
-     * 
-     * if ( SecurityService.isAuthenticationEnable( ) )
-     * {
-     * user = SecurityService.getInstance( ).getRegisteredUser( request );
-     * 
-     * Filter[] filtersRole = null;
-     * 
-     * if ( user != null )
-     * {
-     * String[] userRoles = SecurityService.getInstance( ).getRolesByUser( user
-     * );
-     * 
-     * if ( userRoles != null )
-     * {
-     * filtersRole = new Filter[userRoles.length + 1];
-     * 
-     * for ( int i = 0; i < userRoles.length; i++ )
-     * {
-     * Query queryRole = new TermQuery( new Term( SearchItem.FIELD_ROLE,
-     * userRoles[i] ) );
-     * filtersRole[i] = new CachingWrapperFilter( new QueryWrapperFilter(
-     * queryRole ) );
-     * }
-     * }
-     * else
-     * {
-     * bFilterResult = true;
-     * }
-     * }
-     * else
-     * {
-     * filtersRole = new Filter[1];
-     * }
-     * 
-     * if ( !bFilterResult )
-     * {
-     * Query queryRole = new TermQuery( new Term( SearchItem.FIELD_ROLE,
-     * Page.ROLE_NONE ) );
-     * filtersRole[filtersRole.length - 1] = new CachingWrapperFilter( new
-     * QueryWrapperFilter( queryRole ) );
-     * filterRole = new ChainedFilter( filtersRole, ChainedFilter.OR );
-     * }
-     * }
-     * 
-     * return filterRole;
-     * }
-     */
-
-    /**
      * Convert the SearchItem list on SearchResult list
      * @param listSource The source list
      * @return The result list
      */
-    private List<SearchResult> convertList( List<SearchItem> listSource )
+    private List<CalendarSearchResult> convertList( List<CalendarSearchItem> listSource )
     {
-        List<SearchResult> listDest = new ArrayList<SearchResult>( );
+        List<CalendarSearchResult> listDest = new ArrayList<CalendarSearchResult>( );
 
-        for ( SearchItem item : listSource )
+        for ( CalendarSearchItem item : listSource )
         {
-            SearchResult result = new SearchResult( );
+            CalendarSearchResult result = new CalendarSearchResult( );
             result.setId( item.getId( ) );
 
             try
@@ -349,6 +289,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             result.setTitle( item.getTitle( ) );
             result.setSummary( item.getSummary( ) );
             result.setType( item.getType( ) );
+            result.setHtmlSummary( item.getHtmlSummary( ) );
             listDest.add( result );
         }
 

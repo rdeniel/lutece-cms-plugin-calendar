@@ -183,6 +183,7 @@ public class MultiAgenda implements Agenda
      * Fetches the events present between two dates
      * @param dateBegin The start date
      * @param dateEnd The end date
+     * @param localeEnv the locale
      * @return The events
      */
     public List<Event> getEventsByDate( Date dateBegin, Date dateEnd, Locale localeEnv )

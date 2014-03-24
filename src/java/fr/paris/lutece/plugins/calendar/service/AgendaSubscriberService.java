@@ -73,7 +73,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * The class responsible for the subscription and unsubscription process
  */
-public class AgendaSubscriberService
+public final class AgendaSubscriberService
 {
     public static final String JSP_URL_DO_UNSUBSCRIBE = "/jsp/site/plugins/calendar/DoUnsubscribeCalendar.jsp";
 

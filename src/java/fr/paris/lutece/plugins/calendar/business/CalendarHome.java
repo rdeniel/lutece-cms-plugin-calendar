@@ -48,10 +48,17 @@ import java.util.List;
  * findByPrimaryKey, findAgendasList ...) for
  * Calendar objects ( AgendaResource, Events, ...)
  */
-public class CalendarHome
+public final class CalendarHome
 {
     // Static variable pointed at the DAO instance
     private static ICalendarDAO _dao = SpringContextService.getBean( "calendar.calendarDAO" );
+
+    /**
+     * Create a new CalendarHome
+     */
+    private CalendarHome( )
+    {
+    }
 
     /**
      * Insert a new agenda in the table calendar_agendas.
@@ -123,10 +130,8 @@ public class CalendarHome
     /**
      * Update the event in the table calendar_event
      * @param event The reference of SimpleEvent
-     * @param strDate the old event date
+     * @param bPeriodiciteUpdated true if periodicite, false otherwise
      * @param plugin The Plugin using this data access service
-     * @throws fr.paris.lutece.portal.service.util.AppException Exception thrown
-     *             if an error is detected
      */
     public static void updateEvent( SimpleEvent event, boolean bPeriodiciteUpdated, Plugin plugin )
     {
@@ -135,8 +140,7 @@ public class CalendarHome
 
     /**
      * Delete an Event from the table calendar_events
-     * @param strDate The date
-     * @param strTitle The title
+     * @param nEventId The event id
      * @param nAgendaId The agenda Id
      * @param plugin The Plugin using this data access service
      */

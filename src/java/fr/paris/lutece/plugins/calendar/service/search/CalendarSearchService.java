@@ -41,7 +41,6 @@ import fr.paris.lutece.plugins.calendar.service.EventComparator;
 import fr.paris.lutece.plugins.calendar.service.EventImageResourceService;
 import fr.paris.lutece.plugins.calendar.web.Constants;
 import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.search.SearchResult;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
@@ -100,10 +99,10 @@ public class CalendarSearchService
         List<Event> listEvent = new ArrayList<Event>( );
         HashMap<String, Event> hmListEvent = new HashMap<String, Event>( );
         CalendarSearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
-        List<SearchResult> listResults = engine.getSearchResults( arrayAgendaIds, arrayCategory, strQuery, dateBegin,
-                dateEnd, request );
+        List<CalendarSearchResult> listResults = engine.getSearchResults( arrayAgendaIds, arrayCategory, strQuery,
+                dateBegin, dateEnd, request );
 
-        for ( SearchResult searchResult : listResults )
+        for ( CalendarSearchResult searchResult : listResults )
         {
             if ( ( ( searchResult.getId( ) != null ) && searchResult.getId( ).matches( REGEX_ID_EVENT ) )
                     || ( ( searchResult.getId( ) != null ) && searchResult.getId( ).matches( REGEX_ID_DOCUMENT ) ) )
@@ -121,7 +120,7 @@ public class CalendarSearchService
                     event.setType( searchResult.getType( ) );
                     event.setImageUrl( EventImageResourceService.getInstance( ).getResourceImageEvent( event.getId( ) ) );
 
-                    event.setDescription( searchResult.getSummary( ) );
+                    event.setDescription( searchResult.getHtmlSummary( ) );
 
                     //if it is not already present stroring the event to the temp list
                     if ( !hmListEvent.containsKey( Integer.toString( event.getId( ) ) ) )

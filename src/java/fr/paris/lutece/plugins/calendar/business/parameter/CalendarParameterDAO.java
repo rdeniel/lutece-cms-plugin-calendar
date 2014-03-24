@@ -56,6 +56,7 @@ public class CalendarParameterDAO implements ICalendarParameterDAO
     /**
      * Load the parameter value
      * @param strParameterKey the parameter key
+     * @param plugin the plugin
      * @return The parameter value
      */
     public ReferenceItem load( String strParameterKey, Plugin plugin )

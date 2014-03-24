@@ -52,6 +52,13 @@ public final class CalendarParameterHome
     private static ICalendarParameterDAO _dao = SpringContextService.getBean( "calendar.calendarParameterDAO" );
 
     /**
+     * Default constructor
+     */
+    private CalendarParameterHome( )
+    {
+    }
+
+    /**
      * Load the parameter value
      * @param strParameterKey the parameter key
      * @param plugin Plugin

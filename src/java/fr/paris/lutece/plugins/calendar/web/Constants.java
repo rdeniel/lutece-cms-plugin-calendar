@@ -372,4 +372,12 @@ public final class Constants
 
     // Regex
     public static final String REG_NUMBER = "^[0-9]+$";
+
+    /**
+     * Default constructor
+     */
+    private Constants( )
+    {
+
+    }
 }
