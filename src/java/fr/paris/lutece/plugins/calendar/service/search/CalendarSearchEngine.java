@@ -36,8 +36,6 @@ package fr.paris.lutece.plugins.calendar.service.search;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 
 /**
  * Interface for calendar event search engine
@@ -51,9 +49,8 @@ public interface CalendarSearchEngine
      * @param strQuery The search query
      * @param dateBegin The date begin
      * @param dateEnd The date end
-     * @param request The {@link HttpServletRequest}
      * @return Results as a collection of SearchResult
      */
     List<CalendarSearchResult> getSearchResults( String[] arrayCalendar, String[] arrayCategory, String strQuery,
-            Date dateBegin, Date dateEnd, HttpServletRequest request );
+            Date dateBegin, Date dateEnd );
 }

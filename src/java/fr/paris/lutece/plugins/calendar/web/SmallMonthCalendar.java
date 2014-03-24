@@ -45,7 +45,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.portal.web.LocalVariables;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
@@ -57,6 +56,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -202,8 +203,8 @@ public final class SmallMonthCalendar
 
         if ( agenda.hasEvents( strDate ) )
         {
-            listEvent = CalendarSearchService.getInstance( ).getSearchResults( strAgendaIds, null, "", date, date,
-                    LocalVariables.getRequest( ), plugin );
+            listEvent = CalendarSearchService.getInstance( ).getSearchResults( strAgendaIds, null, StringUtils.EMPTY,
+                    date, date, plugin );
         }
         else
         {

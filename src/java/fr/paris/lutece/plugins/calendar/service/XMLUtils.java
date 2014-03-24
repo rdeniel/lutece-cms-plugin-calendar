@@ -48,7 +48,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
-import fr.paris.lutece.portal.web.LocalVariables;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.url.UrlItem;
 import fr.paris.lutece.util.xml.XmlUtil;
@@ -537,7 +536,7 @@ public final class XMLUtils
                 String[] arrayCalendarIds = Utils.getCalendarIds( request );
 
                 List<Event> listEvent = CalendarSearchService.getInstance( ).getSearchResults( arrayCalendarIds, null,
-                        "", date, date, LocalVariables.getRequest( ), plugin );
+                        "", date, date, plugin );
                 if ( listEvent.size( ) != 0 )
                 {
                     strDay = BEGIN_TD_TAG + Constants.STYLE_CLASS_SMALLMONTH_DAY + Constants.STYLE_CLASS_SUFFIX_EVENT

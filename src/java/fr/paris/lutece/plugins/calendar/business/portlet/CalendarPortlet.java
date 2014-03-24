@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.service.AgendaResource;
 import fr.paris.lutece.plugins.calendar.service.EventImageResourceService;
@@ -58,6 +46,18 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.security.SecurityService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -82,7 +82,7 @@ public class CalendarPortlet extends Portlet
 
     /**
      * Sets the name of the plugin associated with this portlet.
-     *
+     * 
      * @param strPluginName The plugin name.
      */
     public void setPluginName( String strPluginName )
@@ -92,41 +92,41 @@ public class CalendarPortlet extends Portlet
 
     /**
      * Returns the Xml code of the Archive portlet with XML heading
-     *
+     * 
      * @param request The HTTP servlet request
      * @return the Xml code of the Archive portlet
      */
     public String getXmlDocument( HttpServletRequest request )
     {
-        return XmlUtil.getXmlHeader(  ) + getXml( request );
+        return XmlUtil.getXmlHeader( ) + getXml( request );
     }
 
     /**
      * Returns the Xml code of the Calendar portlet without XML heading
-     *
+     * 
      * @param request The HTTP servlet request
      * @return the Xml code of the Archive portlet content
      */
     public String getXml( HttpServletRequest request )
     {
-        StringBuffer strXml = new StringBuffer(  );
+        StringBuffer strXml = new StringBuffer( );
         Locale local;
         Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
 
         if ( request != null )
         {
-            local = request.getLocale(  );
+            local = request.getLocale( );
         }
         else
         {
-            local = Locale.getDefault(  );
+            local = Locale.getDefault( );
         }
 
         XmlUtil.beginElement( strXml, TAG_CALENDAR_FILTERED_LIST );
 
         // fetch all the calendars related to the specified portlet
-        List<AgendaResource> listAgendasInPortlet = CalendarPortletHome.findAgendasInPortlet( this.getId(  ) );
-        List<AgendaResource> listAuthorizedAgenda = new ArrayList<AgendaResource>(  );
+        List<AgendaResource> listAgendasInPortlet = CalendarPortletHome.findAgendasInPortlet( this.getId( ) );
+        List<AgendaResource> listAuthorizedAgenda = new ArrayList<AgendaResource>( );
 
         // Filter to find whether user is identified and authorized to view the agenda on the front office
         for ( AgendaResource agendaResource : listAgendasInPortlet )
@@ -134,14 +134,14 @@ public class CalendarPortlet extends Portlet
             if ( agendaResource != null )
             {
                 // Check security access
-                String strRole = agendaResource.getRole(  );
+                String strRole = agendaResource.getRole( );
 
-                if ( StringUtils.isNotBlank( strRole ) && ( request != null ) &&
-                        ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
+                if ( StringUtils.isNotBlank( strRole ) && ( request != null )
+                        && ( !Constants.PROPERTY_ROLE_NONE.equals( strRole ) ) )
                 {
-                    if ( SecurityService.isAuthenticationEnable(  ) )
+                    if ( SecurityService.isAuthenticationEnable( ) )
                     {
-                        if ( SecurityService.getInstance(  ).isUserInRole( request, strRole ) )
+                        if ( SecurityService.getInstance( ).isUserInRole( request, strRole ) )
                         {
                             listAuthorizedAgenda.add( agendaResource );
                         }
@@ -161,47 +161,45 @@ public class CalendarPortlet extends Portlet
             XmlUtil.beginElement( strXml, TAG_EVENTS );
 
             // ;
-            String strAgendaId = agendaResource.getAgenda(  ).getKeyName(  );
-            String strAgendaDesc = agendaResource.getAgenda(  ).getName(  );
-            
+            String strAgendaId = agendaResource.getAgenda( ).getKeyName( );
+            String strAgendaDesc = agendaResource.getAgenda( ).getName( );
+
             // Retrieve the indexed events
-            Date dateBegin = CalendarPortletHome.getBeginDate( this.getId(  ) ); 
-            Date dateEnd = CalendarPortletHome.getEndDate( this.getId(  ) );
+            Date dateBegin = CalendarPortletHome.getBeginDate( this.getId( ) );
+            Date dateEnd = CalendarPortletHome.getEndDate( this.getId( ) );
             String[] arrayAgendaIds = { strAgendaId };
-            List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
-            	.getSearchResults( arrayAgendaIds, null, StringUtils.EMPTY, dateBegin, dateEnd, request, plugin );
+            List<Event> listIndexedEvents = CalendarSearchService.getInstance( ).getSearchResults( arrayAgendaIds,
+                    null, StringUtils.EMPTY, dateBegin, dateEnd, plugin );
 
             for ( Event event : listIndexedEvents )
             {
-                if ( ( event.getTitle(  ) != null ) && !event.getTitle(  ).equals( "" ) )
+                if ( ( event.getTitle( ) != null ) && !event.getTitle( ).equals( "" ) )
                 {
                     XmlUtil.beginElement( strXml, TAG_AGENDA_EVENT );
                     XmlUtil.addElement( strXml, TAG_AGENDA_ID, strAgendaId );
-                    XmlUtil.addElement( strXml, TAG_EVENT_ID, event.getId(  ) );
+                    XmlUtil.addElement( strXml, TAG_EVENT_ID, event.getId( ) );
                     XmlUtil.addElement( strXml, TAG_AGENDA_NAME, strAgendaDesc );
-                    XmlUtil.addElement( strXml, TAG_AGENDA_EVENT_TITLE, event.getTitle(  ) );
+                    XmlUtil.addElement( strXml, TAG_AGENDA_EVENT_TITLE, event.getTitle( ) );
                     XmlUtil.addElement( strXml, TAG_AGENDA_EVENT_TOP_EVENT, event.getTopEvent( ) );
-                    XmlUtil.addElement( strXml, TAG_AGENDA_EVENT_DATE,
-                        DateUtil.getDateString( event.getDate(  ), local ) );
+                    XmlUtil.addElement( strXml, TAG_AGENDA_EVENT_DATE, DateUtil.getDateString( event.getDate( ), local ) );
                     XmlUtil.addElement( strXml, TAG_EVENT_MONTH,
-                        new SimpleDateFormat( "MMMM" ).format( event.getDate(  ) ) );
-                    XmlUtil.addElement( strXml, TAG_EVENT_IMAGE,
-                        ( EventImageResourceService.getInstance(  ).getResourceImageEvent( event.getId(  ) ) ).replaceAll( 
-                            "&", "&amp;" ) );
-                    XmlUtil.addElementHtml( strXml, TAG_EVENT_DESCRIPTION, event.getDescription(  ) );
+                            new SimpleDateFormat( "MMMM" ).format( event.getDate( ) ) );
+                    XmlUtil.addElement( strXml, TAG_EVENT_IMAGE, ( EventImageResourceService.getInstance( )
+                            .getResourceImageEvent( event.getId( ) ) ).replaceAll( "&", "&amp;" ) );
+                    XmlUtil.addElementHtml( strXml, TAG_EVENT_DESCRIPTION, event.getDescription( ) );
 
-                    Calendar calendar = new GregorianCalendar(  );
-                    calendar.setTime( event.getDate(  ) );
+                    Calendar calendar = new GregorianCalendar( );
+                    calendar.setTime( event.getDate( ) );
 
                     //String strFormat = AppPropertiesService.getProperty( Constants.PROPERTY_LABEL_FORMAT_DATE_OF_DAY );
 
                     //DateFormat formatDate = new SimpleDateFormat( strFormat,
                     //        ( request == null ) ? Locale.getDefault(  ) : request.getLocale(  ) );	                    
-                    String strLocalizedDate = DateUtil.getDateString( event.getDate(  ), local );
+                    String strLocalizedDate = DateUtil.getDateString( event.getDate( ), local );
 
-                    if ( !Utils.getDate( event.getDate(  ) ).equals( Utils.getDate( event.getDateEnd(  ) ) ) )
+                    if ( !Utils.getDate( event.getDate( ) ).equals( Utils.getDate( event.getDateEnd( ) ) ) )
                     {
-                        strLocalizedDate += ( " - " + DateUtil.getDateString( event.getDateEnd(  ), local ) );
+                        strLocalizedDate += ( " - " + DateUtil.getDateString( event.getDateEnd( ), local ) );
                     }
 
                     XmlUtil.addElement( strXml, TAG_EVENT_DATE_LOCAL, strLocalizedDate );
@@ -215,7 +213,7 @@ public class CalendarPortlet extends Portlet
         XmlUtil.endElement( strXml, TAG_CALENDAR_FILTERED_LIST );
 
         //Load the xml calendar	    	
-        strXml.append( XMLUtils.getXMLPortletCalendar( local, new GregorianCalendar(  ), request ) );
+        strXml.append( XMLUtils.getXMLPortletCalendar( local, new GregorianCalendar( ), request ) );
 
         String str = addPortletTags( strXml );
 
@@ -225,16 +223,16 @@ public class CalendarPortlet extends Portlet
     /**
      * Updates the current instance of the CalendarPortlet object
      */
-    public void update(  )
+    public void update( )
     {
-        CalendarPortletHome.getInstance(  ).update( this );
+        CalendarPortletHome.getInstance( ).update( this );
     }
 
     /**
      * Removes the current instance of the CalendarPortlet object
      */
-    public void remove(  )
+    public void remove( )
     {
-        CalendarPortletHome.getInstance(  ).remove( this );
+        CalendarPortletHome.getInstance( ).remove( this );
     }
 }

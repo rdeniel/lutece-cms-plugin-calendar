@@ -46,8 +46,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -73,7 +72,6 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
 {
     private static final String OPEN_PARENTHESIS = "(";
     private static final String SPACE = " ";
-    private static final String EMPTY_STRING = "";
     private static final String CLOSE_PARENTHESIS = ")";
     private static final String OR = "OR";
     private static final String PROPERTY_RESULTS_LIMIT = "calendar.indexer.results.limit";
@@ -85,11 +83,10 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
      * @param strContent The search query
      * @param dateBegin The date begin
      * @param dateEnd The date end
-     * @param request The {@link HttpServletRequest}
      * @return Results as a collection of SearchResult
      */
     public List<CalendarSearchResult> getSearchResults( String[] arrayAgendaIds, String[] arrayCategory,
-            String strContent, Date dateBegin, Date dateEnd, HttpServletRequest request )
+            String strContent, Date dateBegin, Date dateEnd )
     {
         ArrayList<CalendarSearchItem> listResults = new ArrayList<CalendarSearchItem>( );
 
@@ -181,12 +178,17 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             flagsForSearchInTitle.add( BooleanClause.Occur.MUST );
 
             //Content
-            if ( ( strContent != null ) && !strContent.equals( EMPTY_STRING ) )
+            if ( StringUtils.isNotBlank( strContent ) )
             {
                 Query queryContent = new TermQuery( new Term( SearchItem.FIELD_CONTENTS, strContent ) );
                 queriesForSearchInTitle.add( queryContent.toString( ) );
                 fieldsForSearchInContent.add( SearchItem.FIELD_CONTENTS );
                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
+
+                Query queryTitle = new TermQuery( new Term( SearchItem.FIELD_TITLE, strContent ) );
+                queriesForSearchInContent.add( queryTitle.toString( ) );
+                fieldsForSearchInTitle.add( SearchItem.FIELD_TITLE );
+                flagsForSearchInTitle.add( BooleanClause.Occur.MUST );
             }
 
             //Dates
@@ -200,15 +202,6 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
                 fieldsForSearchInContent.add( SearchItem.FIELD_DATE );
                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
                 fieldsForSearchInTitle.add( SearchItem.FIELD_DATE );
-                flagsForSearchInTitle.add( BooleanClause.Occur.MUST );
-            }
-
-            //Titre
-            if ( ( strContent != null ) && !strContent.equals( EMPTY_STRING ) )
-            {
-                Query queryTitle = new TermQuery( new Term( SearchItem.FIELD_TITLE, strContent ) );
-                queriesForSearchInContent.add( queryTitle.toString( ) );
-                fieldsForSearchInTitle.add( SearchItem.FIELD_TITLE );
                 flagsForSearchInTitle.add( BooleanClause.Occur.MUST );
             }
 

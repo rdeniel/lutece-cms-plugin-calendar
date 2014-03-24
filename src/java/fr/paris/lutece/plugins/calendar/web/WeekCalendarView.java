@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -54,6 +45,15 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * This class provides a calendar view by Month.
@@ -65,7 +65,8 @@ public class WeekCalendarView implements CalendarView
     private static final String TEMPLATE_VIEW_DAY_EVENT = "skin/plugins/calendar/calendar_view_week_event.html";
 
     /**
-     * Returns the HTML view of the Month corresponding to the given date and displaying
+     * Returns the HTML view of the Month corresponding to the given date and
+     * displaying
      * events of a given agenda
      * @return The view in HTML
      * @param options The options storing the display settings
@@ -73,11 +74,12 @@ public class WeekCalendarView implements CalendarView
      * @param agenda An agenda
      * @param request HttpServletRequest
      */
-    public String getCalendarView( String strDate, MultiAgenda agenda, CalendarUserOptions options, HttpServletRequest request )
+    public String getCalendarView( String strDate, MultiAgenda agenda, CalendarUserOptions options,
+            HttpServletRequest request )
     {
-        Locale locale = options.getLocale(  );
+        Locale locale = options.getLocale( );
         Calendar calendar = Utils.getFirstDayOfWeek( strDate ); //Fetch the date of the first Monday
-        StringBuffer sbDays = new StringBuffer(  );
+        StringBuffer sbDays = new StringBuffer( );
 
         for ( int i = 0; i < 7; i++ )
         {
@@ -85,12 +87,12 @@ public class WeekCalendarView implements CalendarView
             calendar.roll( Calendar.DAY_OF_WEEK, true );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( Constants.MARK_DAYS, sbDays.toString(  ) );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( Constants.MARK_DAYS, sbDays.toString( ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_WEEK, options.getLocale(  ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_VIEW_WEEK, options.getLocale( ), model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -103,41 +105,42 @@ public class WeekCalendarView implements CalendarView
      */
     private String getDay( Calendar calendar, MultiAgenda agenda, Locale locale, HttpServletRequest request )
     {
-        StringBuffer sbEvents = new StringBuffer(  );
+        StringBuffer sbEvents = new StringBuffer( );
         String strDate = Utils.getDate( calendar );
 
         if ( agenda.hasEvents( strDate ) )
         {
             Date date = Utils.getDate( Utils.getDate( calendar ) );
             Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
-            List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
-            	.getSearchResults( agenda.getAgendaIds(  ), null, "", date, date, request, plugin );
-            
+            List<Event> listIndexedEvents = CalendarSearchService.getInstance( ).getSearchResults(
+                    agenda.getAgendaIds( ), null, "", date, date, plugin );
+
             for ( Event event : listIndexedEvents )
             {
-            	MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar(  ) ) );
-            	HashMap<String, Object> eventModel = new HashMap<String, Object>(  );
+                MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event,
+                        String.valueOf( event.getIdCalendar( ) ) );
+                HashMap<String, Object> eventModel = new HashMap<String, Object>( );
                 HtmlUtils.fillEventTemplate( eventModel, multiAgendaEvent, strDate );
                 eventModel.put( Constants.MARK_JSP_URL,
-                    AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );
+                        AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );
 
                 HtmlTemplate tEvent = AppTemplateService.getTemplate( TEMPLATE_VIEW_DAY_EVENT, locale, eventModel );
-                sbEvents.append( tEvent.getHtml(  ) );
+                sbEvents.append( tEvent.getHtml( ) );
             }
         }
 
         String strDayOfMonth = Utils.getWeekDayLabel( Utils.getDate( calendar ), locale );
         String strDateLink = Utils.getDate( calendar );
-        HashMap<String, Object> dayModel = new HashMap<String, Object>(  );
+        HashMap<String, Object> dayModel = new HashMap<String, Object>( );
         dayModel.put( Constants.MARK_DAY_CLASS, getDayClass( calendar ) );
         dayModel.put( Constants.MARK_DAY, strDayOfMonth );
         dayModel.put( Constants.MARK_DAY_LINK, strDateLink );
-        dayModel.put( Constants.MARK_EVENTS, sbEvents.toString(  ) );
+        dayModel.put( Constants.MARK_EVENTS, sbEvents.toString( ) );
         dayModel.put( Constants.MARK_JSP_URL, AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );
 
         HtmlTemplate tDay = AppTemplateService.getTemplate( TEMPLATE_VIEW_WEEK_DAY, locale, dayModel );
 
-        return tDay.getHtml(  );
+        return tDay.getHtml( );
     }
 
     /**
@@ -149,7 +152,7 @@ public class WeekCalendarView implements CalendarView
     {
         String strClass = Constants.STYLE_CLASS_VIEW_MONTH_DAY;
         String strDate = Utils.getDate( calendar );
-        String strToday = Utils.getDateToday(  );
+        String strToday = Utils.getDateToday( );
 
         if ( Utils.isDayOff( calendar ) )
         {
@@ -168,7 +171,8 @@ public class WeekCalendarView implements CalendarView
     }
 
     /**
-     * Returns the next code date corresponding to the current view and the current date
+     * Returns the next code date corresponding to the current view and the
+     * current date
      * @param strDate The current date code
      * @return The next code date
      */
@@ -178,7 +182,8 @@ public class WeekCalendarView implements CalendarView
     }
 
     /**
-     * Returns the previous code date corresponding to the current view and the current date
+     * Returns the previous code date corresponding to the current view and the
+     * current date
      * @param strDate The current date code
      * @return The previous code date
      */
@@ -195,7 +200,7 @@ public class WeekCalendarView implements CalendarView
      */
     public String getTitle( String strDate, CalendarUserOptions options )
     {
-        String strTitle = Utils.getWeekLabel( strDate, Locale.getDefault(  ) );
+        String strTitle = Utils.getWeekLabel( strDate, Locale.getDefault( ) );
 
         return strTitle;
     }
@@ -215,7 +220,7 @@ public class WeekCalendarView implements CalendarView
      * Returns the view type
      * @return The view type
      */
-    public int getType(  )
+    public int getType( )
     {
         return CalendarView.TYPE_WEEK;
     }

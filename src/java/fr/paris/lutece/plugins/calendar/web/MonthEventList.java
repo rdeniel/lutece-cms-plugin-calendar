@@ -109,7 +109,7 @@ public class MonthEventList implements EventList
         Date date = Utils.getDate( strDate );
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
         List<Event> listIndexedEvents = CalendarSearchService.getInstance( ).getSearchResults( agenda.getAgendaIds( ),
-                null, Constants.EMPTY_STRING, date, date, request, plugin );
+                null, Constants.EMPTY_STRING, date, date, plugin );
         boolean bHasIndexedEvent = false;
 
         for ( Event event : listIndexedEvents )

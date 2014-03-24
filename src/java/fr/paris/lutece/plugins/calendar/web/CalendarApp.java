@@ -702,6 +702,10 @@ public class CalendarApp implements XPageApplication
         switch ( Integer.parseInt( strPeriod ) )
         {
         case Constants.PROPERTY_PERIOD_NONE:
+            dateBegin = new Date( );
+            dateEnd = new Date( );
+            strDateBegin = DateUtil.getDateString( new Date( ), request.getLocale( ) );
+            strDateEnd = DateUtil.getDateString( new Date( ), request.getLocale( ) );
             break;
 
         case Constants.PROPERTY_PERIOD_TODAY:
@@ -758,7 +762,7 @@ public class CalendarApp implements XPageApplication
         }
 
         listEvent = CalendarSearchService.getInstance( ).getSearchResults( arrayCalendar, arrayCategory, strQuery,
-                dateBegin, dateEnd, request, plugin );
+                dateBegin, dateEnd, plugin );
 
         _strCurrentPageIndex = Paginator.getPageIndex( request, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex );
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,

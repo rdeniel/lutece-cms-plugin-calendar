@@ -51,8 +51,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 
 /**
  * DocumentSearchService
@@ -89,18 +87,17 @@ public class CalendarSearchService
      * @param strQuery The search query
      * @param dateBegin The date begin
      * @param dateEnd The date end
-     * @param request The {@link HttpServletRequest}
      * @param plugin The plugin
      * @return Results as a collection of SearchResult
      */
     public List<Event> getSearchResults( String[] arrayAgendaIds, String[] arrayCategory, String strQuery,
-            Date dateBegin, Date dateEnd, HttpServletRequest request, Plugin plugin )
+            Date dateBegin, Date dateEnd, Plugin plugin )
     {
         List<Event> listEvent = new ArrayList<Event>( );
         HashMap<String, Event> hmListEvent = new HashMap<String, Event>( );
         CalendarSearchEngine engine = SpringContextService.getBean( BEAN_SEARCH_ENGINE );
         List<CalendarSearchResult> listResults = engine.getSearchResults( arrayAgendaIds, arrayCategory, strQuery,
-                dateBegin, dateEnd, request );
+                dateBegin, dateEnd );
 
         for ( CalendarSearchResult searchResult : listResults )
         {
@@ -116,6 +113,11 @@ public class CalendarSearchService
 
                     //Retrieve the event related to the occurence
                     SimpleEvent event = CalendarHome.findEvent( occurence.getEventId( ), plugin );
+                    if ( event.getDate( ).compareTo( event.getDateEnd( ) ) != 0 )
+                    {
+                        event.setDate( new Date( ) );
+                    }
+
                     event.setUrl( searchResult.getUrl( ) );
                     event.setType( searchResult.getType( ) );
                     event.setImageUrl( EventImageResourceService.getInstance( ).getResourceImageEvent( event.getId( ) ) );

@@ -81,7 +81,7 @@ public class DayCalendarView implements CalendarView
             Date date = Utils.getDate( strDate );
             Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
             List<Event> listIndexedEvents = CalendarSearchService.getInstance( ).getSearchResults(
-                    agenda.getAgendaIds( ), null, "", date, date, request, plugin );
+                    agenda.getAgendaIds( ), null, "", date, date, plugin );
 
             for ( Event event : listIndexedEvents )
             {

@@ -160,9 +160,9 @@ public class MiniCalendarPortlet extends Portlet
         //Top event section            
         Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
 
-        boolean top_event = MiniCalendarPortletHome.showTopEvent( );
+        boolean topevent = MiniCalendarPortletHome.showTopEvent( );
 
-        if ( top_event )
+        if ( topevent )
         {
             XmlUtil.beginElement( strXml, TAG_TOP_EVENTS );
 
@@ -214,7 +214,7 @@ public class MiniCalendarPortlet extends Portlet
         }
 
         listEvent = CalendarSearchService.getInstance( ).getSearchResults( arrayCalendar, arrayCategory, strQuery,
-                dateBegin, dateEnd, request, pluginCalendar );
+                dateBegin, dateEnd, pluginCalendar );
         if ( listEvent != null )
         {
             //Sort events by DateTimeStart using bubble sort

@@ -33,15 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.web;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.MultiAgenda;
 import fr.paris.lutece.plugins.calendar.business.MultiAgendaEvent;
@@ -54,6 +45,15 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * An implementation of an EvenList, listing all events of a month
@@ -65,7 +65,8 @@ public class WeekEventList implements EventList
     private static final String TEMPLATE_WEEK_EVENT_LIST_EVENT = "skin/plugins/calendar/calendar_eventlist_week_event.html";
 
     /**
-     * Build an event list corresponding to the date, the agenda and privileges stored in the HTTP request
+     * Build an event list corresponding to the date, the agenda and privileges
+     * stored in the HTTP request
      * @return The HTML code of the event list formatted
      * @param locale The locale
      * @param strWeekDate The date of the event list
@@ -74,15 +75,15 @@ public class WeekEventList implements EventList
      */
     public String getEventList( String strWeekDate, MultiAgenda agenda, Locale locale, HttpServletRequest request )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<String, Object>( );
         int nYear = Utils.getYear( strWeekDate );
         int nMonth = Utils.getMonth( strWeekDate );
         int nDay = Utils.getDay( strWeekDate );
 
-        Calendar calendar = new GregorianCalendar(  );
+        Calendar calendar = new GregorianCalendar( );
         calendar.set( nYear, nMonth, nDay );
 
-        StringBuffer sbDays = new StringBuffer(  );
+        StringBuffer sbDays = new StringBuffer( );
 
         // Go backward to the Monday day
         while ( calendar.get( Calendar.DAY_OF_WEEK ) != Calendar.MONDAY )
@@ -103,11 +104,11 @@ public class WeekEventList implements EventList
             calendar.add( Calendar.DATE, 1 );
         }
 
-        model.put( Constants.MARK_DAYS, sbDays.toString(  ) );
+        model.put( Constants.MARK_DAYS, sbDays.toString( ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_WEEK_EVENT_LIST, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -120,37 +121,37 @@ public class WeekEventList implements EventList
      */
     private String getDay( String strDate, MultiAgenda agenda, Locale locale, HttpServletRequest request )
     {
-        StringBuffer sbEvents = new StringBuffer(  );
+        StringBuffer sbEvents = new StringBuffer( );
         Date date = Utils.getDate( strDate );
         Plugin plugin = PluginService.getPlugin( CalendarPlugin.PLUGIN_NAME );
-        List<Event> listIndexedEvents = CalendarSearchService.getInstance(  )
-        	.getSearchResults( agenda.getAgendaIds(  ), null, Constants.EMPTY_STRING, date, date, request, plugin );
+        List<Event> listIndexedEvents = CalendarSearchService.getInstance( ).getSearchResults( agenda.getAgendaIds( ),
+                null, Constants.EMPTY_STRING, date, date, plugin );
         boolean bHasIndexedEvent = Boolean.FALSE;
-        
+
         for ( Event event : listIndexedEvents )
         {
-        	MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar(  ) ) );
-        	HashMap<String, Object> eventModel = new HashMap<String, Object>(  );
+            MultiAgendaEvent multiAgendaEvent = new MultiAgendaEvent( event, String.valueOf( event.getIdCalendar( ) ) );
+            HashMap<String, Object> eventModel = new HashMap<String, Object>( );
             HtmlUtils.fillEventTemplate( eventModel, multiAgendaEvent, strDate );
 
             HtmlTemplate tEvent = AppTemplateService.getTemplate( TEMPLATE_WEEK_EVENT_LIST_EVENT, locale, eventModel );
-            sbEvents.append( tEvent.getHtml(  ) );
+            sbEvents.append( tEvent.getHtml( ) );
             bHasIndexedEvent = Boolean.TRUE;
         }
 
-        HashMap<String, Object> dayModel = new HashMap<String, Object>(  );
-        
+        HashMap<String, Object> dayModel = new HashMap<String, Object>( );
+
         if ( bHasIndexedEvent )
         {
-        	dayModel.put( Constants.MARK_DAY, Utils.getDayLabel( strDate, locale ) );
-            dayModel.put( Constants.MARK_EVENTS, sbEvents.toString(  ) );
+            dayModel.put( Constants.MARK_DAY, Utils.getDayLabel( strDate, locale ) );
+            dayModel.put( Constants.MARK_EVENTS, sbEvents.toString( ) );
             dayModel.put( Constants.MARK_DATE, strDate );
             dayModel.put( Constants.MARK_JSP_URL, AppPropertiesService.getProperty( Constants.PROPERTY_RUNAPP_JSP_URL ) );
             HtmlTemplate tDay = AppTemplateService.getTemplate( TEMPLATE_EVENT_WEEK_LIST_DAY, locale, dayModel );
 
-            return tDay.getHtml(  );
+            return tDay.getHtml( );
         }
-        
+
         return Constants.EMPTY_STRING;
     }
 }
