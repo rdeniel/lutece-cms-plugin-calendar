@@ -1,15 +1,10 @@
-<div class="row-fluid">
-    <div class="span12">
-		<fieldset>
-			<legend>
-				<img src="${icon}" class="thumblist" >
-				<a href="${url}" >#i18n{calendar.dashboard.calendarsList}</a> 
-				<a class="btn btn-small btn-primary pull-right" href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar" title="#i18n{calendar.dashboard.addCalendar}">
-					 <i class="icon-plus icon-white"></i>
-				</a>
-			</legend>
-			<#include "calendar_dashboard.html" />
-		</fieldset>
-    </div>
+<div class="well">
+    <img src="${icon}" />
+    <a href="${url}" >
+        #i18n{calendar.dashboard.calendarsList}
+    </a> : 
+    <a href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar">
+    	<img src="images/admin/skin/plugins/calendar/action/add.png" title="#i18n{calendar.dashboard.addCalendar}" alt="#i18n{calendar.dashboard.addCalendar}" />
+    </a>
+    <#include "calendar_dashboard.html" />
 </div>
-

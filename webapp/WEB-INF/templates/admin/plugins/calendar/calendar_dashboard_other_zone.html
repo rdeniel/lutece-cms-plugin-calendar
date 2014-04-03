@@ -1,21 +1,17 @@
-<div class="row-fluid">
-    <div class="span12">
-		<div class="well well-small">
-			<fieldset>
-				<legend>
-					<img src="${icon}" >
-					<a href="${url}" >#i18n{calendar.dashboard.calendarsList}</a>
-					<a class="pull-right spaced" href="jsp/admin/AdminMenu.jsp#top" title="#i18n{calendar.dashboard.top}">
-						<i class="icon-arrow-up"></i>
-					</a>
-					<!--
-					<a class="btn btn-small btn-primary pull-right" href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar" title="#i18n{calendar.dashboard.addCalendar}">
+<div class="well">
+	<fieldset>
+		<legend>
+			<img src="${icon}"/>&nbsp;
+			<a href="${url}" >#i18n{calendar.dashboard.calendarsList}</a>
+			<div class="pull-right">
+					<a class="btn btn-primary btn-small" href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar" title="#i18n{calendar.dashboard.addCalendar}">
 						<i class="icon-plus icon-white"></i>
 					</a>
-					-->
-				</legend>
-				<#include "calendar_dashboard.html" />
-			</fieldset>	
-		</div>
-    </div>
+					<a href="jsp/admin/AdminMenu.jsp#top" title="#i18n{calendar.dashboard.top}">
+						<i class="icon-arrow-up"></i>
+					</a>
+			</div>
+		</legend>	
+		<#include "calendar_dashboard.html" />
+	</fieldset>
 </div>
