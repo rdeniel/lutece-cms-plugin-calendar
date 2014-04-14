@@ -33,6 +33,18 @@
  */
 package fr.paris.lutece.plugins.calendar.business.portlet;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.Event;
 import fr.paris.lutece.plugins.calendar.business.SimpleEvent;
@@ -49,18 +61,6 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.util.date.DateUtil;
 import fr.paris.lutece.util.xml.XmlUtil;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -307,5 +307,17 @@ public class MiniCalendarPortlet extends Portlet
     public void remove( )
     {
         MiniCalendarPortletHome.getInstance( ).remove( this );
+    }
+
+    @Override
+    public boolean canBeCachedForAnonymousUsers( )
+    {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCachedForConnectedUsers( )
+    {
+        return false;
     }
 }
