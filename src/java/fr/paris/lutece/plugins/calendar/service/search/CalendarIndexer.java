@@ -33,18 +33,6 @@
  */
 package fr.paris.lutece.plugins.calendar.service.search;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.lucene.demo.html.HTMLParser;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-
 import fr.paris.lutece.plugins.calendar.business.Agenda;
 import fr.paris.lutece.plugins.calendar.business.CalendarHome;
 import fr.paris.lutece.plugins.calendar.business.Event;
@@ -62,9 +50,30 @@ import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.search.IndexationService;
 import fr.paris.lutece.portal.service.search.SearchIndexer;
 import fr.paris.lutece.portal.service.search.SearchItem;
+import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.url.UrlItem;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.html.HtmlParser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -101,7 +110,7 @@ public class CalendarIndexer implements SearchIndexer
 
             String strAgenda = agenda.getId( );
 
-            for ( Object oEvent : agenda.getAgenda( ).getEvents( ) )
+            for ( Event oEvent : agenda.getAgenda( ).getEvents( ) )
             {
                 indexSubject( oEvent, sRoleKey, strAgenda );
             }
@@ -110,11 +119,13 @@ public class CalendarIndexer implements SearchIndexer
 
     /**
      * Recursive method for indexing a calendar event
-     * 
+     * @param oEvent the event
+     * @param sRoleKey the role key
+     * @param strAgenda the agenda
      * @throws IOException I/O Exception
      * @throws InterruptedException interruptedException
      */
-    public void indexSubject( Object oEvent, String sRoleKey, String strAgenda ) throws IOException,
+    public void indexSubject( Event oEvent, String sRoleKey, String strAgenda ) throws IOException,
             InterruptedException
     {
         OccurrenceEvent occurrence = (OccurrenceEvent) oEvent;
@@ -208,9 +219,14 @@ public class CalendarIndexer implements SearchIndexer
         // make a new, empty document
         org.apache.lucene.document.Document doc = new org.apache.lucene.document.Document( );
 
+        FieldType ft = new FieldType( StringField.TYPE_STORED );
+        ft.setOmitNorms( false );
+
+        FieldType ftNotStored = new FieldType( StringField.TYPE_NOT_STORED );
+        ft.setOmitNorms( false );
+
         //add the id of the calendar
-        doc.add( new Field( Constants.FIELD_CALENDAR_ID, strAgenda + "_" + Constants.CALENDAR_SHORT_NAME,
-                Field.Store.NO, Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( Constants.FIELD_CALENDAR_ID, strAgenda + "_" + Constants.CALENDAR_SHORT_NAME, ftNotStored ) );
 
         //add the category of the event
         Collection<Category> arrayCategories = occurrence.getListCategories( );
@@ -226,43 +242,47 @@ public class CalendarIndexer implements SearchIndexer
             }
         }
 
-        doc.add( new Field( Constants.FIELD_CATEGORY, strCategories, Field.Store.NO, Field.Index.ANALYZED ) );
+        doc.add( new Field( Constants.FIELD_CATEGORY, strCategories, TextField.TYPE_NOT_STORED ) );
 
-        doc.add( new Field( SearchItem.FIELD_ROLE, strRoleKey, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_ROLE, strRoleKey, ft ) );
 
         // Add the url as a field named "url".  Use an UnIndexed field, so
         // that the url is just stored with the question/answer, but is not searchable.
-        doc.add( new Field( SearchItem.FIELD_URL, strUrl, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_URL, strUrl, ft ) );
 
         // Add the uid as a field, so that index can be incrementally maintained.
         // This field is not stored with question/answer, it is indexed, but it is not
         // tokenized prior to indexing.
         String strIdEvent = String.valueOf( occurrence.getId( ) );
-        doc.add( new Field( SearchItem.FIELD_UID, strIdEvent + "_" + Constants.CALENDAR_SHORT_NAME, Field.Store.YES,
-                Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_UID, strIdEvent + "_" + Constants.CALENDAR_SHORT_NAME, ft ) );
 
         // Add the last modified date of the file a field named "modified".
         // Use a field that is indexed (i.e. searchable), but don't tokenize
         // the field into words.
         String strDate = Utils.getDate( occurrence.getDate( ) );
-        doc.add( new Field( SearchItem.FIELD_DATE, strDate, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_DATE, strDate, ft ) );
 
         String strContentToIndex = getContentToIndex( occurrence );
-        StringReader readerPage = new StringReader( strContentToIndex );
-        HTMLParser parser = new HTMLParser( readerPage );
+        ContentHandler handler = new BodyContentHandler( );
+        Metadata metadata = new Metadata( );
 
-        //the content of the event descriptionr is recovered in the parser because this one
-        //had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
-        Reader reader = parser.getReader( );
-        int c;
-        StringBuffer sb = new StringBuffer( );
-
-        while ( ( c = reader.read( ) ) != -1 )
+        try
         {
-            sb.append( String.valueOf( (char) c ) );
+            new HtmlParser( ).parse( new ByteArrayInputStream( strContentToIndex.getBytes( ) ), handler, metadata,
+                    new ParseContext( ) );
+        }
+        catch ( SAXException e )
+        {
+            throw new AppException( "Error during page parsing." );
+        }
+        catch ( TikaException e )
+        {
+            throw new AppException( "Error during page parsing." );
         }
 
-        reader.close( );
+        //the content of the article is recovered in the parser because this one
+        //had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
+        StringBuilder sb = new StringBuilder( handler.toString( ) );
 
         // Add the description as a summary field, so that index can be incrementally maintained.
         // This field is stored, but it is not indexed
@@ -274,20 +294,18 @@ public class CalendarIndexer implements SearchIndexer
             strDescription = strDescription.substring( 0, length ) + PROPERTY_DESCRIPTION_ETC;
         }
 
-        doc.add( new Field( SearchItem.FIELD_SUMMARY, strDescription, Field.Store.YES, Field.Index.ANALYZED ) );
-        doc.add( new Field( CalendarSearchItem.FIELD_HTML_SUMMARY, occurrence.getDescription( ), Field.Store.YES,
-                Field.Index.ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_SUMMARY, strDescription, TextField.TYPE_STORED ) );
+        doc.add( new Field( CalendarSearchItem.FIELD_HTML_SUMMARY, occurrence.getDescription( ), TextField.TYPE_STORED ) );
 
         // Add the tag-stripped contents as a Reader-valued Text field so it will
         // get tokenized and indexed.
-        doc.add( new Field( SearchItem.FIELD_CONTENTS, sb.toString( ), Field.Store.NO, Field.Index.ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_CONTENTS, sb.toString( ), TextField.TYPE_NOT_STORED ) );
 
         // Add the subject name as a separate Text field, so that it can be searched
         // separately.
-        doc.add( new Field( SearchItem.FIELD_TITLE, occurrence.getTitle( ), Field.Store.YES, Field.Index.ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_TITLE, occurrence.getTitle( ), TextField.TYPE_STORED ) );
 
-        doc.add( new Field( SearchItem.FIELD_TYPE, CalendarPlugin.PLUGIN_NAME, Field.Store.YES,
-                Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_TYPE, CalendarPlugin.PLUGIN_NAME, ft ) );
 
         // return the document
         return doc;

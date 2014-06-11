@@ -33,7 +33,13 @@
  */
 package fr.paris.lutece.plugins.calendar.service.search;
 
-import java.io.IOException;
+import fr.paris.lutece.plugins.calendar.service.Utils;
+import fr.paris.lutece.plugins.calendar.web.Constants;
+import fr.paris.lutece.portal.service.search.IndexationService;
+import fr.paris.lutece.portal.service.search.SearchItem;
+import fr.paris.lutece.portal.service.util.AppLogService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,25 +49,20 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.TopDocs;
-
-import fr.paris.lutece.plugins.calendar.service.Utils;
-import fr.paris.lutece.plugins.calendar.web.Constants;
-import fr.paris.lutece.portal.service.search.IndexationService;
-import fr.paris.lutece.portal.service.search.SearchItem;
-import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import org.apache.lucene.util.BytesRef;
 
 
 /**
@@ -71,7 +72,6 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
 {
     private static final String OPEN_PARENTHESIS = "(";
     private static final String SPACE = " ";
-    private static final String EMPTY_STRING = "";
     private static final String CLOSE_PARENTHESIS = ")";
     private static final String OR = "OR";
     private static final String PROPERTY_RESULTS_LIMIT = "calendar.indexer.results.limit";
@@ -94,14 +94,15 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
         {
             return new ArrayList<CalendarSearchResult>( );
         }
-        Searcher searcher = null;
+        IndexSearcher searcher = null;
 
         //Filter filterRole = getFilterRoles( request );
         Filter filterRole = null;
 
         try
         {
-            searcher = new IndexSearcher( IndexationService.getDirectoryIndex( ), true );
+            IndexReader ir = DirectoryReader.open( IndexationService.getDirectoryIndex( ) );
+            searcher = new IndexSearcher( ir );
 
             Collection<String> queriesForSearchInContent = new ArrayList<String>( );
             Collection<String> queriesForSearchInTitle = new ArrayList<String>( );
@@ -183,7 +184,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
                 queriesForSearchInTitle.add( queryContent.toString( ) );
                 fieldsForSearchInContent.add( SearchItem.FIELD_CONTENTS );
                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
-                
+
                 Query queryTitle = new TermQuery( new Term( SearchItem.FIELD_TITLE, strContent ) );
                 queriesForSearchInContent.add( queryTitle.toString( ) );
                 fieldsForSearchInTitle.add( SearchItem.FIELD_TITLE );
@@ -193,8 +194,8 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             //Dates
             if ( ( dateBegin != null ) && ( dateEnd != null ) )
             {
-                String strDateBegin = Utils.getDate( dateBegin );
-                String strDateEnd = Utils.getDate( dateEnd );
+                BytesRef strDateBegin = new BytesRef( Utils.getDate( dateBegin ) );
+                BytesRef strDateEnd = new BytesRef( Utils.getDate( dateEnd ) );
                 Query queryDate = new TermRangeQuery( SearchItem.FIELD_DATE, strDateBegin, strDateEnd, true, true );
                 queriesForSearchInContent.add( queryDate.toString( ) );
                 queriesForSearchInTitle.add( queryDate.toString( ) );
@@ -248,20 +249,6 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
         catch ( Exception e )
         {
             AppLogService.error( e.getMessage( ), e );
-        }
-        finally
-        {
-            try
-            {
-                if ( searcher != null )
-                {
-                    searcher.close( );
-                }
-            }
-            catch ( IOException ioe )
-            {
-                AppLogService.error( ioe.getMessage( ), ioe );
-            }
         }
 
         return convertList( listResults );
