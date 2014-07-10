@@ -2,25 +2,27 @@
 <div class="portlet">
 	<div class="portlet-header">#i18n{calendar.download.agenda.title}</div>
     <form class="form-horizontal" action="jsp/site/plugins/calendar/GetCalendarFile.jsp" method="post">
-		<div class="control-group">
-		<label class="control-label" for="agenda">#i18n{calendar.search.event.label.calendar_choice} * :</label>
-			<div class="controls">
-				<@combo name="agenda" default_value=" " items=calendar_list />
+		<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-3 col-md-3" for="agenda">#i18n{calendar.search.event.label.calendar_choice} * :</label>
+			<div class="col-xs-12 col-sm-8 col-md-6">
+				<@comboWithParams name="agenda" default_value="" additionalParameters="class=\"form-control input-sm\"" items=calendar_list />
 		</div>
 	</div> 
-	<div class="control-group">
-		<label class="control-label" for="export_sheet">#i18n{calendar.search.event.label.stylesheet_choice} * :</label>
-           <div class="controls">
-			<@combo name="stylesheet_id" default_value=" " items=stylesheet_list />
+	<div class="form-group">
+		<label class="control-label col-xs-12 col-sm-3 col-md-3" for="export_sheet">#i18n{calendar.search.event.label.stylesheet_choice} * :</label>
+           <div class="col-xs-12 col-sm-8 col-md-6">
+			<@comboWithParams name="stylesheet_id" default_value="" additionalParameters="class=\"form-control input-sm\"" items=stylesheet_list />
 		</div>
 	</div> 
-	<div class="form-actions">
-		<button class="btn btn-primary btn-small" type="submit">
-			<i class="icon-download icon-white"></i>&nbsp;#i18n{calendar.label.download}
-		</button>
-        <button class="btn btn-small" onclick="javascript:history.go(-1)" >
-			<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
-		</button>
+	<div class="form-group">
+		<div class="col-xs-12 col-sm-offset-3 col-sm-9 col-md-offset-3 col-md-9">
+			<button class="btn btn-primary btn-sm" type="submit">
+				<i class="glyphicon glyphicon-download"></i>&nbsp;#i18n{calendar.label.download}
+			</button>
+			<a href="#" class="btn btn-default btn-sm" onclick="javascript:history.go(-1)" >
+				<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
+			</a>
+		</div>
 	</div>
 	</form>
 </div>

@@ -1,12 +1,12 @@
-<div class="row-fluid">	
-    <div class="span12">	
+<div class="row">	
+    <div class="col-xs-12 col-sm-12 col-md-12">	
        <form class="form" method="post"  action="jsp/admin/plugins/calendar/CreateEvent.jsp">
         <fieldset>
             <legend>#i18n{calendar.modify_calendar.titleEventsList}
                     <input type="hidden" name="calendar_id" value="${calendar.id}" /> 
                     <input type="hidden" name="plugin_name" value="calendar" />   
-                    <button class="btn btn-primary btn-small pull-right" type="submit" >
-                        <i class="icon-plus icon-white" ></i>
+                    <button class="btn btn-primary btn-sm pull-right" type="submit" >
+                        <i class="glyphicon glyphicon-plus" ></i>
                         <span class="hidden-phone" >#i18n{calendar.modify_calendar.buttonCreate}</span>
                     </button>
             </legend>
@@ -47,11 +47,11 @@
                        <strong>${event.title}</strong>
 					</td>
 					<td>	
-						<i class="icon-calendar"></i>&nbsp;${event.date?date} 
+						<i class="glyphicon glyphicon-calendar"></i>&nbsp;${event.date?date}
 					</td>
 					<td>					
 						<#if event.dateTimeStart?exists>
-						<i class="icon-time"></i>&nbsp;${event.dateTimeStart}
+						<i class="glyphicon glyphicon-time"></i>&nbsp;${event.dateTimeStart}
                         </#if>
                     </td>
                     <td>
@@ -78,18 +78,24 @@
                     <td>
                         ${event.occurrence}
                     </td>
-                    <td> 
-                        <a class="btn btn-primary btn-small" href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&calendar_id=${calendar.id}&event_id=${event.id}"  title="null" >
-                            <i class="icon-edit icon-white"></i>
+                    <td>
+						<div class="col-xs-12 col-sm-2 col-md-2">
+                        <a class="btn btn-primary btn-xs" href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&calendar_id=${calendar.id}&event_id=${event.id}"  title="null" >
+                            <i class="glyphicon glyphicon-edit"></i>
                         </a>
+						</div>
+						
+						<div class="col-xs-12 col-sm-2 col-md-2">
+                        <a class="btn btn-primary btn-xs" href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}"  title="#i18n{calendar.modify_calendar.actionOccurenceList}" >
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </a>
+						</div>
 
-                        <a class="btn btn-primary btn-small" href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}"  title="#i18n{calendar.modify_calendar.actionOccurenceList}" >
-                            <i class="icon-calendar icon-white"></i>
+                        <div class="col-xs-12 col-sm-2 col-md-2">
+						<a class="btn btn-danger btn-xs" href="jsp/admin/plugins/calendar/RemoveEvent.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}"  title="#i18n{calendar.modify_calendar.actionDeleteEvent}" >
+                            <i class="glyphicon glyphicon-trash"></i>
                         </a>
-
-                        <a class="btn btn-danger btn-small" href="jsp/admin/plugins/calendar/RemoveEvent.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}"  title="#i18n{calendar.modify_calendar.actionDeleteEvent}" >
-                            <i class="icon-trash icon-white"></i>
-                        </a>
+						</div>
 
                     </td>
                 </tr>

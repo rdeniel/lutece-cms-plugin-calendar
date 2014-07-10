@@ -1,18 +1,18 @@
-<div class="row-fluid" >
-    <div class="span12">
+<div class="row" >
+    <div class="col-xs-12 col-sm-12 col-md-12">
     <fieldset>
         <legend>#i18n{calendar.manage_calendars.tableLabel}
             <#if permission_advanced_parameter>
             <form class="form-inline pull-right" method="post" action="jsp/admin/plugins/calendar/ManageAdvancedParameters.jsp">
-                <button class="btn btn-small btn-primary" type="submit" >
-                    <i class="icon-cog icon-white" ></i>
+                <button class="btn btn-sm btn-primary" type="submit" >
+                    <i class="glyphicon glyphicon-cog"></i>
                     <span class="hidden-phone" >#i18n{calendar.manage_calendars.labelAdvancedParameters}</span>
                 </button>
             </form>		        
             </#if>
             <form class="form-inline pull-right spaced" method="post"  action="jsp/admin/plugins/calendar/CreateCalendar.jsp">
-                <button class="btn btn-small btn-primary" type="submit" >
-                    <i class="icon-plus icon-white" ></i>
+                <button class="btn btn-sm btn-primary" type="submit" >
+                    <i class="glyphicon glyphicon-plus"></i>
                     <span class="hidden-phone" >#i18n{calendar.manage_calendars.buttonAddCalendar}</span>
                 </button>
             </form>
@@ -35,34 +35,34 @@
 					</strong>
                     &nbsp;
                     <a href="jsp/site/Portal.jsp?page=calendar&id_agenda=${calendar.id}" title="#i18n{calendar.manage_calendars.labelViewFullAgenda}" target="agenda">
-                        <i class="icon-globe"></i>
+                        <i class="glyphicon glyphicon-globe"></i>
                     </a> |
                     &nbsp;
                     <a href="jsp/site/Portal.jsp?page=calendar&action=do_search&id_agenda=${calendar.id}" title="#i18n{calendar.manage_calendars.labelViewSearchAgenda}"  target="agenda">
-                        <i class="icon-search"></i>
+                        <i class="glyphicon glyphicon-search"></i>
                     </a> |
                    &nbsp;
                     <#if calendar.role?exists>
-						<i class="icon-list-alt"></i>&nbsp;#i18n{calendar.manage_calendars.columnTitleRole}: ${calendar.role} | 
+						<i class="glyphicon glyphicon-list-alt"></i>&nbsp;#i18n{calendar.manage_calendars.columnTitleRole}: ${calendar.role} | 
 					</#if>
-						<i class="icon-user"></i>&nbsp;#i18n{calendar.manage_calendars.columnTitleWorkgroup}: ${calendar.workgroup}
+						<i class="glyphicon glyphicon-user"></i>&nbsp;#i18n{calendar.manage_calendars.columnTitleWorkgroup}: ${calendar.workgroup}
 					
                 </td> 
                 <td>
-                   <a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}"  title="" >
-                       <i class="icon-edit icon-white"></i>
+                   <a class="btn btn-primary btn-xs pull-left spaced" href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}"  title="" >
+                       <i class="glyphicon glyphicon-edit"></i>
                    </a>    
-                   <a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}"  title="#i18n{calendar.manage_calendars.manage_calendars.actionAddEvent}" >
-                       <i class="icon-plus icon-white"></i>
+                   <a class="btn btn-primary btn-xs pull-left spaced" href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}"  title="#i18n{calendar.manage_calendars.manage_calendars.actionAddEvent}" >
+                       <i class="glyphicon glyphicon-plus"></i>
                    </a>
-                   <a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}"  title="#i18n{calendar.manage_calendars.manage_calendars.actionManageEvent}" >
-                       <i class="icon-th-list icon-white"></i>
+                   <a class="btn btn-primary btn-xs pull-left spaced" href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}"  title="#i18n{calendar.manage_calendars.manage_calendars.actionManageEvent}" >
+                       <i class="glyphicon glyphicon-th-list"></i>
                    </a>
-                   <a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}"  title="#i18n{calendar.manage_calendars.manage_calendars.actionManageSubscribers}" >
-                       <i class="icon-user icon-white"></i>
+                   <a class="btn btn-primary btn-xs pull-left spaced" href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}"  title="#i18n{calendar.manage_calendars.manage_calendars.actionManageSubscribers}" >
+                       <i class="glyphicon glyphicon-user"></i>
                    </a>
-                   <a class="btn btn-danger btn-small pull-left" href="jsp/admin/plugins/calendar/RemoveCalendar.jsp?calendar_id=${calendar.id}"  title="#i18n{calendar.manage_calendars.actionDelete}" >
-                      <i class="icon-trash icon-white"></i>
+                   <a class="btn btn-danger btn-xs pull-left" href="jsp/admin/plugins/calendar/RemoveCalendar.jsp?calendar_id=${calendar.id}"  title="#i18n{calendar.manage_calendars.actionDelete}" >
+                      <i class="glyphicon glyphicon-trash"></i>
                    </a>
                 </td>
             </tr>					

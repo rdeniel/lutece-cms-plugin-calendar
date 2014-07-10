@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="portlet span12">
+	<div class="portlet col-xs-12 col-sm-12 col-md-12">
 		<fieldset>
 		<legend>#i18n{calendar.calendar_manage_events.title} ${calendar.name}</legend>
 			<table summary="#i18n{calendar.calendar_manage_events.tableSummary}"  >
@@ -43,11 +43,11 @@
 						</#if>
 					</td>
 					<td>
-						<a class="btn btn-primary btn-small" href="jsp/site/Portal.jsp?page=calendar&amp;action=modify_event&amp;calendar_id=${calendar.id}&amp;event_id=${event.id}"  title="null" >
-							<i class="icon-edit icon-white"></i>
+						<a class="btn btn-primary btn-sm" href="jsp/site/Portal.jsp?page=calendar&amp;action=modify_event&amp;calendar_id=${calendar.id}&amp;event_id=${event.id}"  title="null" >
+							<i class="glyphicon glyphicon-edit"></i>
 						</a>
-						<a class="btn btn-danger btn-small" href="jsp/site/Portal.jsp?page=calendar&amp;action=remove_event&amp;calendar_id=${calendar.id}&amp;event_id=${event.id}"  title="#i18n{calendar.calendar_manage_events.actionDeleteEvent}" >
-							<i class="icon-trash icon-white"></i>
+						<a class="btn btn-danger btn-sm" href="jsp/site/Portal.jsp?page=calendar&amp;action=remove_event&amp;calendar_id=${calendar.id}&amp;event_id=${event.id}"  title="#i18n{calendar.calendar_manage_events.actionDeleteEvent}" >
+							<i class="glyphicon glyphicon-trash"></i>
 						</a>
 					</td>
 					</tr>

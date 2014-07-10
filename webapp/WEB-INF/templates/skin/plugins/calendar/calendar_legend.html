@@ -1,14 +1,14 @@
 <h3>#i18n{calendar.label.legend}</h3>
-<ul class="unstyled">
+<ul class="list-unstyled">
 	<#list agenda_resource_list as agendaResource >
 		<li>
             <img src="${agendaResource.eventImage}" />
 			<#if agendaResource.resourceType="READ_WRITE">
 				<a href="jsp/site/Portal.jsp?page=calendar&action=manage_events&calendar_id=${agendaResource.id}"  title="null" >
-					<i class="icon-edit"></i>&nbsp;${agendaResource.name}
+					<i class="glyphicon glyphicon-edit"></i>&nbsp;${agendaResource.name}
 				</a>
 			<#else>
-                <i class="icon-lock"></i>&nbsp;${agendaResource.name}
+                <i class="glyphicon glyphicon-lock"></i>&nbsp;${agendaResource.name}
             </#if>
 		</li>  
     </#list>

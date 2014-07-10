@@ -1,5 +1,5 @@
-<div class="row-fluid">
-    <div class="span12">
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
         <ul class="nav nav-tabs">
             <li>
                 <a href="jsp/admin/plugins/calendar/ManageAdvancedParameters.jsp">#i18n{calendar.advanced_parameters.dashboard}</a>
@@ -19,8 +19,8 @@
             <legend>
                 #i18n{calendar.manage_stylesheets.title}
                 <form class="form-inline pull-right" method="post"  action="jsp/admin/plugins/calendar/style/CreateStyleSheet.jsp" >
-                    <button class="btn btn-primary btn-small" type="submit" >
-                        <i class="icon-plus icon-white" ></i>
+                    <button class="btn btn-primary btn-sm" type="submit" >
+                        <i class="glyphicon glyphicon-plus" ></i>
                         <span class="hidden-phone" >#i18n{calendar.manage_stylesheets.buttonAdd}</span>
                     </button>
                 </form>
@@ -42,8 +42,8 @@
                     <td>${stylesheet.description}</td>
                     <td>${stylesheet.file}</td>
                     <td>
-                        <a class="btn btn-primary btn-small" href="jsp/admin/plugins/calendar/style/ModifyStyleSheet.jsp?stylesheet_id=${stylesheet.id}"  title="null" >
-                            <i class="icon-edit icon-white"></i>
+                        <a class="btn btn-primary btn-xs" href="jsp/admin/plugins/calendar/style/ModifyStyleSheet.jsp?stylesheet_id=${stylesheet.id}"  title="null" >
+                            <i class="glyphicon glyphicon-edit"></i>
                         </a>
 
                     </td>

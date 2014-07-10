@@ -1,68 +1,72 @@
-<div class="row-fluid" >
-    <div class="span12">
+<div class="row" >
+    <div class="col-xs-12 col-sm-12 col-md-12">
         <fieldset>
             <legend>#i18n{calendar.create_calendar.pageTitle}</legend>
             <form class="form-horizontal" method="post" name="create_calendar" action="jsp/admin/plugins/calendar/DoCreateCalendar.jsp">		
-                <div class="control-group">
-                    <label class="control-label" for="calendar_name">#i18n{calendar.create_calendar.name} *</label>
-                    <div class="controls">
-                        <input type="text" id="calendar_name" name="calendar_name" tabindex="1" class="input-xlarge" maxlength="250" >
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_name">#i18n{calendar.create_calendar.name} *</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        <input type="text" class="form-control input-sm" id="calendar_name" name="calendar_name" tabindex="1" maxlength="250" >
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="calendar_image">#i18n{calendar.create_calendar.image} *</label>
-                    <div class="controls">
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_image">#i18n{calendar.create_calendar.image} *</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
                         <@radioImageList name="calendar_image" default_value="" items=dots_list />
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="calendar_prefix">#i18n{calendar.create_calendar.prefix} :</label>
-                    <div class="controls">
-                        <input type="text" id="calendar_prefix" name="calendar_prefix" tabindex="1" class="input-small" maxlength="250" >
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_prefix">#i18n{calendar.create_calendar.prefix} :</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        <input type="text" class="form-control input-sm" id="calendar_prefix" name="calendar_prefix" tabindex="1" maxlength="250" >
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="calendar_role">#i18n{calendar.create_calendar.role} :</label>
-                    <div class="controls">
-                        <@comboWithParams name="calendar_role" default_value="" additionalParameters=" class=\"input-normal\"" items=roles_list />
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_role">#i18n{calendar.create_calendar.role} :</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        <@comboWithParams name="calendar_role" default_value="" additionalParameters=" class=\"form-control input-sm\"" items=roles_list />
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="calendar_role_manager">#i18n{calendar.create_calendar.manager_role}</label>
-                    <div class="controls">
-                        <@comboWithParams name="calendar_role_manager" default_value="" additionalParameters=" class=\"input-normal\"" items=roles_list />
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_role_manager">#i18n{calendar.create_calendar.manager_role}</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        <@comboWithParams name="calendar_role_manager" default_value="" additionalParameters=" class=\"form-control input-sm\"" items=roles_list />
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="workgroup">#i18n{calendar.create_calendar.workgroup}</label>
-                    <div class="controls">
-                        <@comboWithParams name="workgroup" default_value="" additionalParameters=" class=\"input-normal\"" items=workgroups_list />
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-3" for="workgroup">#i18n{calendar.create_calendar.workgroup}</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        <@comboWithParams name="workgroup" default_value="" additionalParameters=" class=\"form-control input-sm\"" items=workgroups_list />
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label" for="calendar_notification">#i18n{calendar.create_calendar.notification}</label>
-                    <div class="controls">
-                        <label class="checkbox">
-                            <input name="calendar_notification" id="calendar_notification" type="checkbox" >
-                            #i18n{calendar.create_calendar.notification.comment}
-                        </label>    
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_notification">#i18n{calendar.create_calendar.notification}</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+						<div class="checkbox">
+							<label>
+								<input name="calendar_notification" id="calendar_notification" type="checkbox" >
+								#i18n{calendar.create_calendar.notification.comment}
+							</label>
+						</div>
                     </div>
                 </div>
-                <div class="control-group" id="notif">
-                    <label class="control-label" for="calendar_period">#i18n{calendar.create_calendar.periodValidity} *</label>
-                    <div class="controls">
-                        <input type="text" id="calendar_period" name="calendar_period" tabindex="1" class="input-mini" maxlength="2" value="7">
+                <div class="form-group" id="notif">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_period">#i18n{calendar.create_calendar.periodValidity} *</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        <input type="text" class="form-control" id="calendar_period" name="calendar_period" tabindex="1" class="input-sm" maxlength="2" value="7">
                         <span class="help-text">#i18n{calendar.create_calendar.periodValidityUnit}</span>&nbsp;
                         <span class="help-text">#i18n{calendar.create_calendar.periodValidity.comment}</span>
                     </div>
                 </div>
-                <div class="form-actions">
-                    <button class="btn btn-primary btn-small" type="submit" >
-                        <i class="icon-ok icon-white"></i>&nbsp;#i18n{calendar.create_calendar.buttonLabelCreate}
-                    </button>
-                    <a class="btn btn-small" href="jsp/admin/plugins/calendar/ManageCalendars.jsp" >
-                        <i class="icon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
-                    </a>
+                <div class="form-group">
+					<div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
+						<button class="btn btn-primary btn-sm" type="submit" >
+							<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.create_calendar.buttonLabelCreate}
+						</button>
+						<a class="btn btn-default btn-sm" href="jsp/admin/plugins/calendar/ManageCalendars.jsp" >
+							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
+						</a>
+					</div>
                 </div>
             </form>
         </fieldset>

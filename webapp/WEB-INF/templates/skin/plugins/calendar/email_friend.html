@@ -1,48 +1,48 @@
 <#escape x as x?html>
 <div class="row">
-	<div class="span12">
+	<div class="col-xs-12 col-sm-12 col-md-12">
 		<h4>#i18n{calendar.email-friend.event.title}</h4>
 		<form action="jsp/site/plugins/calendar/DoSendToFriend.jsp" method="post" name="form_email" class="form-horizontal">
 		    <input type="hidden" name="page" value="calendar"> 
 		    <input type="hidden" name="action" value="send_friend"> 
 		    <input type="hidden" name="event_id" value="${event_id}">
 		    <input type="hidden" name="calendar_id" value="${calendar_id}">
-		    <div class="control-group">
-			<label class="control-label" for="sender_first_name">#i18n{calendar.email-friend.sender.firstname} *</label>
-				<div class="controls">
-					<input type="text" id="sender_first_name" name="sender_first_name" tabindex="2" class="input-normal" maxlength="60">
+		    <div class="form-group">
+			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="sender_first_name">#i18n{calendar.email-friend.sender.firstname} *</label>
+				<div class="col-xs-12 col-sm-8 col-md-6">
+					<input type="text" class="form-control" id="sender_first_name" name="sender_first_name" tabindex="2" class="input-sm" maxlength="60">
 				</div>	
 			</div>	
-		    <div class="control-group">
-				<label class="control-label" for="sender_last_name">#i18n{calendar.email-friend.sendar.lastname} * </label>
-				<div class="controls">
-					<input type="text" id="sender_last_name" name="sender_last_name" tabindex="3" class="input-normal" maxlength="60">
+		    <div class="form-group">
+				<label class="control-label col-xs-12 col-sm-3 col-md-3" for="sender_last_name">#i18n{calendar.email-friend.sendar.lastname} * </label>
+				<div class="col-xs-12 col-sm-8 col-md-6">
+					<input type="text" class="form-control" id="sender_last_name" name="sender_last_name" tabindex="3" class="input-sm" maxlength="60">
 				</div>	
 			</div>	
-		    <div class="control-group">
-			<label class="control-label" for="sender_email">#i18n{calendar.email-friend.sender.email} * </label>
-				<div class="controls">
-					<input type="text" id="sender_email" name="sender_email" tabindex="4" class="input-normal" maxlength="160" >
+		    <div class="form-group">
+			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="sender_email">#i18n{calendar.email-friend.sender.email} * </label>
+				<div class="col-xs-12 col-sm-8 col-md-6">
+					<input type="text" class="form-control" id="sender_email" name="sender_email" tabindex="4" class="input-sm" maxlength="160" >
 				</div>	
 			</div>
-		    <div class="control-group">
-			<label class="control-label" for="sender_friend_email">#i18n{calendar.email-friend.friend.email} *</label>
-		        <div class="controls">
-					<input type="text" id="sender_friend_email" name="sender_friend_email" tabindex="5" class="input-normal" maxlength="160" >
+		    <div class="form-group">
+			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="sender_friend_email">#i18n{calendar.email-friend.friend.email} *</label>
+		        <div class="col-xs-12 col-sm-8 col-md-6">
+					<input type="text" class="form-control" id="sender_friend_email" name="sender_friend_email" tabindex="5" class="input-sm" maxlength="160" >
 		        </div>	
 			</div>	
-			<div class="control-group">
-			<label class="control-label" for="event_description">#i18n{calendar.email-friend.sender.message}</label>
-				<div class="controls">	
+			<div class="form-group">
+			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_description">#i18n{calendar.email-friend.sender.message}</label>
+				<div class="col-xs-12 col-sm-8 col-md-6">	
 					<textarea rows="10" cols="40" id="event_description" name="event_description" ></textarea>
 				</div>	
 			</div>
-			<div class="form-actions">
-		        <button type="submit" tabindex="10" class="btn btn-primary btn-small">
-					<i class="icon-envelope icon-white"></i>&nbsp;#i18n{calendar.email-friend.buttonLabelSend}
+			<div class="form-group">
+		        <button type="submit" tabindex="10" class="btn btn-primary btn-sm">
+					<i class="glyphicon glyphicon-envelope"></i>&nbsp;#i18n{calendar.email-friend.buttonLabelSend}
 				</button>
-		        <button class="btn btn-small" type="button" onclick="javascript:history.go(-1)">
-					<i class="icon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
+		        <button class="btn btn-default btn-sm" type="button" onclick="javascript:history.go(-1)">
+					<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
 				</button>
 			</div>
 	    </form>

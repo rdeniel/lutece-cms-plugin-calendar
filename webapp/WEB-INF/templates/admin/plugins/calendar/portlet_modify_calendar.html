@@ -4,16 +4,16 @@
 	<label class="radio inline">
 		<input class="radio" name="periodicity" value="1" <#if time_span="FALSE">checked="checked"</#if>type="radio">
 		<label class="inline">#i18n{calendar.portlet_modify_calendar.labelFrom}</label>
-		<input type="text" id="date_begin" name="date_begin" value="<#if date_begin?exists && date_begin?trim != "">${date_begin[6..7]}/${date_begin[4..5]}/${date_begin[0..3]}</#if>" class="input-small" maxlength="10" />
+		<input type="text" class="form-control" id="date_begin" name="date_begin" value="<#if date_begin?exists && date_begin?trim != "">${date_begin[6..7]}/${date_begin[4..5]}/${date_begin[0..3]}</#if>" class="input-sm" maxlength="10" />
 		<label class="inline">#i18n{calendar.portlet_modify_calendar.labelTo}</label>
-		<input type="text" id="date_end" name="date_end" value="<#if date_end?exists && date_end?trim != "">${date_end[6..7]}/${date_end[4..5]}/${date_end[0..3]}</#if>" class="input-small" maxlength="10" />
+		<input type="text" class="form-control" id="date_end" name="date_end" value="<#if date_end?exists && date_end?trim != "">${date_end[6..7]}/${date_end[4..5]}/${date_end[0..3]}</#if>" class="input-sm" maxlength="10" />
 	</label>
 	<label class="radio">
 		<input class="radio" name="periodicity" type="radio" value="0" <#if time_span="TRUE">checked="checked"</#if> >
 		#i18n{calendar.portlet_modify_calendar.labelOr}
 	</label>
 	#i18n{calendar.portlet_modify_calendar.labelPeriodicity}</b>
-	<@comboWithParams name="number_days" default_value="${number_days}" additionalParameters=" class=\"input-medium\"" items=interval_list />
+	<@comboWithParams name="number_days" default_value="${number_days}" additionalParameters=" class=\"form-control input-sm\"" items=interval_list />
 	#i18n{calendar.portlet_modify_calendar.labelStartingNow}
 </fieldset>
 <fieldset>
@@ -30,7 +30,7 @@
 		</#list>
 	</ul>
 	<label>#i18n{calendar.portlet_modify_calendar.labelTextFileAgenda}</label>
-	<input type="text" id="text_agendas" name="text_agendas" value="<#if text_agendas?exists>${text_agendas}</#if>" size="40" maxlength="255" />
+	<input type="text" class="form-control" id="text_agendas" name="text_agendas" value="<#if text_agendas?exists>${text_agendas}</#if>" size="40" maxlength="255" />
 	<span class="help-block">#i18n{calendar.portlet_modify_calendar.labelSummaryFile}</span>
 </fieldset>
 </#escape>

@@ -1,5 +1,5 @@
-<div class="row-fluid">
-    <div class="span12">
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
         <ul class="nav nav-tabs">
             <li> 
                 <a href="jsp/admin/plugins/calendar/ManageAdvancedParameters.jsp">#i18n{calendar.advanced_parameters.dashboard}</a>
@@ -19,8 +19,8 @@
             <legend>
                 #i18n{calendar.manage_category.boxTitle}
                 <form class="form-inline pull-right" method="post" action="jsp/admin/plugins/calendar/CreateCategory.jsp">
-                    <button class="btn btn-primary btn-small" type="submit" >
-                        <i class="icon-plus icon-white" ></i>
+                    <button class="btn btn-primary btn-sm" type="submit" >
+                        <i class="glyphicon glyphicon-plus" ></i>
                         <span class="hidden-phone" >#i18n{calendar.manage_category.buttonLabelCreate}</span>
                     </button>
                 </form>
@@ -40,12 +40,12 @@
                     <td>
                         <form class="form-inline pull-left spaced" method="post"  action="jsp/admin/plugins/calendar/RemoveCategory.jsp">
                             <input type="hidden" name="category_id"  value="${(categoryDisplay.category).id}" />
-                            <button class="btn btn-danger btn-small" type="submit"  title="#i18n{workgroup.manage_workgroups.linkLabelRemove}">
-								<i class="icon-trash icon-white"></i>
+                            <button class="btn btn-danger btn-sm" type="submit"  title="#i18n{workgroup.manage_workgroups.linkLabelRemove}">
+								<i class="glyphicon glyphicon-trash"></i>
                             </button>
                         </form>
-						<a class="btn btn-primary btn-small pull-left spaced" href="jsp/admin/plugins/calendar/ModifyCategory.jsp?category_id=${(categoryDisplay.category).id}"  title="null" >
-                            <i class="icon-edit icon-white"></i>
+						<a class="btn btn-primary btn-sm pull-left spaced" href="jsp/admin/plugins/calendar/ModifyCategory.jsp?category_id=${(categoryDisplay.category).id}"  title="null" >
+                            <i class="glyphicon glyphicon-edit"></i>
                         </a>
                     </td>
                 </tr>
