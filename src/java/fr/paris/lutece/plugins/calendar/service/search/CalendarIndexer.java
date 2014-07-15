@@ -282,7 +282,7 @@ public class CalendarIndexer implements SearchIndexer
 
         //the content of the article is recovered in the parser because this one
         //had replaced the encoded caracters (as &eacute;) by the corresponding special caracter (as ?)
-        StringBuilder sb = new StringBuilder( handler.toString( ) );
+        StringBuilder sb = new StringBuilder( occurrence.getTitle( ) + " - " + handler.toString( ) );
 
         // Add the description as a summary field, so that index can be incrementally maintained.
         // This field is stored, but it is not indexed
