@@ -702,10 +702,6 @@ public class CalendarApp implements XPageApplication
         switch ( Integer.parseInt( strPeriod ) )
         {
         case Constants.PROPERTY_PERIOD_NONE:
-            dateBegin = new Date( );
-            dateEnd = new Date( );
-            strDateBegin = DateUtil.getDateString( new Date( ), request.getLocale( ) );
-            strDateEnd = DateUtil.getDateString( new Date( ), request.getLocale( ) );
             break;
 
         case Constants.PROPERTY_PERIOD_TODAY:
