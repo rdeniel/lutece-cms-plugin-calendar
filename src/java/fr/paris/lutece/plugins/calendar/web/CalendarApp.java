@@ -1403,7 +1403,7 @@ public class CalendarApp implements XPageApplication
         }
         else
         {
-            SiteMessageService.setMessage( request, PROPERTY_INVALID_MAIL_ERROR_MESSAGE,
+            SiteMessageService.setMessage( request, PROPERTY_INVALID_MAIL_ERROR_MESSAGE, new String[] { strEmail },
                     PROPERTY_INVALID_MAIL_TITLE_MESSAGE, SiteMessage.TYPE_STOP );
         }
     }
