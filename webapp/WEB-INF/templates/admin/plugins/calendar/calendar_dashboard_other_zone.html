@@ -1,31 +1,18 @@
-
-<div class="well">
-	<fieldset>
-		<legend>
-			<img src="${icon}"/>&nbsp;
-			<a href="${url}" >#i18n{calendar.dashboard.calendarsList}</a>
-			<div class="pull-right">
-					<a class="btn btn-primary btn-sm" href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar" title="#i18n{calendar.dashboard.addCalendar}">
-						<i class="glyphicon glyphicon-plus"></i>
-					</a>
-					<a href="jsp/admin/AdminMenu.jsp#top" title="#i18n{calendar.dashboard.top}">
-						<i class="glyphicon glyphicon-arrow-up"></i>
-					</a>
-			</div>
-		</legend>	
-		<#include "calendar_dashboard.html" />
-	</fieldset>
-</div>
-<!--
-<div class="lutece-widget">
-	<div class="panel panel-primary">
-		<div class="panel-header">
-			<a href="${url}" ><i class="glyphicon glyphicon-calendar"></i></a>
-			<span>#i18n{calendar.dashboard.calendarsList}</span>
-		</div>
-		<div class="panel-content">
-			<#include "calendar_dashboard.html" />
+<div class="box box-solid box-primary">
+	<div class="box-header">
+		<h3 class="box-title">#i18n{calendar.dashboard.calendarsList}</h3>
+    	<div class="box-tools pull-right">
+			<a class="btn btn-primary btn-xs btn-flat" href="jsp/admin/plugins/calendar/CreateCalendar.jsp?plugin_name=calendar" title="#i18n{calendar.dashboard.addCalendar}">
+				<i class="fa fa-plus"></i>
+			</a>
 		</div>
 	</div>
+	<div class="box-body table-responsive no-padding">
+		<#include "calendar_dashboard.html" />	
+	</div><!-- /.box-body -->
+    <div class="box-footer text-center">
+		<a title="#i18n{calendar.dashboard.calendarsList} " href="${url}">
+			#i18n{calendar.dashboard.calendarsList} <i class="fa fa-arrow-circle-right"></i>
+		</a>	
+	</div><!-- /.box-footer-->
 </div>
- -->

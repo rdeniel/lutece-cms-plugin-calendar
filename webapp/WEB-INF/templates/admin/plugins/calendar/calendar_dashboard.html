@@ -1,5 +1,4 @@
-
-<table class="table table-striped table-condensed">
+<table class="table table-hover table-condensed">
 	<thead>
 		<tr>
 			<th>#i18n{calendar.dashboard.columnTitleLabel}</th>
@@ -8,7 +7,8 @@
 		<#list calendar_list as calendar>
 			<tr>
 				<td>
-					<img src="${calendar.eventImage}" alt="${calendar.eventImage}" title="${calendar.eventImage}" /> ${calendar.name}
+					<strong><img src="${calendar.eventImage}" alt="${calendar.eventImage}" title="${calendar.eventImage}" /> ${calendar.name}</strong>
+					<p><small><i class="glyphicon glyphicon-user"></i> #i18n{calendar.dashboard.nbSubscribers}&nbsp;:&nbsp;${nb_subscribers_list[calendar.id]}</small></p>
 					<ul class="list-unstyled">
 						<#assign nb_event = 0>
 						<#list event_list as event>
@@ -22,7 +22,7 @@
 									<#assign nb_event = nb_event + 1>
 								<#else>
 									<li>
-										<a class="btn btn-default btn-sm" href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
+										<a class="btn btn-default btn-xs btn-flat" href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
 											<i class="glyphicon glyphicon-chevron-right"></i>  #i18n{calendar.dashboard.etc}
 										</a>
 									</li>
@@ -33,15 +33,13 @@
 					</ul>
 				</td>
 				<td>
-					<a href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="btn btn-primary btn-sm" title="#i18n{calendar.dashboard.modifyCalendar}" >
+					<a href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="btn btn-primary btn-xs btn-flat" title="#i18n{calendar.dashboard.modifyCalendar}" >
 						<i class="glyphicon glyphicon-edit"></i>
 					</a>
-					<a href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="btn btn-primary btn-sm" title="#i18n{calendar.dashboard.addEvent}" >
-						<i class="fa fa-calendar-o"></i>
+					<a href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="btn btn-primary btn-xs btn-flat" title="#i18n{calendar.dashboard.addEvent}" >
+						<i class="fa fa-plus"></i>
 					</a>
-					<a href="jsp/admin/plugins/calendar/ManageSubscribers.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="btn btn-primary btn-sm" title="#i18n{calendar.dashboard.nbSubscribers}" >
-						<i class="glyphicon glyphicon-user"></i> (${nb_subscribers_list[calendar.id]})
-					</a>
+					
 				</td>
 			</tr>
 		</#list>
