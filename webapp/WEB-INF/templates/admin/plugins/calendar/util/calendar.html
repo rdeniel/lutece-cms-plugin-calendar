@@ -1,5 +1,5 @@
 <#macro multiCombo name list_default_values items >
-	<select multiple="multiple" id="${name!}" name="${name!}" class="input-sm">			
+	<select multiple="multiple" id="${name!}" name="${name!}" class="input-xs form-control">			
 		<#if list_default_values?has_content>
 			<#list list_default_values as default_value>
 				<#if items[default_value.id?string]?exists>

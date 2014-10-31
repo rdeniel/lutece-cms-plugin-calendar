@@ -6,234 +6,182 @@
 	</#list>
 	<#return false>
 </#function>
-
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-3">
-		<form class="form-horizontal" role="form" method="post" action="jsp/admin/plugins/calendar/DoModifyOccurrencePeriodicity.jsp">
-		<input type="hidden" name="event_id" value="${event.id}" />
-		<input type="hidden" name="calendar_id" value="${calendar_id}" />
-		<div class="well">
-			<div class="form-group">
-			<label class="col-xs-12 col-sm-12 col-md-12">#i18n{calendar.modify_event.periodicity} :</label>
-				<div class="col-xs-12 col-sm-12 col-md-12">
-				<@comboWithParams name="periodicity" default_value="${number_days}" additionalParameters=" tabindex=\"1\" class=\"input-sm form-control\"" items=interval_list />
-				<span class="help-text">#i18n{calendar.modify_event.labelStartingDateStart}</span>
-				</div>
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="box box-solid box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{calendar.modify_occurrence.pageTitle}</h3>
 			</div>
-		</div>
-		<div class="well">
-			<div class="form-group">
-				<label class="col-xs-12 col-sm-12 col-md-12"> #i18n{calendar.modify_event.occurrence} :</label>
-				<div class="col-xs-12 col-sm-12 col-md-12">
-					<input type="text" class="form-control input-sm" id="occurrence" name="occurrence" value="${event.occurrence}" tabindex="2" maxlength="3">
+			<div class="box-body">
+				<form class="form-inline" role="form" method="post" action="jsp/admin/plugins/calendar/DoModifyOccurrencePeriodicity.jsp">
+				<input type="hidden" name="event_id" value="${event.id}">
+				<input type="hidden" name="calendar_id" value="${calendar_id}">
+				<div class="form-group">
+					<label>#i18n{calendar.modify_event.periodicity}</label>
+					<@comboWithParams name="periodicity" default_value="${number_days}" additionalParameters=" tabindex=\"1\" class=\"input-xs form-control\"" items=interval_list />
 				</div>
-			</div>
-		</div>
-		<div class="well">
-			<div class="form-group">
-				<label class="col-xs-12 col-sm-12 col-md-12" for="excluded_days">#i18n{calendar.modify_event.excluded_days} : </label>
-				<div class="col-xs-12 col-sm-12 col-md-12">
-					<div class="checkbox">
-						<label>
+				<div class="form-group">
+					<label>#i18n{calendar.modify_event.occurrence}</label>
+					<input type="text" class="form-control input-xs" size="2" id="occurrence" name="occurrence" value="${event.occurrence}" tabindex="2" maxlength="3">
+				</div>
+				<div class="form-group">
+					<label for="excluded_days">#i18n{calendar.modify_event.excluded_days}</label>
+					<label class="checkbox-inline">
 						<input tabindex="3" type="checkbox" value="2" name="excluded_days" <#if isDayExcluded("2", event.excludedDays)> checked="checked" </#if>>#i18n{calendar.label.monday}
-						</label>
-					</div>
-					<div class="checkbox">
-						<label>
+					</label>
+					<label class="checkbox-inline">
 						<input tabindex="4" type="checkbox" value="3" name="excluded_days" <#if isDayExcluded("3", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.tuesday}
-						</label>
-					</div>
-					<div class="checkbox">
-						<label>
+					</label>
+					<label class="checkbox-inline">
 						<input tabindex="5" type="checkbox" value="4" name="excluded_days" <#if isDayExcluded("4", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.wednesday}
-						</label>
-					</div>
-					<div class="checkbox">
-						<label>
+					</label>
+					<label class="checkbox-inline">
 						<input tabindex="6" type="checkbox" value="5" name="excluded_days" <#if isDayExcluded("5", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.thursday}
-						</label>
-					</div>
-					<div class="checkbox">
-						<label>
+					</label>
+					<label class="checkbox-inline">
 						<input tabindex="7" type="checkbox" value="6" name="excluded_days" <#if isDayExcluded("6", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.friday}
-						</label>
-					</div>
-					<div class="checkbox">
-						<label>
+					</label>
+					<label class="checkbox-inline">
 						<input tabindex="8" type="checkbox" value="7" name="excluded_days" <#if isDayExcluded("7", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.saturday}
-						</label>
-					</div>    
-					<div class="checkbox">
-						<label>
+					</label>
+					<label class="checkbox-inline">
 						<input tabindex="9" type="checkbox" value="1" name="excluded_days" <#if isDayExcluded("1", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.sunday}
-						</label>
-					</div>
+					</label>
+				</div>
+				<a class="btn btn-default btn-xs btn-flat pull-right spaced" tabindex="11" href="jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=${calendar_id}">
+					<i class="glyphicon glyphicon-remove-circle"></i><span class="hidden-xs">&nbsp;#i18n{calendar.modify_event.backToEventList}</span>
+				</a>
+				<button tabindex="10" class="btn btn-primary btn-xs btn-flat pull-right" type="submit" >
+					<i class="glyphicon glyphicon-ok"></i><span class="hidden-xs">&nbsp;#i18n{calendar.modify_event.buttonLabelmodify}</span>
+				</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+		<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/ModifyOccurrenceList.jsp" name="form_modify_occurrence">
+		<input type="hidden" name="plugin_name" value="calendar"> 
+		<input type="hidden" name="calendar_id" value="${calendar_id}">   
+		<input type="hidden" name="event_id" value="${event.id}">
+        <div class="box box-solid box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{calendar.modify_occurrence.ListOccurrence}</h3>
+				<div class="box-tools">
+					<button class="btn btn-danger btn-xs pull-right spaced" disabled type="submit" name="remove_occurrences" >
+						<i class="fa fa-trash"></i>&nbsp;#i18n{calendar.modify_occurrence.buttonDelete}
+					</button>
+					<button class="btn btn-primary btn-xs pull-right" type="submit" disabled name="modify_occurrences_status" >
+						<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_occurrence.buttonModify} #i18n{calendar.modify_occurrence.labelStatus}
+					</button>
+					<@comboWithParams name="event_status" default_value="${default_status}" additionalParameters=" tabindex=\"1\" style=\"color:#000;\" class=\"input-xs pull-right\" disabled=\"disabled\"" items=event_status_list />
 				</div>
 			</div>
-		</div>
-		<div class="well">
-			<button tabindex="10" class="btn btn-primary btn-sm" type="submit" >
-				<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_event.buttonLabelmodify}
-			</button>
-			<a class="btn btn-default btn-sm" tabindex="11" href="jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=${calendar_id}">
-				<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{calendar.modify_event.backToEventList}
-			</a>
-		</div>
-       	</fieldset>
-	</form>
-	</div>
-	
-	<div class="col-xs-12 col-sm-12 col-md-9">
-	<fieldset>
-		<legend>#i18n{calendar.modify_occurrence.ListOccurrence}</legend>
-		<@paginationAdmin paginator=paginator combo=1 />
-		<form class="form" method="post" action="jsp/admin/plugins/calendar/ModifyOccurrenceList.jsp" name="form_modify_occurrence">
-		<input type="hidden" name="plugin_name" value="calendar" /> 
-        <input type="hidden" name="calendar_id" value="${calendar_id}" />   
-       	<input type="hidden" name="event_id" value="${event.id}" />
-       	
-	    <table class="table table-striped table-condensed">
-	        <tr>
-				 <th>
-					<div class="checkbox">
-						<label>
-						<input tabindex="12"  type="checkbox" id="cbx_0" name="cbx_check">
-						<strong>#i18n{calendar.modify_occurrence.columnEventTitle}</strong>
-						</label>
-						<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="title&calendar_id=${calendar_id}&event_id=${event.id}" />
-					</div>	
-	            </th>   
-	            <th>
-	            	#i18n{calendar.modify_occurrence.columnEventDate}
-					<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="date&calendar_id=${calendar_id}&event_id=${event.id}" />
-	            </th>
-	            <th>
-	            	#i18n{calendar.modify_event.status}
-	            	<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="status&calendar_id=${calendar_id}&event_id=${event.id}" />
-	            </th>           
-	            <th>
-	            	#i18n{calendar.modify_occurrence.columnEventTimeStart}
-	            	<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="dateTimeStart&calendar_id=${calendar_id}&event_id=${event.id}" />
-	            </th>
-	            <th>
-	            	#i18n{calendar.modify_occurrence.columnEventTimeEnd}
-	            	<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="dateTimeEnd&calendar_id=${calendar_id}&event_id=${event.id}" />
-	            </th>
-	                   
-	            <th>#i18n{calendar.modify_occurrence.columnEventActions}</th>
-	        </tr> 
-	        <#assign i=13>                
-	        <#list occurrence_list as occurrence >
-	        <tr>
-				 <td>
-					<div class="checkbox">
-					<label>
-						<input tabindex="${i}" type="checkbox" id="cbx_occurrence_${i}" name="cbx_occurrence" class="cbx_occurence" value="${occurrence.id}" >
-						<strong>${occurrence.title}</strong>
-					</label>
-					 </div>
-	            </td>
-				<td>
-				  ${occurrence.date?date}
-	            </td>
-	            <td>
-	                <#if occurrence.status?exists>
-						<#switch occurrence.status>
-						  <#case "confirmed">
-						    #i18n{calendar.event.status.confirmed.value}
-						    <#break>
-						  <#case "tentative">
-						    #i18n{calendar.event.status.tentative.value}
-						    <#break>
-						  <#case "cancelled">
-						    #i18n{calendar.event.status.cancelled.value}
-						    <#break>
-						</#switch>
-	                </#if>
-	            </td>
-	            <td>
-	                <#if occurrence.dateTimeStart?exists>
-	                ${occurrence.dateTimeStart}
-	                </#if>
-	            </td>
-	            <td>
-	                <#if occurrence.dateTimeEnd?exists>
-	                ${occurrence.dateTimeEnd}
-	                </#if>
-	            </td>
-	            <td>
-					<a tabindex="${i + 1}" class="btn btn-primary btn-xs" href="jsp/admin/plugins/calendar/ModifyOccurrence.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${occurrence.eventId}&occurrence_id=${occurrence.id}"  title="null" >
-						<i class="glyphicon glyphicon-edit"></i>
-					</a>
-	                <a tabindex="${i + 2}" class="btn btn-danger btn-xs" href="jsp/admin/plugins/calendar/RemoveOccurrence.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${occurrence.eventId}&occurrence_id=${occurrence.id}"  title="#i18n{calendar.modify_occurrence.actionDeleteEvent}" >
-						<i class="glyphicon glyphicon-trash"></i>
-					</a>
-	            </td>
-	        </tr>
-	        <#assign i=i+3>
-	        </#list>
-	    </table>
-		<div class="form-group">
-			<div class="input-group">
-				<div class="input-group-addon"><label>#i18n{calendar.modify_occurrence.labelStatus} :</label></div>
-	      		<@comboWithParams name="event_status" default_value="${default_status}" additionalParameters=" tabindex=\"1\" class=\"form-control\"" items=event_status_list />
+			<div class="box-body table-responsive">	
+				<table class="table table-hover table-condensed">
+					<tr>
+						 <th>
+							<div class="checkbox">
+								<label>
+								<input tabindex="12"  type="checkbox" id="select_all" name="cbx_check">
+								<strong>#i18n{calendar.modify_occurrence.columnEventTitle}</strong>
+								</label>
+								<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="title&calendar_id=${calendar_id}&event_id=${event.id}" />
+							</div>	
+						</th>   
+						<th>
+							#i18n{calendar.modify_occurrence.columnEventDate}
+							<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="date&calendar_id=${calendar_id}&event_id=${event.id}" />
+						</th>
+						<th>
+							#i18n{calendar.modify_event.status}
+							<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="status&calendar_id=${calendar_id}&event_id=${event.id}" />
+						</th>           
+						<th>
+							#i18n{calendar.modify_occurrence.columnEventTimeStart}
+							<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="dateTimeStart&calendar_id=${calendar_id}&event_id=${event.id}" />
+						</th>
+						<th>
+							#i18n{calendar.modify_occurrence.columnEventTimeEnd}
+							<@sort jsp_url="jsp/admin/plugins/calendar/OccurrenceList.jsp" attribute="dateTimeEnd&calendar_id=${calendar_id}&event_id=${event.id}" />
+						</th>
+							   
+						<th>#i18n{calendar.modify_occurrence.columnEventActions}</th>
+					</tr> 
+					<#assign i=13>                
+					<#list occurrence_list as occurrence >
+					<tr>
+						 <td>
+							<label class="checkbox-inline">
+								<input tabindex="${i}" type="checkbox" id="cbx_occurrence_${i}" name="cbx_occurrence" class="cbx_occurence" value="${occurrence.id}" >
+								<strong>${occurrence.title}</strong>
+							</label>
+						</td>
+						<td>
+						  ${occurrence.date?date}
+						</td>
+						<td>
+							<#if occurrence.status?exists>
+								<#switch occurrence.status>
+								  <#case "confirmed">
+									#i18n{calendar.event.status.confirmed.value}
+									<#break>
+								  <#case "tentative">
+									#i18n{calendar.event.status.tentative.value}
+									<#break>
+								  <#case "cancelled">
+									#i18n{calendar.event.status.cancelled.value}
+									<#break>
+								</#switch>
+							</#if>
+						</td>
+						<td>
+							<#if occurrence.dateTimeStart?exists>
+							${occurrence.dateTimeStart}
+							</#if>
+						</td>
+						<td>
+							<#if occurrence.dateTimeEnd?exists>
+							${occurrence.dateTimeEnd}
+							</#if>
+						</td>
+						<td>
+							<a tabindex="${i + 1}" class="btn btn-primary btn-xs btn-flat" href="jsp/admin/plugins/calendar/ModifyOccurrence.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${occurrence.eventId}&occurrence_id=${occurrence.id}"  title="null" >
+								<i class="fa fa-pencil"></i>
+							</a>
+							<a tabindex="${i + 2}" class="btn btn-danger btn-xs btn-flat" href="jsp/admin/plugins/calendar/RemoveOccurrence.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${occurrence.eventId}&occurrence_id=${occurrence.id}"  title="#i18n{calendar.modify_occurrence.actionDeleteEvent}" >
+								<i class="fa fa-trash"></i>
+							</a>
+						</td>
+					</tr>
+					<#assign i=i+3>
+					</#list>
+				</table>
+				<@paginationAdmin paginator=paginator combo=1 />
 			</div>
-
 		</div>
-	    <div class="form-group col-xs-12 col-sm-12 col-md-12 well">
-			<button tabindex="${i + 1}" class="btn btn-primary btn-sm" type="submit" name="modify_occurrences_status" >
-				<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_occurrence.buttonModify}
-			</button>
-			<button tabindex="${i + 2}" class="btn btn-danger btn-sm" type="submit" name="remove_occurrences" >
-				<i class="glyphicon glyphicon-trash"></i>&nbsp;#i18n{calendar.modify_occurrence.buttonDelete}
-			</button>
-		</div>
-        </form>
-    </fieldset>
-		<@paginationAdmin paginator=paginator combo=1 />
+		</form>
 	</div>
 </div>
 
 <script>
 $(document).ready( function(){
-	$("#cbx_0").click( function(){
-		if( $(this).attr('checked') == 'checked' ){
-			$("input:checkbox.cbx_occurence").attr('checked','checked');
+	$("#select_all").click( function(){
+		if( this.checked ){
+			$('input[type="checkbox"]').each( function() {this.checked = true;} );
 		} else {
-			$("input:checkbox.cbx_occurence").removeAttr('checked');
+			$('input[type="checkbox"]').each(function() { this.checked = false; } );
 		}
 	});
- });  
-
-/*
-function doCheckBox( ){
 	
-	//Retrieve a checkbox[] from the form
-	allcheckBox = document.forms["form_modify_occurrence"].cbx_occurrence;
-
-	//when the main checkbox is checked all the checkbox of the list are checked
-	if(document.getElementById("cbx_0").checked )
-	{	
-		//if there are several checkbox	to check	
-		if( allcheckBox.length > 0)
-			for (i=0; i < allcheckBox.length ; ++i){
-				document.getElementById("cbx_occurrence_" + i).checked = true;
-				}
-		//if there is just one checkbox to check		
-		else
-			document.getElementById("cbx_occurrence_0").checked = true;	
+	$("input[type='checkbox']").click( function(){    
+	if( $("input[type='checkbox']:checked").length > 0 ){
+		$(".box-tools").children().removeAttr("disabled");
+	} else {
+		$(".box-tools").children().attr("disabled","disabled");
 	}
-	//when the main checkbox is checked all the uncheckbox of the list are unchecked
-	else {
-		if( allcheckBox.length > 0)
-			for (i=0; i < allcheckBox.length ; ++i){
-					document.getElementById("cbx_occurrence_"+i).checked = false;
-				}			
-		else
-			document.getElementById("cbx_occurrence_0").checked = false;	
-	}
-}
-
-function checkRadio( radio ){document.getElementById(radio).checked = true;}
-*/
+	});
+	
+ });  
 </script>

@@ -1,60 +1,70 @@
-<div class="row">	
-	<div class="col-xs-12 col-sm-12 col-md-12">	
-		<fieldset>
-		<legend>#i18n{calendar.modify_occurrence.pageTitle}</legend>
-    	<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/DoModifyOccurrence.jsp" name="modify_occurrence">
-			<input type="hidden" name="calendar_id" value="${calendar_id}" />   
-			<input type="hidden" name="event_id" value="${occurrence.eventId}" /> 
-			<input type="hidden" name="occurrence_id" value="${occurrence.id}" />
-			<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_title" >#i18n{calendar.modify_event.title}&nbsp;*</label>
-				<div class="col-xs-12 col-sm-8 col-md-6">
-					<input type="text" class="form-control" id="event_title" name="event_title" value="${occurrence.title}" class="input-lg" maxlength="60">
-				</div>
-			</div>			
-			<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_date" >#i18n{calendar.modify_event.date} (dd/MM/yyyy)&nbsp;*</label>
-				<div class="col-xs-12 col-sm-8 col-md-6">
-					<input type="text" class="form-control" id="event_date" name="event_date" value="${occurrence.date?date}" class="input-sm" maxlength="10" />
-				</div>
-			</div>			
-			<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_time_start" >#i18n{calendar.modify_event.time_start} (hh:mm)</label>
-				<div class="col-xs-12 col-sm-8 col-md-6">
-					<input type="text" class="form-control" id="event_time_start" name="event_time_start" value="<#if occurrence.dateTimeStart?exists>${occurrence.dateTimeStart}</#if>" class="timepicker-default input-sm" maxlength="5" >
-				</div>
-			</div>			
-			<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_time_end" >#i18n{calendar.modify_event.time_end} (hh:mm)</label>
-				<div class="col-xs-12 col-sm-8 col-md-6">
-					<input type="text" class="form-control" id="event_time_end" name="event_time_end" value="<#if occurrence.dateTimeEnd?exists>${occurrence.dateTimeEnd}</#if>" class="timepicker-default input-sm" maxlength="5" >
-				</div>
-			</div>			
-			<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_status">#i18n{calendar.modify_event.status}</label>
-				<div class="col-xs-12 col-sm-8 col-md-6">
-					<@comboWithParams name="event_status" default_value="${default_status}" additionalParameters=" class=\"form-control input-sm\"" items=event_status_list />
-				</div>
-			</div>            
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
-					<button class="btn btn-primary btn-sm" type="submit">
-						<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_event.buttonLabelmodify}
-					</button>
-					<a class="btn btn-default btn-sm" href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${occurrence.eventId}">
-						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{calendar.modify_occurrence.backToOccurenceList}
-					</a>
-				</div>
-			</div> 							 
-		</form>
-		</fieldset>
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="box box-solid box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{calendar.modify_occurrence.pageTitle}</h3>
+			</div>
+			<div class="box-body">
+				<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/DoModifyOccurrence.jsp" name="modify_occurrence">
+					<input type="hidden" name="calendar_id" value="${calendar_id}" />   
+					<input type="hidden" name="event_id" value="${occurrence.eventId}" /> 
+					<input type="hidden" name="occurrence_id" value="${occurrence.id}" />
+					<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_title" >#i18n{calendar.modify_event.title}&nbsp;*</label>
+						<div class="col-xs-12 col-sm-8 col-md-6">
+							<input type="text" class="form-control" id="event_title" name="event_title" value="${occurrence.title}" class="input-lg" maxlength="60">
+						</div>
+					</div>			
+					<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_date" >#i18n{calendar.modify_event.date} (dd/MM/yyyy)&nbsp;*</label>
+						<div class="col-xs-12 col-sm-4 col-md-2">
+							<input type="text" class="form-control" id="event_date" name="event_date" value="${occurrence.date?date}" class="input-sm" maxlength="10">
+						</div>
+					</div>			
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_time_start" >#i18n{calendar.modify_event.time_start} (hh:mm)</label>
+						<div class="col-xs-12 col-sm-2 col-md-1">
+							<div class="input-group clockpicker">
+								<input type="text" class="form-control input-sm" title=" (hh:mm) " id="event_time_start" name="event_time_start" tabindex="3" maxlength="5" value="<#if occurrence.dateTimeEnd?exists>${occurrence.dateTimeEnd}</#if>">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-time"></span>
+								</span>	
+							</div>
+						</div>			
+						<label for="event_time_end" >#i18n{calendar.modify_event.time_end} (hh:mm)</label>
+						<div class="col-xs-12 col-sm-1 col-md-1">
+							<div class="input-group clockpicker">
+								<input type="text" class="form-control input-sm" title=" (hh:mm) " id="event_time_end" name="event_time_end" tabindex="3" maxlength="5" value="<#if occurrence.dateTimeEnd?exists>${occurrence.dateTimeEnd}</#if>">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-time"></span>
+								</span>	
+							</div>
+						</div>			
+					</div>			
+					<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_status">#i18n{calendar.modify_event.status}</label>
+						<div class="col-xs-12 col-sm-4 col-md-2">
+							<@comboWithParams name="event_status" default_value="${default_status}" additionalParameters=" class=\"form-control input-sm\"" items=event_status_list />
+						</div>
+					</div>            
+					<div class="form-group">
+						<div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
+							<button class="btn btn-primary btn-flat" type="submit">
+								<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_event.buttonLabelmodify}
+							</button>
+							<a class="btn btn-default btn-flat" href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${occurrence.eventId}">
+								<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{calendar.modify_occurrence.backToOccurenceList}
+							</a>
+						</div>
+					</div> 							 
+				</form>
+			</div>
+		</div>
     </div>
 </div>
-
-<script src="js/jquery/plugins/ui/jquery-ui-1.9.2.custom.min.js"></script>
-<script src="js/jquery/plugins/ui/ui.datepicker-fr.js"></script>
-<script src="js/jquery/plugins/ui/timepicker/jquery-ui-timepicker-addon.js"></script>
-<script src="js/jquery/plugins/ui/timepicker/jquery-ui-sliderAccess.js"></script>
-<script src="js/jquery/plugins/ui/timepicker/localization/jquery-ui-timepicker-${locale}.js"></script>
-<script>$('.timepicker-default').timepicker();</script>
-<@getDatePicker idField="event_date" language=locale />
+</script>
+<@getDatePickerBootstrap idField="event_date" language=locale />
+<script src="js/bootstrap-clockpicker.min.js"></script>
+<script type="text/javascript">
+$('.clockpicker').clockpicker({donetext:"Ok"});
+</script>

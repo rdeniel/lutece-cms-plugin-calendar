@@ -1,7 +1,9 @@
 <#escape x as x?html>
-<label class="checkbox">
-	<input type="checkbox" name="cbx_top_event" class="checkbox" ${top_event?string("checked=\"checked\"", "")}  value="top_event" >
-	#i18n{calendar.portlet_mini_calendar.show.topevent}
-</label>
+<div class="checkbox">
+	<label>
+		<input type="checkbox" name="cbx_top_event" class="checkbox" ${top_event?string("checked=\"checked\"", "")}  value="top_event" >
+		#i18n{calendar.portlet_mini_calendar.show.topevent}
+	</label>
+</div>
 </#escape>
 

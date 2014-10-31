@@ -1,38 +1,45 @@
-<ul class="nav nav-tabs">
-  <li class="active">
-    <a href="jsp/admin/plugins/calendar/ManageAdvancedParameters.jsp">#i18n{calendar.advanced_parameters.dashboard}</a>
-  </li>
-  <li>
-    <a href="jsp/admin/plugins/calendar/ManageCalendarCategory.jsp" >
-        #i18n{calendar.adminFeature.category_management.description}
-    </a>
-  </li>
-  <li>
-    <a href="jsp/admin/plugins/calendar/style/ManageExportStyleSheets.jsp"  title="null" >
-        #i18n{calendar.adminFeature.calendar_management_export_stylesheet.description}
-    </a>
-  </li>
-</ul>
-<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/DoModifyCalendarParameterValues.jsp">
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-3 col-md-3" > #i18n{calendar.advanced_parameters.dashboard.nNextDays}</label>
-            <div class="col-xs-12 col-sm-8 col-md-6">
-                <input type="text" class="form-control" maxlength="2" class="input-sm" name="dashboard_n_next_days" value="${calendar_parameters['dashboard_n_next_days']}">
-                <span class="help-block">#i18n{calendar.advanced_parameters.dashboard.nNextDaysComment}</span>
-            </div>
+<div class="box box-solid box-primary">
+	<div class="box-header">
+		<h3 class="box-title">#i18n{calendar.manage_calendars.labelAdvancedParameters}</h3>
     </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-3 col-md-3" > #i18n{calendar.advanced_parameters.dashboard.nbEvents}</label>
-            <div class="col-xs-12 col-sm-8 col-md-6">
-               <input type="text" class="form-control" maxlength="2" class="input-sm" name="dashboard_nb_events" value="${calendar_parameters['dashboard_nb_events']}"/>
-               <span class="help-block">#i18n{calendar.advanced_parameters.dashboard.nbEventsComment}</span>
-         </div>
-    </div>  
-    <div class="form-group">
-		<div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
-			<button class="btn btn-primary btn-sm" type="submit" >
-				<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.advanced_parameters.dashboard.labelButtonModify}
-			</button>
-		</div>
+    <div class="box-body table-responsive">
+		<ul class="nav nav-tabs">
+		  <li class="active">
+			<a href="jsp/admin/plugins/calendar/ManageAdvancedParameters.jsp">#i18n{calendar.advanced_parameters.dashboard}</a>
+		  </li>
+		  <li>
+			<a href="jsp/admin/plugins/calendar/ManageCalendarCategory.jsp" >
+				#i18n{calendar.adminFeature.category_management.description}
+			</a>
+		  </li>
+		  <li>
+			<a href="jsp/admin/plugins/calendar/style/ManageExportStyleSheets.jsp"  title="null" >
+				#i18n{calendar.adminFeature.calendar_management_export_stylesheet.description}
+			</a>
+		  </li>
+		</ul>
+		<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/DoModifyCalendarParameterValues.jsp">
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-3 col-md-3" > #i18n{calendar.advanced_parameters.dashboard.nNextDays}</label>
+					<div class="col-xs-12 col-sm-3 col-md-3">
+						<input type="number" min="1" max="365" class="form-control" maxlength="2" style="width:25%;" name="dashboard_n_next_days" value="${calendar_parameters['dashboard_n_next_days']}">
+						<span class="help-block">#i18n{calendar.advanced_parameters.dashboard.nNextDaysComment}</span>
+					</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-3 col-md-3" > #i18n{calendar.advanced_parameters.dashboard.nbEvents}</label>
+					<div class="col-xs-12 col-sm-3 col-md-3">
+					   <input type="number" min="1" max="365" class="form-control" maxlength="2" style="width:25%;" name="dashboard_nb_events" value="${calendar_parameters['dashboard_nb_events']}"/>
+					   <span class="help-block">#i18n{calendar.advanced_parameters.dashboard.nbEventsComment}</span>
+				 </div>
+			</div>  
+			<div class="form-group">
+				<div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
+					<button class="btn btn-primary btn-flat" type="submit" >
+						<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.advanced_parameters.dashboard.labelButtonModify}
+					</button>
+				</div>
+			</div>
+		</form>
     </div>
-</form>
+</div>

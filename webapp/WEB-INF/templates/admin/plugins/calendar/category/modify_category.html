@@ -1,51 +1,57 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12">
-		<fieldset>
-		<legend>#i18n{calendar.modify_category.boxTitle}</legend>
-		<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/DoModifyCategory.jsp" enctype="multipart/form-data" >
-			<input type="hidden" name="category_id" value="${categoryDisplay.category.id}" />
-       		<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="category_name">#i18n{calendar.modify_category.labelName} *</label>
-				<div class="col-xs-12 col-sm-8 col-md-6">
-					<input type="text" class="form-control input-sm" id="category_name" name="category_name" value="${categoryDisplay.category.name}" maxlength="100" />
-				</div>
+		<div class="box box-solid box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{calendar.modify_category.boxTitle}</h3>
 			</div>
-			<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="category_description">#i18n{calendar.modify_category.labelDescription}</label>
-				<div class="col-xs-12 col-sm-8 col-md-6">
-					<input type="text" class="form-control input-sm" id="category_description" name="category_description" value="${categoryDisplay.category.description!}" maxlength="255" />
-				</div>
-			</div>
-			<div class="form-group">
-			<label class="control-label col-xs-12 col-sm-3 col-md-3" for="workgroup_key">#i18n{calendar.modify_category.labelWorkgroup}</label>
-				 <div class="col-xs-12 col-sm-8 col-md-6">
-					<@comboWithParams name="workgroup_key" default_value=categoryDisplay.category.workgroup additionalParameters=" class=\"form-control input-sm\"" items=user_workgroup_list  />
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-xs-12 col-sm-3 col-md-3" for="category_icon">#i18n{calendar.modify_category.labelIcon}</label>
+		<div class="box-body">
+			<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/DoModifyCategory.jsp" enctype="multipart/form-data" >
+				<input type="hidden" name="category_id" value="${categoryDisplay.category.id}" />
+				<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-3 col-md-3" for="category_name">#i18n{calendar.modify_category.labelName} *</label>
 					<div class="col-xs-12 col-sm-8 col-md-6">
-					<img src=${categoryDisplay.iconUrl} class="thumblist" alt="#i18n{calendar.modify_category.altIcon}" >
-					<div class="checkbox">
-						<label>
-						<input type="checkbox" name="update_icon" >
-						#i18n{calendar.modify_category.labelUpdateIcon} 
-					</label>
+						<input type="text" class="form-control" id="category_name" name="category_name" value="${categoryDisplay.category.name}" maxlength="100" />
 					</div>
-					<input type="file" id="category_icon" name="category_icon" class="input-xs" />
 				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
-					<button class="btn btn-primary btn-sm" type="submit" >
-						<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_category.buttonLabelModify}
-					</button>
-					<a class="btn btn-default btn-sm" href="jsp/admin/plugins/calendar/ManageCalendarCategory.jsp" >
-						<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
-					</a>
+				<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-3 col-md-3" for="category_description">#i18n{calendar.modify_category.labelDescription}</label>
+					<div class="col-xs-12 col-sm-8 col-md-6">
+						<input type="text" class="form-control" id="category_description" name="category_description" value="${categoryDisplay.category.description!}" maxlength="255" />
+					</div>
 				</div>
+				<div class="form-group">
+				<label class="control-label col-xs-12 col-sm-3 col-md-3" for="workgroup_key">#i18n{calendar.modify_category.labelWorkgroup}</label>
+					 <div class="col-xs-12 col-sm-8 col-md-6">
+						<@comboWithParams name="workgroup_key" default_value=categoryDisplay.category.workgroup additionalParameters=" class=\"form-control\"" items=user_workgroup_list  />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-3 col-md-3" for="category_icon">#i18n{calendar.modify_category.labelIcon}</label>
+						<div class="col-xs-12 col-sm-4 col-md-4">
+							<input type="file" id="category_icon" name="category_icon" class="input-xs">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="update_icon" >
+									#i18n{calendar.modify_category.labelUpdateIcon} 
+								</label>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-4 col-md-4">
+							<img src=${categoryDisplay.iconUrl} class="thumblist" alt="#i18n{calendar.modify_category.altIcon}" >
+						</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
+						<button class="btn btn-primary btn-flat" type="submit" >
+							<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_category.buttonLabelModify}
+						</button>
+						<a class="btn btn-default btn-flat" href="jsp/admin/plugins/calendar/ManageCalendarCategory.jsp" >
+							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{portal.admin.message.buttonCancel}
+						</a>
+					</div>
+				</div>
+			</form>
 			</div>
-		</form>
-		</fieldset>
+		</div>
 	</div>
 </div>

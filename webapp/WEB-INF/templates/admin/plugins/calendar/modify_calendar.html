@@ -1,8 +1,11 @@
-<div class="row" >
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <fieldset>
-            <legend>#i18n{calendar.modify_calendar.pageTitle}</legend>
-            <form class="form-horizontal" method="post" name="modify_calendar" action="jsp/admin/plugins/calendar/DoModifyCalendar.jsp">
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="box box-solid box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{calendar.modify_calendar.pageTitle}</h3>
+            </div>
+            <div class="box-body">
+				<form class="form-horizontal" method="post" name="modify_calendar" action="jsp/admin/plugins/calendar/DoModifyCalendar.jsp">
                 <input type="hidden" name="calendar_id" value="${calendar.id}">
                 <div class="form-group">
                     <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_name">#i18n{calendar.modify_calendar.name} *</label>
@@ -13,7 +16,7 @@
                 <div class="form-group">
                     <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_image">#i18n{calendar.modify_calendar.image} *</label>
                     <div class="col-xs-12 col-sm-8 col-md-6">
-                        <@radioImageList name="calendar_image" default_value="${calendar.eventImage}" items=dots_list />
+                        <@radioImageList name="calendar_image" default_value="${calendar.eventImage}" items=dots_list inline=1 />
                     </div>
                 </div>
                 <div class="form-group">
@@ -25,19 +28,19 @@
                 <div class="form-group">
                     <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_role">#i18n{calendar.modify_calendar.role}</label>
                     <div class="col-xs-12 col-sm-8 col-md-6">
-                        <@combo name="calendar_role" default_value="${calendar.role}" items=roles_list />
+                        <@comboWithParams name="calendar_role" default_value="${calendar.role}"  additionalParameters=" class=\"form-control input-sm\" tabindex=\"2\"" items=roles_list />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-xs-12 col-sm-3 col-md-3" for="calendar_role_manager">#i18n{calendar.modify_calendar.manager_role}</label>
                     <div class="col-xs-12 col-sm-8 col-md-6">
-                        <@combo name="calendar_role_manager" default_value="${calendar.roleManager}" items=roles_list />
+                        <@comboWithParams name="calendar_role_manager" default_value="${calendar.roleManager}"  additionalParameters=" class=\"form-control input-sm\" tabindex=\"3\"" items=roles_list />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-xs-12 col-sm-3 col-md-3" for="workgroup">#i18n{calendar.modify_calendar.workgroup}  :</label>
                     <div class="col-xs-12 col-sm-8 col-md-6">
-                        <@combo name="workgroup" default_value="${calendar.workgroup}" items=workgroups_list />
+                        <@comboWithParams name="workgroup" default_value="${calendar.workgroup}"  additionalParameters=" class=\"form-control input-sm\" tabindex=\"4\"" items=workgroups_list />
                     </div>
                 </div>
                 <div class="form-group">
@@ -74,8 +77,9 @@
 						</a>
 					</div>
                 </div>
-            </form>
-        </fieldset>
+				</form>
+			</div>
+		</div>
     </div>
 </div>
 

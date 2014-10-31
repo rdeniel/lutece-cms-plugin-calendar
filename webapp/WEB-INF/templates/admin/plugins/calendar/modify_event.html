@@ -11,213 +11,220 @@
 </#function>
 <#escape x as x?html>
 <div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/ModifyEventConfirmation.jsp" name="form_modify_event" enctype="multipart/form-data">
-		<input type="hidden" name="calendar_id" value="${calendar_id}" />   
-		<input type="hidden" name="event_id" value="${event.id}" /> 
-		<input type="hidden" name="sort_events" value="${default_sort_event}" />
-		<input type="hidden" name="box" value="mandatory" />
-		<ul class="nav nav-tabs">
-				<li class="active">
-					<a href="#panel1"  data-toggle="tab">
-						#i18n{calendar.modify_event.pageTitle}
-					</a>
-				</li>
-				<li>
-					<a href="#panel2"  data-toggle="tab">
-						#i18n{calendar.create_event.advanced_parameters}
-					</a>
-				</li>
-			</ul>		
-			<div class="tab-content">
-				<div class="tab-pane active" id="panel1">
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_title">#i18n{calendar.create_event.title} *</label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" class="form-control input-sm" id="event_title" name="event_title" tabindex="1" maxlength="60" value="${event.title}">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-xs-12 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-8">
-							<label class="control-label" for="event_top_event">#i18n{calendar.create_event.topevent} *</label>
-							<@comboWithParams name="event_top" default_value="${top_event_default}" items=top_event_list additionalParameters="class=\"input-sm\"" />
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_description">#i18n{calendar.modify_event.description} *</label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<textarea id="event_description" class="richtext" tabindex="3" name="event_description" rows="4" >${event.description}</textarea>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_date">#i18n{calendar.create_event.event_hour_and_time}</label>
-						<div class="col-xs-12 col-sm-4 col-md-3">
-							<label for="event_date">#i18n{calendar.create_event.date} *&nbsp;</label>
-							<div class="input-group">
-								<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>	
-								<input type="text" class="form-control input-sm" title=" (dd/MM/yyyy)" name="event_date" id="event_date" tabindex="4" value="${event.date?date}">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-xs-12 col-sm-offset-3 col-sm-4 col-md-offset-3 col-md-3">
-							<label for="event_date_end">#i18n{calendar.create_event.date_end}&nbsp;</label>
-							<div class="input-group">
-								<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>	
-								<input type="text" class="form-control input-sm" title=" (dd/MM/yyyy)" name="event_date_end" id="event_date_end" value="${event_date_end?date}">
-							</div>
-					   </div>
-					</div>
-					<div class="form-group">
-					   <div class="col-xs-12 col-sm-offset-3 col-sm-4 col-md-offset-3 col-md-3">
-						   <a class="btn btn-default btn-sm" href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}&sort_events=${default_sort_event}">
-							<i class="glyphicon glyphicon-edit"></i>&nbsp;#i18n{calendar.modify_event.buttonLabelmodify} #i18n{calendar.modify_event.periodicity}
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="box box-solid box-primary">
+			<div class="box-header">
+				<h3 class="box-title">#i18n{calendar.manage_subscribers.boxTitle}</h3>
+			</div>
+			<div class="box-body">
+				<form class="form-horizontal" method="post" action="jsp/admin/plugins/calendar/ModifyEventConfirmation.jsp" name="form_modify_event" enctype="multipart/form-data">
+				<input type="hidden" name="calendar_id" value="${calendar_id}" />   
+				<input type="hidden" name="event_id" value="${event.id}" /> 
+				<input type="hidden" name="sort_events" value="${default_sort_event}" />
+				<input type="hidden" name="box" value="mandatory" />
+				<ul class="nav nav-tabs">
+						<li class="active">
+							<a href="#panel1"  data-toggle="tab">
+								#i18n{calendar.modify_event.pageTitle}
 							</a>
+						</li>
+						<li>
+							<a href="#panel2"  data-toggle="tab">
+								#i18n{calendar.create_event.advanced_parameters}
+							</a>
+						</li>
+					</ul>		
+					<div class="tab-content">
+						<div class="tab-pane active" id="panel1">
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_title">#i18n{calendar.create_event.title} *</label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<input type="text" class="form-control input-sm" id="event_title" name="event_title" tabindex="1" maxlength="60" value="${event.title}">
+								</div>
+							</div>
+							<div class="form-group">
+									<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_top_event">#i18n{calendar.create_event.topevent} *</label>
+								<div class="col-xs-12 col-sm-8 3 col-md-8">
+									<@comboWithParams name="event_top" default_value="${top_event_default}" items=top_event_list additionalParameters="class=\"input-sm\"" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_description">#i18n{calendar.modify_event.description} *</label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<textarea id="event_description" class="richtext" tabindex="3" name="event_description" rows="4" >${event.description}</textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_date">#i18n{calendar.create_event.event_hour_and_time}</label>
+								<div class="col-xs-12 col-sm-4 col-md-2">
+									<label for="event_date">#i18n{calendar.create_event.date} *&nbsp;</label>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>	
+										<input type="text" class="form-control input-sm" title=" (dd/MM/yyyy)" name="event_date" id="event_date" tabindex="4" value="${event.date?date}">
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-2 col-md-1">
+									<label for="event_time_start">#i18n{calendar.create_event.time_start}&nbsp;</label>
+									<div class="input-group clockpicker">
+										<input type="text" class="form-control input-sm"  title=" (hh:mm) " id="event_time_start" name="event_time_start" tabindex="2" maxlength="5" value="<#if event.dateTimeStart?exists>${event.dateTimeStart}</#if>" >
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-time"></span>
+										</span>	
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-2 col-md-1">
+									<label for="event_time_end">#i18n{calendar.create_event.time_end}&nbsp;</label>
+									<div class="input-group clockpicker">
+										<input type="text" class="form-control input-sm" title=" (hh:mm) " id="event_time_end" name="event_time_end" tabindex="3" maxlength="5" value="<#if event.dateTimeEnd?exists>${event.dateTimeEnd}</#if>">
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-time"></span>
+										</span>	
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_date_end">#i18n{calendar.create_event.date_end}&nbsp;</label>
+								<div class="col-xs-12 col-sm-3 col-md-3">
+									<div class="input-group">
+										<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>	
+										<input type="text" class="form-control input-sm" title=" (dd/MM/yyyy)" name="event_date_end" id="event_date_end" value="${event_date_end?date}">
+										 <span class="input-group-btn">
+											<a class="btn btn-default btn-sm btn-flat" href="jsp/admin/plugins/calendar/OccurrenceList.jsp?plugin_name=calendar&calendar_id=${calendar_id}&event_id=${event.id}&sort_events=${default_sort_event}">
+												<i class="glyphicon glyphicon-edit"></i>&nbsp;#i18n{calendar.modify_event.buttonLabelmodify} #i18n{calendar.modify_event.periodicity}
+											</a>
+											
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="excluded_days">#i18n{calendar.create_event.excluded_days}</label>
+								<div class="col-xs-12 col-sm-9 col-md-9">
+									<label class="checkbox-inline">
+										<input type="checkbox" value="2" name="excluded_days" <#if isDayExcluded("2", event.excludedDays)> checked="checked" </#if>>#i18n{calendar.label.monday}
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="3" name="excluded_days" <#if isDayExcluded("3", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.tuesday}
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="4" name="excluded_days" <#if isDayExcluded("4", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.wednesday}
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="5" name="excluded_days" <#if isDayExcluded("5", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.thursday}
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="6" name="excluded_days" <#if isDayExcluded("6", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.friday}
+									</label>
+									<label class="checkbox-inline">
+										<input type="checkbox" value="7" name="excluded_days" <#if isDayExcluded("7", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.saturday}
+									</label>    
+									<label class="checkbox-inline">
+										<input type="checkbox" value="1" name="excluded_days" <#if isDayExcluded("1", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.sunday}
+									</label>
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-xs-12 col-sm-offset-3 col-sm-4 col-md-offset-3 col-md-3">
-							<label for="event_time_start">#i18n{calendar.create_event.time_start}&nbsp;</label>
-							<div class="input-group">
-								<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>	
-								<input type="text" class="form-control input-sm timepicker-default"  title=" (hh:mm) " id="event_time_start" name="event_time_start" tabindex="2" maxlength="5" value="<#if event.dateTimeStart?exists>${event.dateTimeStart}</#if>" >
+						<div class="tab-pane" id="panel2">
+							<div class="form-group">
+							<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_category">#i18n{calendar.create_event.category}</label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<@multiCombo name="category" list_default_values=category_default_list items=category_list />
+									<p class="help-block">#i18n{calendar.modify_event.labelMultiCategorySelection}</p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_image">#i18n{calendar.create_event.imagelink}</label>
+								<div class="col-xs-12 col-sm-4 col-md-6">
+									<input type="file" id="event_image" name="event_image" class="input-xs" >
+								</div>
+								<div class="col-xs-12 col-sm-4 col-md-2">
+									<img class="thumblist-medium" title="${event.imageUrl}" src="${event.imageUrl}" >
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_location">#i18n{calendar.create_event.location} </label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<input type="text" class="form-control input-sm" id="event_location" name="event_location" maxlength="60" value="<#if event.location?exists>${event.location}</#if>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_location_address">#i18n{calendar.create_event.location.address} </label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<input type="text" class="form-control input-sm" id="event_location_address" name="event_location_address" maxlength="130" value="<#if event.locationAddress?exists>${event.locationAddress}</#if>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_location_town">#i18n{calendar.create_event.location.town} </label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<input type="text" class="form-control input-sm" id="event_location_town" name="event_location_town" maxlength="130" value="<#if event.locationTown?exists>${event.locationTown}</#if>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_location_zip">#i18n{calendar.create_event.location.zip}</label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<input type="text" class="form-control input-sm" id="event_location_zip" name="event_location_zip" maxlength="20" value="<#if event.locationZip?exists>${event.locationZip}</#if>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_tags">#i18n{calendar.create_event.tags} </label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<input type="text" class="form-control input-sm" id="event_tags" name="event_tags" maxlength="130" value="<#if event.listTags?exists>${event.listTags}</#if>">
+									<span class="help-block"> #i18n{calendar.create_event.separator}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_map">#i18n{calendar.create_event.map} </label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<input type="text" class="form-control input-sm" id="event_map_url" name="event_map_url" maxlength="130"  value="<#if event.mapUrl?exists>${event.mapUrl}</#if>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_linkurl">#i18n{calendar.create_event.linkurl} </label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<input type="text" class="form-control input-sm" id="event_link_url" name="event_link_url" maxlength="130" value="<#if event.linkUrl?exists>${event.linkUrl}</#if>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_document_id">#i18n{calendar.create_event.documentid}</label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<div class="input-group">
+									<input type="text" class="form-control input-sm" id="event_document_id" name="event_document_id" maxlength="130" value="<#if event.documentId?exists>${event.documentId}</#if>">
+										<span class="input-group-btn">
+											<button type="button" class="btn insert-service" data-url="${insert_service_page}">
+											<img src="images/admin/skin/plugins/calendar/ed_linkservice2.png">
+											</button> 
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-xs-12 col-sm-2 col-md-2" for="event_page_url">#i18n{calendar.create_event.pageurl}</label>
+								<div class="col-xs-12 col-sm-8 col-md-6">
+									<div class="input-group">
+									<input type="text" class="form-control input-sm" id="event_page_url" name="event_page_url" maxlength="130" value="<#if event.pageUrl?exists>${event.pageUrl}</#if>">
+										<span class="input-group-btn">
+											<button type="button" class="btn insert-service" data-url="${insert_service_link_page}">
+											<img src="images/admin/skin/plugins/calendar/ed_linkservice2.png">
+											</button>
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<div class="col-xs-12 col-sm-offset-3 col-sm-4 col-md-offset-3 col-md-3">
-							<label for="event_time_end">#i18n{calendar.create_event.time_end}&nbsp;</label>
-							<div class="input-group">
-								<span class="input-group-addon"><i class="glyphicon glyphicon-time" title=" (hh:mm) "></i></span>	
-								<input type="text" class="form-control input-sm timepicker-default" title=" (hh:mm) " id="event_time_end" name="event_time_end" tabindex="3" maxlength="5" value="<#if event.dateTimeEnd?exists>${event.dateTimeEnd}</#if>">
-							</div>
+						<div class="col-xs-12 col-sm-offset-2 col-sm-9 col-md-offset2 col-md-9">
+								<button class="btn btn-primary btn-flat" type="submit" >
+									<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_event.buttonLabelmodify}
+								</button>
+								<a class="btn btn-default btn-flat" href="jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=${calendar_id}" >
+									<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{calendar.modify_event.backToEventList}
+								</a>
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="excluded_days">#i18n{calendar.create_event.excluded_days}</label>
-						<div class="col-xs-12 col-sm-9 col-md-9">
-							<label class="checkbox-inline">
-								<input type="checkbox" value="2" name="excluded_days" <#if isDayExcluded("2", event.excludedDays)> checked="checked" </#if>>#i18n{calendar.label.monday}
-							</label>
-							<label class="checkbox-inline">
-								<input type="checkbox" value="3" name="excluded_days" <#if isDayExcluded("3", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.tuesday}
-							</label>
-							<label class="checkbox-inline">
-								<input type="checkbox" value="4" name="excluded_days" <#if isDayExcluded("4", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.wednesday}
-							</label>
-							<label class="checkbox-inline">
-								<input type="checkbox" value="5" name="excluded_days" <#if isDayExcluded("5", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.thursday}
-							</label>
-							<label class="checkbox-inline">
-								<input type="checkbox" value="6" name="excluded_days" <#if isDayExcluded("6", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.friday}
-							</label>
-							<label class="checkbox-inline">
-								<input type="checkbox" value="7" name="excluded_days" <#if isDayExcluded("7", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.saturday}
-							</label>    
-							<label class="checkbox-inline">
-								<input type="checkbox" value="1" name="excluded_days" <#if isDayExcluded("1", event.excludedDays)> checked="checked" </#if>> #i18n{calendar.label.sunday}
-							</label>
-						</div>
-					</div>
-				</div>
-				
-				<div class="tab-pane" id="panel2">
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_category">#i18n{calendar.create_event.category}</label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<@multiCombo name="category" list_default_values=category_default_list items=category_list />
-							<p class="help-block">#i18n{calendar.modify_event.labelMultiCategorySelection}</p>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_image">#i18n{calendar.create_event.imagelink}</label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="file" id="event_image" name="event_image" class="input-xs" >
-							<img class="thumbnails thumblist-wide" title="${event.imageUrl}" src="${event.imageUrl}" >
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_location">#i18n{calendar.create_event.location} </label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" class="form-control input-sm" id="event_location" name="event_location" maxlength="60" value="<#if event.location?exists>${event.location}</#if>">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_location_address">#i18n{calendar.create_event.location.address} </label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" class="form-control input-sm" id="event_location_address" name="event_location_address" maxlength="130" value="<#if event.locationAddress?exists>${event.locationAddress}</#if>">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_location_town">#i18n{calendar.create_event.location.town} </label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" class="form-control input-sm" id="event_location_town" name="event_location_town" maxlength="130" value="<#if event.locationTown?exists>${event.locationTown}</#if>">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_location_zip">#i18n{calendar.create_event.location.zip}</label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" class="form-control input-sm" id="event_location_zip" name="event_location_zip" maxlength="20" value="<#if event.locationZip?exists>${event.locationZip}</#if>">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_tags">#i18n{calendar.create_event.tags} </label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" class="form-control input-sm" id="event_tags" name="event_tags" maxlength="130" value="<#if event.listTags?exists>${event.listTags}</#if>">
-							<span class="help-block"> #i18n{calendar.create_event.separator}</span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_map">#i18n{calendar.create_event.map} </label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" class="form-control input-sm" id="event_map_url" name="event_map_url" maxlength="130"  value="<#if event.mapUrl?exists>${event.mapUrl}</#if>">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_linkurl">#i18n{calendar.create_event.linkurl} </label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<input type="text" class="form-control input-sm" id="event_link_url" name="event_link_url" maxlength="130" value="<#if event.linkUrl?exists>${event.linkUrl}</#if>">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_document_id">#i18n{calendar.create_event.documentid}</label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<div class="input-group">
-							<input type="text" class="form-control input-sm" id="event_document_id" name="event_document_id" maxlength="130" value="<#if event.documentId?exists>${event.documentId}</#if>">
-								<span class="input-group-btn">
-									<button type="button" class="btn insert-service" data-url="${insert_service_page}">
-									<img src="images/admin/skin/plugins/calendar/ed_linkservice2.png">
-									</button> 
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-3 col-md-3" for="event_page_url">#i18n{calendar.create_event.pageurl}</label>
-						<div class="col-xs-12 col-sm-8 col-md-6">
-							<div class="input-group">
-							<input type="text" class="form-control input-sm" id="event_page_url" name="event_page_url" maxlength="130" value="<#if event.pageUrl?exists>${event.pageUrl}</#if>">
-								<span class="input-group-btn">
-									<button type="button" class="btn insert-service" data-url="${insert_service_link_page}">
-									<img src="images/admin/skin/plugins/calendar/ed_linkservice2.png">
-									</button>
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
+				</form>
 			</div>
-			<div class="form-group">
-				<div class="col-xs-12 col-sm-offset-3 col-sm-9 col-md-offset-3 col-md-9">
-						<button class="btn btn-primary btn-sm" type="submit" >
-							<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{calendar.modify_event.buttonLabelmodify}
-						</button>
-						<a class="btn btn-default btn-sm" href="jsp/admin/plugins/calendar/EventList.jsp?plugin_name=calendar&calendar_id=${calendar_id}" >
-							<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;#i18n{calendar.modify_event.backToEventList}
-						</a>
-				</div>
-			</div>
-		</form>
+		</div>
 	</div>
 </div>
 </#escape>
@@ -236,23 +243,12 @@ $(document).ready( function(){
 		$("#radio_2").attr('checked','checked')
 	});
 	
-    // Function to activate the tab
-    function activateTab() {
-        var activeTab = $('[href=' + window.location.hash.replace('/', '') + ']');
-        activeTab && activeTab.tab('show');
-    }
-
-    // Trigger when the page loads
-    activateTab();
-
 });
 </script>
-
 <@initEditor />
-<script src="js/jquery/plugins/ui/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="js/jquery/plugins/ui/ui.datepicker-${locale}.js"></script>
-<script src="js/jquery/plugins/ui/timepicker/jquery-ui-timepicker-addon.js"></script>
-<script src="js/jquery/plugins/ui/timepicker/jquery-ui-sliderAccess.js"></script>
-<script src="js/jquery/plugins/ui/timepicker/localization/jquery-ui-timepicker-${locale}.js"></script>
-<script>$('.timepicker-default').timepicker();</script>
-<@getDatePickerRange idFieldFrom="event_date" idFieldTo="event_date_end" language=locale />
+<@getDatePickerBootstrap idField="event_date" language=locale />
+<@getDatePickerBootstrap idField="event_date_end" language=locale />
+<script src="js/bootstrap-clockpicker.min.js"></script>
+<script type="text/javascript">
+$('.clockpicker').clockpicker({donetext:"Ok"});
+</script>
