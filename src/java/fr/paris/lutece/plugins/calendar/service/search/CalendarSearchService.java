@@ -113,11 +113,7 @@ public class CalendarSearchService
 
                     //Retrieve the event related to the occurence
                     SimpleEvent event = CalendarHome.findEvent( occurence.getEventId( ), plugin );
-                    if ( event.getDate( ).compareTo( event.getDateEnd( ) ) != 0 )
-                    {
-                        event.setDate( new Date( ) );
-                    }
-
+                   
                     event.setUrl( searchResult.getUrl( ) );
                     event.setType( searchResult.getType( ) );
                     event.setImageUrl( EventImageResourceService.getInstance( ).getResourceImageEvent( event.getId( ) ) );
