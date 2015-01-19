@@ -203,6 +203,16 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
                 fieldsForSearchInTitle.add( SearchItem.FIELD_DATE );
                 flagsForSearchInTitle.add( BooleanClause.Occur.MUST );
+            }else{
+            	 BytesRef strDate = new BytesRef( Utils.getDate( new Date()) );
+                 Query queryDate = new TermRangeQuery( SearchItem.FIELD_DATE, strDate ,null, true, true );
+                 queriesForSearchInContent.add( queryDate.toString( ) );
+                 queriesForSearchInTitle.add( queryDate.toString( ) );
+                 fieldsForSearchInContent.add( SearchItem.FIELD_DATE );
+                 flagsForSearchInContent.add( BooleanClause.Occur.MUST );
+                 fieldsForSearchInTitle.add( SearchItem.FIELD_DATE );
+                 flagsForSearchInTitle.add( BooleanClause.Occur.MUST );
+            	
             }
 
             //Search in contents
