@@ -1,9 +1,9 @@
 <%@ page errorPage="../../../ErrorPage.jsp" %>
 <jsp:include page="../../../AdminHeader.jsp" />
 
-<jsp:useBean id="stylesheet" scope="page" class="fr.paris.lutece.plugins.calendar.web.CalendarStyleSheetJspBean" />
+<jsp:useBean id="calendarStylesheet" scope="page" class="fr.paris.lutece.plugins.calendar.web.CalendarStyleSheetJspBean" />
 
-<% stylesheet.init( request, fr.paris.lutece.plugins.calendar.web.CalendarStyleSheetJspBean.RIGHT_MANAGE_STYLESHEET ) ; %>
-<%= stylesheet.getManageStyleSheet ( request )%>
+<% calendarStylesheet.init( request, fr.paris.lutece.plugins.calendar.web.CalendarStyleSheetJspBean.RIGHT_MANAGE_STYLESHEET ) ; %>
+<%= calendarStylesheet.getManageStyleSheet ( request )%>
 
 <%@ include file="../../../AdminFooter.jsp" %>
