@@ -1,13 +1,17 @@
 <div class="box box-solid box-primary">
 	<div class="box-header">
 		<h3 class="box-title">#i18n{calendar.dashboard.calendarsList}</h3>
+		<div class="box-tools">
+			<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			<button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+		</div>
 	</div>
 	<div class="box-body table-responsive no-padding">
-		<#include "calendar_dashboard.html" />	
+		<#include "calendar_dashboard.html" />
 	</div><!-- /.box-body -->
     <div class="box-footer text-center">
 		<a title="#i18n{calendar.dashboard.calendarsList} " href="${url}">
 			#i18n{calendar.dashboard.calendarsList} <i class="fa fa-arrow-circle-right"></i>
-		</a>	
+		</a>
 	</div><!-- /.box-footer-->
 </div>

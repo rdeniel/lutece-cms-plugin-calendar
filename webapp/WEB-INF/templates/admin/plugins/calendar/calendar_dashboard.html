@@ -8,7 +8,7 @@
 			<tr>
 				<td>
 					<strong><img src="${calendar.eventImage}" alt="${calendar.eventImage}" title="${calendar.eventImage}" /> ${calendar.name}</strong>
-					<p><small><i class="glyphicon glyphicon-user"></i> #i18n{calendar.dashboard.nbSubscribers}&nbsp;:&nbsp;${nb_subscribers_list[calendar.id]}</small></p>
+					<p><small><i class="fa fa-user"></i> #i18n{calendar.dashboard.nbSubscribers}&nbsp;:&nbsp;${nb_subscribers_list[calendar.id]}</small></p>
 					<ul class="list-unstyled">
 						<#assign nb_event = 0>
 						<#list event_list as event>
@@ -16,14 +16,14 @@
 								<#if ( nb_event <= nb_events_max )>
 									<li>
 										<a href="jsp/admin/plugins/calendar/ModifyEvent.jsp?plugin_name=calendar&amp;calendar_id=${calendar.id}&event_id=${event.id}">
-											<i class="glyphicon glyphicon-calendar"></i> ${event.title} (${event.date?date})
+											<i class="fa fa-calendar"></i> ${event.title} (${event.date?date})
 										</a>
 									</li>
 									<#assign nb_event = nb_event + 1>
 								<#else>
 									<li>
 										<a class="btn btn-default btn-xs btn-flat" href="jsp/admin/plugins/calendar/EventList.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar">
-											<i class="glyphicon glyphicon-chevron-right"></i>  #i18n{calendar.dashboard.etc}
+											<i class="fa fa-chevron-right"></i>  #i18n{calendar.dashboard.etc}
 										</a>
 									</li>
 									<#break>
@@ -34,12 +34,12 @@
 				</td>
 				<td>
 					<a href="jsp/admin/plugins/calendar/ModifyCalendar.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="btn btn-primary btn-xs btn-flat" title="#i18n{calendar.dashboard.modifyCalendar}" >
-						<i class="glyphicon glyphicon-edit"></i>
+						<i class="fa fa-pencil"></i>
 					</a>
 					<a href="jsp/admin/plugins/calendar/CreateEvent.jsp?calendar_id=${calendar.id}&amp;plugin_name=calendar" class="btn btn-primary btn-xs btn-flat" title="#i18n{calendar.dashboard.addEvent}" >
 						<i class="fa fa-plus"></i>
 					</a>
-					
+
 				</td>
 			</tr>
 		</#list>
