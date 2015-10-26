@@ -3,7 +3,7 @@
     <!-- Plugin Informations -->
     <name>calendar</name>
     <class>fr.paris.lutece.plugins.calendar.service.CalendarPlugin</class>
-    <version>4.1.1</version>
+    <version>4.1.2-SNAPSHOT</version>
     <documentation/>
     <installation/>
     <changes/>
