@@ -54,7 +54,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.Filter;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
@@ -97,7 +97,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
         IndexSearcher searcher = null;
 
         //Filter filterRole = getFilterRoles( request );
-        Filter filterRole = null;
+        Query filterRole = null;
 
         try
         {
@@ -168,8 +168,9 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             }
 
             //Type (=calendar)
-            PhraseQuery queryType = new PhraseQuery( );
-            queryType.add( new Term( SearchItem.FIELD_TYPE, Constants.PLUGIN_NAME ) );
+            PhraseQuery.Builder queryTypeBuilder = new PhraseQuery.Builder( );
+            queryTypeBuilder.add( new Term( SearchItem.FIELD_TYPE, Constants.PLUGIN_NAME ) );
+            PhraseQuery queryType = queryTypeBuilder.build( );
             queriesForSearchInContent.add( queryType.toString( ) );
             queriesForSearchInTitle.add( queryType.toString( ) );
             fieldsForSearchInContent.add( SearchItem.FIELD_TYPE );
@@ -216,7 +217,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             }
 
             //Search in contents
-            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION,
+            Query queryMulti = MultiFieldQueryParser.parse(
                     queriesForSearchInContent.toArray( new String[queriesForSearchInContent.size( )] ),
                     fieldsForSearchInContent.toArray( new String[fieldsForSearchInContent.size( )] ),
                     flagsForSearchInContent.toArray( new BooleanClause.Occur[flagsForSearchInContent.size( )] ),
@@ -226,7 +227,12 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             TopDocs hits = null;
 
             int nLimit = Integer.parseInt( AppPropertiesService.getProperty( PROPERTY_RESULTS_LIMIT ) );
-            hits = searcher.search( queryMulti, filterRole, nLimit );
+
+            BooleanQuery.Builder bQueryBuilder = new BooleanQuery.Builder( );
+            bQueryBuilder.add( queryMulti, BooleanClause.Occur.SHOULD );
+            bQueryBuilder.add( filterRole, BooleanClause.Occur.FILTER );
+
+            hits = searcher.search( bQueryBuilder.build( ), nLimit );
 
             for ( int i = 0; hits.totalHits > i; i++ )
             {
@@ -237,7 +243,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             }
 
             //Search in titles
-            Query queryMultiTitle = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION,
+            Query queryMultiTitle = MultiFieldQueryParser.parse(
                     queriesForSearchInTitle.toArray( new String[queriesForSearchInTitle.size( )] ),
                     fieldsForSearchInTitle.toArray( new String[fieldsForSearchInTitle.size( )] ),
                     flagsForSearchInTitle.toArray( new BooleanClause.Occur[flagsForSearchInTitle.size( )] ),
@@ -246,7 +252,11 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             // Get results documents
             TopDocs hitsTitle = null;
 
-            hitsTitle = searcher.search( queryMultiTitle, filterRole, nLimit );
+            BooleanQuery.Builder bQueryBuilderTitle = new BooleanQuery.Builder( );
+            bQueryBuilder.add( queryMultiTitle, BooleanClause.Occur.SHOULD );
+            bQueryBuilder.add( filterRole, BooleanClause.Occur.FILTER );
+
+            hitsTitle = searcher.search( bQueryBuilderTitle.build( ), nLimit );
 
             for ( int i = 0; hitsTitle.totalHits > i; i++ )
             {
