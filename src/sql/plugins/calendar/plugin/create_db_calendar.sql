@@ -156,7 +156,7 @@ CREATE TABLE calendar_events_users
 DROP TABLE IF EXISTS calendar_notify_key;
 CREATE TABLE calendar_notify_key
 (
-	key_email varchar(255) DEFAULT NULL, 
+	key_email varchar(255) NOT NULL,
 	email varchar(100) default NULL,
 	id_agenda int DEFAULT NULL,
 	date_expiry timestamp DEFAULT NULL NULL,
