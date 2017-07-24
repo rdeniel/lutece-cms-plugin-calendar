@@ -229,7 +229,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             int nLimit = Integer.parseInt( AppPropertiesService.getProperty( PROPERTY_RESULTS_LIMIT ) );
 
             BooleanQuery.Builder bQueryBuilder = new BooleanQuery.Builder( );
-            bQueryBuilder.add( queryMulti, BooleanClause.Occur.SHOULD );
+            bQueryBuilder.add( queryMulti, BooleanClause.Occur.MUST );
             bQueryBuilder.add( filterRole, BooleanClause.Occur.FILTER );
 
             hits = searcher.search( bQueryBuilder.build( ), nLimit );
@@ -253,7 +253,7 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             TopDocs hitsTitle = null;
 
             BooleanQuery.Builder bQueryBuilderTitle = new BooleanQuery.Builder( );
-            bQueryBuilder.add( queryMultiTitle, BooleanClause.Occur.SHOULD );
+            bQueryBuilder.add( queryMultiTitle, BooleanClause.Occur.MUST );
             bQueryBuilder.add( filterRole, BooleanClause.Occur.FILTER );
 
             hitsTitle = searcher.search( bQueryBuilderTitle.build( ), nLimit );
