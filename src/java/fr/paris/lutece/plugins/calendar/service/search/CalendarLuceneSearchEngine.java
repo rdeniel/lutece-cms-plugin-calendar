@@ -228,11 +228,14 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
 
             int nLimit = Integer.parseInt( AppPropertiesService.getProperty( PROPERTY_RESULTS_LIMIT ) );
 
-            BooleanQuery.Builder bQueryBuilder = new BooleanQuery.Builder( );
-            bQueryBuilder.add( queryMulti, BooleanClause.Occur.MUST );
-            bQueryBuilder.add( filterRole, BooleanClause.Occur.FILTER );
+            if ( filterRole != null ) {
+                BooleanQuery.Builder bQueryBuilder = new BooleanQuery.Builder( );
+                bQueryBuilder.add( queryMulti, BooleanClause.Occur.MUST );
+                bQueryBuilder.add( filterRole, BooleanClause.Occur.FILTER );
+                queryMulti = bQueryBuilder.build( );
+            }
 
-            hits = searcher.search( bQueryBuilder.build( ), nLimit );
+            hits = searcher.search( queryMulti, nLimit );
 
             for ( int i = 0; hits.totalHits > i; i++ )
             {
@@ -252,11 +255,14 @@ public class CalendarLuceneSearchEngine implements CalendarSearchEngine
             // Get results documents
             TopDocs hitsTitle = null;
 
-            BooleanQuery.Builder bQueryBuilderTitle = new BooleanQuery.Builder( );
-            bQueryBuilder.add( queryMultiTitle, BooleanClause.Occur.MUST );
-            bQueryBuilder.add( filterRole, BooleanClause.Occur.FILTER );
+            if ( filterRole != null ) {
+                BooleanQuery.Builder bQueryBuilderTitle = new BooleanQuery.Builder( );
+                bQueryBuilderTitle.add( queryMultiTitle, BooleanClause.Occur.MUST );
+                bQueryBuilderTitle.add( filterRole, BooleanClause.Occur.FILTER );
+                queryMultiTitle = bQueryBuilderTitle.build( );
+            }
 
-            hitsTitle = searcher.search( bQueryBuilderTitle.build( ), nLimit );
+            hitsTitle = searcher.search( queryMultiTitle, nLimit );
 
             for ( int i = 0; hitsTitle.totalHits > i; i++ )
             {
