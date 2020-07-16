@@ -71,7 +71,12 @@ import org.apache.commons.fileupload.FileItem;
  */
 public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
 {
-    // Right
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3116740220774059347L;
+
+	// Right
     public static final String RIGHT_CATEGORY_MANAGEMENT = "CALENDAR_MANAGEMENT";
 
     //Constants
@@ -132,7 +137,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         setPageTitleProperty( null );
 
@@ -158,13 +163,13 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         setPageTitleProperty( PROPERTY_PAGE_TITLE_CREATE_CATEGORY );
 
         AdminUser user = getUser( );
         ReferenceList refListWorkGroups = AdminWorkgroupService.getUserWorkgroups( user, getLocale( ) );
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_USER_WORKGROUP_LIST, refListWorkGroups );
 
         //LUTECE-890 : the first workgroup will be selected by default
@@ -190,7 +195,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         Category category = new Category( );
         String strCategoryName = request.getParameter( PARAMETER_CATEGORY_NAME );
@@ -239,7 +244,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_CATEGORY );
 
@@ -274,7 +279,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         Category category = null;
         String strCategoryName = request.getParameter( PARAMETER_CATEGORY_NAME );
@@ -339,7 +344,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         int nIdCategory = checkCategoryId( request );
 
@@ -375,7 +380,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         int nIdCategory = checkCategoryId( request );
 

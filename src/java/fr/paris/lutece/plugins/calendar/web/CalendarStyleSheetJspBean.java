@@ -146,7 +146,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         // Parameters processing
         ReferenceList listModes = ModeHome.getModes( );
@@ -212,7 +212,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_STYLE_LIST, getStyleList( ) );
@@ -238,7 +238,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         StyleSheet stylesheet = new StyleSheet( );
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -294,7 +294,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         String strErrorUrl = null;
         String strDescription = multipartRequest.getParameter( Parameters.STYLESHEET_NAME );
@@ -346,7 +346,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         String strStyleSheetId = request.getParameter( Parameters.STYLESHEET_ID );
         int nId = Integer.parseInt( strStyleSheetId );
@@ -376,7 +376,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         Collection<Style> stylesList = StyleHome.getStylesList( );
         ReferenceList stylesListWithLabels = new ReferenceList( );
@@ -416,7 +416,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         int nId = Integer.parseInt( multipartRequest.getParameter( Parameters.STYLESHEET_ID ) );
@@ -480,7 +480,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         String strId = request.getParameter( Parameters.STYLESHEET_ID );
         UrlItem url = new UrlItem( JSP_DO_REMOVE_STYLESHEET );
@@ -507,7 +507,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         int nId = Integer.parseInt( request.getParameter( Parameters.STYLESHEET_ID ) );
 

@@ -261,7 +261,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( Constants.MARK_CALENDAR_PARAMETERS, _calendarService.getCalendarParameters( getPlugin( ) ) );
@@ -2223,7 +2223,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         if ( !RBACService.isAuthorized( CalendarResourceIdService.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                 CalendarResourceIdService.PERMISSION_MANAGE, getUser( ) ) )
         {
-            throw new AccessDeniedException( );
+            throw new AccessDeniedException( "Access denied" );
         }
 
         ReferenceList listParams = CalendarParameterHome.findParametersList( getPlugin( ) );
