@@ -69,6 +69,7 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.constants.Messages;
+import fr.paris.lutece.portal.web.l10n.LocaleService;
 import fr.paris.lutece.portal.web.xpages.XPage;
 import fr.paris.lutece.portal.web.xpages.XPageApplication;
 import fr.paris.lutece.util.ReferenceList;
@@ -86,6 +87,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -395,13 +397,13 @@ public class CalendarApp implements XPageApplication
             model.put( Constants.MARK_EVENT_LIST, listEvents );
 
             HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CALENDAR_MANAGE_EVENTS,
-                    request.getLocale( ), model );
+                    getLocale( request ), model );
 
             page.setContent( template.getHtml( ) );
             page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_MANAGE_EVENTS,
-                    request.getLocale( ) ) );
+                    getLocale( request ) ) );
             page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_MANAGE_EVENTS,
-                    request.getLocale( ) ) );
+                    getLocale( request ) ) );
         }
         return page;
     }
@@ -425,16 +427,16 @@ public class CalendarApp implements XPageApplication
             Map<String, Object> model = new HashMap<String, Object>( );
 
             model.put( Constants.MARK_CALENDAR_ID, strCalendarId );
-            model.put( Constants.MARK_LOCALE, request.getLocale( ).getLanguage( ) );
+            model.put( Constants.MARK_LOCALE, getLocale( request ).getLanguage( ) );
 
-            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_EVENT_FRONT, request.getLocale( ),
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_EVENT_FRONT, getLocale( request ),
                     model );
 
             page.setContent( template.getHtml( ) );
             page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_CREATE_EVENT,
-                    request.getLocale( ) ) );
+                    getLocale( request ) ) );
             page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_CREATE_EVENT,
-                    request.getLocale( ) ) );
+                    getLocale( request ) ) );
         }
 
         return page;
@@ -466,17 +468,17 @@ public class CalendarApp implements XPageApplication
                 model.put( Constants.MARK_EVENT, _eventListService.getEvent( nEventId, plugin ) );
                 model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
                 model.put( Constants.MARK_DEFAULT_SORT_EVENT, request.getParameter( Constants.PARAMETER_SORT_EVENTS ) );
-                model.put( Constants.MARK_LOCALE, request.getLocale( ).getLanguage( ) );
+                model.put( Constants.MARK_LOCALE, getLocale( request ).getLanguage( ) );
 
                 HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_EVENT_FRONT,
-                        request.getLocale( ), model );
+                        getLocale( request ), model );
 
                 page = new XPage( );
                 page.setContent( template.getHtml( ) );
                 page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_MODIFY_EVENT,
-                        request.getLocale( ) ) );
+                        getLocale( request ) ) );
                 page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_MODIFY_EVENT,
-                        request.getLocale( ) ) );
+                        getLocale( request ) ) );
             }
             else
             {
@@ -542,7 +544,7 @@ public class CalendarApp implements XPageApplication
 
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( Constants.MARK_JSP_URL, url.getUrl( ) );
-        model.put( Constants.MARK_LOCALE, request.getLocale( ) );
+        model.put( Constants.MARK_LOCALE, getLocale( request ) );
         model.put( Constants.MARK_CALENDARS_LIST, getListAgenda( request, plugin ) );
         model.put( Constants.MARK_IS_ACTIVE_CAPTCHA, bIsCaptchaEnabled );
 
@@ -553,12 +555,12 @@ public class CalendarApp implements XPageApplication
         }
 
         HtmlTemplate template = AppTemplateService
-                .getTemplate( TEMPLATE_SUBSCRIPTION_FORM, request.getLocale( ), model );
+                .getTemplate( TEMPLATE_SUBSCRIPTION_FORM, getLocale( request ), model );
 
         page.setContent( template.getHtml( ) );
-        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_SUBSCRIPTION_TITLE, request.getLocale( ) ) );
+        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_SUBSCRIPTION_TITLE, getLocale( request ) ) );
         page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_SUBSCRIPTION_TITLE,
-                request.getLocale( ) ) );
+                getLocale( request ) ) );
 
         return page;
     }
@@ -579,17 +581,17 @@ public class CalendarApp implements XPageApplication
         {
             page = new XPage( );
             Map<String, Object> model = new HashMap<String, Object>( );
-            model.put( Constants.MARK_LOCALE, request.getLocale( ) );
+            model.put( Constants.MARK_LOCALE, getLocale( request ) );
             model.put( Constants.MARK_EVENT_ID, Integer.parseInt( strEventId ) );
             model.put( Constants.MARK_CALENDAR_ID, Integer.parseInt( strCalendarId ) );
 
-            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_EMAIL_FRIEND, request.getLocale( ), model );
+            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_EMAIL_FRIEND, getLocale( request ), model );
 
             page.setContent( template.getHtml( ) );
             page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_EMAIL_FRIEND_TITLE,
-                    request.getLocale( ) ) );
+                    getLocale( request ) ) );
             page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_EMAIL_FRIEND_TITLE,
-                    request.getLocale( ) ) );
+                    getLocale( request ) ) );
         }
 
         return page;
@@ -605,16 +607,16 @@ public class CalendarApp implements XPageApplication
     {
         XPage page = new XPage( );
         Map<String, Object> model = new HashMap<String, Object>( );
-        model.put( Constants.MARK_LOCALE, request.getLocale( ) );
+        model.put( Constants.MARK_LOCALE, getLocale( request ) );
         model.put( Constants.MARK_CALENDARS_LIST, getListAgenda( request, plugin ) );
         model.put( Constants.MARK_EXPORT_STYLESHEET_LIST, getExportSheetList( request, plugin ) );
 
         HtmlTemplate template = AppTemplateService
-                .getTemplate( TEMPLATE_DOWNLOAD_CALENDAR, request.getLocale( ), model );
+                .getTemplate( TEMPLATE_DOWNLOAD_CALENDAR, getLocale( request ), model );
 
         page.setContent( template.getHtml( ) );
-        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_DOWNLOAND_TITLE, request.getLocale( ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_DOWNLOAND_TITLE, request.getLocale( ) ) );
+        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_DOWNLOAND_TITLE, getLocale( request ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_DOWNLOAND_TITLE, getLocale( request ) ) );
 
         return page;
     }
@@ -633,16 +635,16 @@ public class CalendarApp implements XPageApplication
         model.put( Constants.MARK_NB_ITEMS_PER_PAGE, Integer.toString( _nDefaultItemsPerPage ) );
         model.put( Constants.MARK_CALENDARS_LIST, getListAgenda( request, plugin ) );
         model.put( Constants.MARK_AGENDA, Constants.SPACE );
-        model.put( Constants.MARK_LOCALE, request.getLocale( ) );
+        model.put( Constants.MARK_LOCALE, getLocale( request ) );
 
         Collection<Category> categoryList = _categoryService.getCategories( plugin );
         model.put( Constants.MARK_CATEGORY_LIST, getReferenceListCategory( categoryList ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_SEARCH_EVENTS, request.getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_SEARCH_EVENTS, getLocale( request ), model );
 
         page.setContent( template.getHtml( ) );
-        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH, request.getLocale( ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH, request.getLocale( ) ) );
+        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH, getLocale( request ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH, getLocale( request ) ) );
 
         return page;
     }
@@ -707,8 +709,8 @@ public class CalendarApp implements XPageApplication
         case Constants.PROPERTY_PERIOD_TODAY:
             dateBegin = new Date( );
             dateEnd = new Date( );
-            strDateBegin = DateUtil.getDateString( new Date( ), request.getLocale( ) );
-            strDateEnd = DateUtil.getDateString( new Date( ), request.getLocale( ) );
+            strDateBegin = DateUtil.getDateString( new Date( ), getLocale( request ) );
+            strDateEnd = DateUtil.getDateString( new Date( ), getLocale( request ) );
             break;
 
         case Constants.PROPERTY_PERIOD_WEEK:
@@ -730,16 +732,16 @@ public class CalendarApp implements XPageApplication
             calendarLastDay.add( Calendar.DATE, 6 );
             dateBegin = calendarFirstDay.getTime( );
             dateEnd = calendarLastDay.getTime( );
-            strDateBegin = DateUtil.getDateString( dateBegin, request.getLocale( ) );
-            strDateEnd = DateUtil.getDateString( dateEnd, request.getLocale( ) );
+            strDateBegin = DateUtil.getDateString( dateBegin, getLocale( request ) );
+            strDateEnd = DateUtil.getDateString( dateEnd, getLocale( request ) );
 
             break;
 
         case Constants.PROPERTY_PERIOD_RANGE:
             if ( StringUtils.isNotBlank( strDateBegin ) && StringUtils.isNotBlank( strDateEnd ) )
             {
-                dateBegin = DateUtil.formatDate( strDateBegin, request.getLocale( ) );
-                dateEnd = DateUtil.formatDate( strDateEnd, request.getLocale( ) );
+                dateBegin = DateUtil.formatDate( strDateBegin, getLocale( request ) );
+                dateEnd = DateUtil.formatDate( strDateEnd, getLocale( request ) );
 
                 if ( dateBegin == null || !Utils.isValidDate( dateBegin ) || dateEnd == null
                         || !Utils.isValidDate( dateEnd ) )
@@ -840,7 +842,7 @@ public class CalendarApp implements XPageApplication
         String strDate;
         if ( StringUtils.isNotBlank( strDateBegin ) && !Constants.NULL.equals( strDateBegin ) )
         {
-            strDate = Utils.getDate( DateUtil.formatDateLongYear( strDateBegin, request.getLocale( ) ) );
+            strDate = Utils.getDate( DateUtil.formatDateLongYear( strDateBegin, getLocale( request ) ) );
             if ( strDateBegin.equals( strDateEnd ) )
             {
                 bIsSelectedDay = true;
@@ -866,18 +868,18 @@ public class CalendarApp implements XPageApplication
         model.put( Constants.MARK_NB_ITEMS_PER_PAGE, Integer.toString( _nItemsPerPage ) );
         model.put( Constants.MARK_CALENDARS_LIST, listAgendas );
         model.put( Constants.MARK_AGENDA, ( StringUtils.isNotBlank( strAgenda ) ) ? strAgenda : StringUtils.EMPTY );
-        model.put( Constants.MARK_LOCALE, request.getLocale( ) );
+        model.put( Constants.MARK_LOCALE, getLocale( request ) );
         model.put( Constants.MARK_CATEGORY_LIST, listCategorys );
         model.put( Constants.MARK_OCCURRENCES_LIST, listOccurrences );
         model.put( Constants.MARK_SMALL_MONTH_CALENDAR,
                 SmallMonthCalendar.getSmallMonthCalendar( strDate, agendaWithOccurences, options, bIsSelectedDay ) );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_DO_SEARCH_EVENTS, request.getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_DO_SEARCH_EVENTS, getLocale( request ), model );
 
         XPage page = new XPage( );
         page.setContent( template.getHtml( ) );
-        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH_RESULT, request.getLocale( ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH, request.getLocale( ) ) );
+        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH_RESULT, getLocale( request ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH, getLocale( request ) ) );
 
         return page;
     }
@@ -983,14 +985,14 @@ public class CalendarApp implements XPageApplication
                 model.put( Constants.MARK_IS_AUTHORIZED, bIsUserAuthorized );
                 model.put( Constants.MARK_SMALL_MONTH_CALENDAR, SmallMonthCalendar.getSmallMonthCalendar(
                         Utils.getDate( event.getDate( ) ), agendaWithOccurences, options, true ) );
-                template = AppTemplateService.getTemplate( TEMPLATE_SHOW_RESULT, request.getLocale( ), model );
+                template = AppTemplateService.getTemplate( TEMPLATE_SHOW_RESULT, getLocale( request ), model );
                 strPathResult = event.getTitle( );
             }
 
             page = new XPage( );
             page.setContent( template.getHtml( ) );
             page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_TITLE_SEARCH_RESULT,
-                    request.getLocale( ) ) );
+                    getLocale( request ) ) );
             page.setPathLabel( strPathResult );
         }
         return page;
@@ -1007,17 +1009,17 @@ public class CalendarApp implements XPageApplication
         Collection<Category> categoryList = _categoryService.getCategories( plugin );
 
         Map<String, Object> model = new HashMap<String, Object>( );
-        model.put( Constants.MARK_LOCALE, request.getLocale( ) );
+        model.put( Constants.MARK_LOCALE, getLocale( request ) );
         model.put( Constants.MARK_CALENDARS_LIST, getListAgenda( request, plugin ) );
         model.put( Constants.MARK_CATEGORY_LIST, getReferenceListCategory( categoryList ) );
         model.put( Constants.MARK_CATEGORY_DEFAULT_LIST, StringUtils.EMPTY );
 
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_RSS_CALENDAR, request.getLocale( ), model );
+        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_RSS_CALENDAR, getLocale( request ), model );
 
         XPage page = new XPage( );
         page.setContent( template.getHtml( ) );
-        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_RSS_TITLE, request.getLocale( ) ) );
-        page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_RSS_TITLE, request.getLocale( ) ) );
+        page.setTitle( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_RSS_TITLE, getLocale( request ) ) );
+        page.setPathLabel( I18nService.getLocalizedString( Constants.PROPERTY_PAGE_RSS_TITLE, getLocale( request ) ) );
 
         return page;
     }
@@ -1117,7 +1119,7 @@ public class CalendarApp implements XPageApplication
     private CalendarUserOptions getUserOptions( HttpServletRequest request )
     {
         CalendarUserOptions options = new CalendarUserOptions( );
-        options.setLocale( request.getLocale( ) );
+        options.setLocale( getLocale( request ) );
         options.setDayOffDisplayed( true );
 
         return options;
@@ -1186,7 +1188,7 @@ public class CalendarApp implements XPageApplication
             verifyFieldFilled( request, strEventTitle );
 
             //Convert the date in form to a java.util.Date object
-            Date dateEvent = DateUtil.formatDate( strDate, request.getLocale( ) );
+            Date dateEvent = DateUtil.formatDate( strDate, getLocale( request ) );
 
             if ( dateEvent == null )
             {
@@ -1283,7 +1285,7 @@ public class CalendarApp implements XPageApplication
                 verifyFieldFilled( request, strEventDate );
 
                 //Convert the date in form to a java.util.Date object
-                Date dateEvent = DateUtil.formatDate( strEventDate, request.getLocale( ) );
+                Date dateEvent = DateUtil.formatDate( strEventDate, getLocale( request ) );
 
                 if ( dateEvent == null )
                 {
@@ -1537,7 +1539,7 @@ public class CalendarApp implements XPageApplication
         String strSenderName = strSenderFirstName + Constants.SPACE + strSenderLastName;
 
         //Properties
-        String strObject = I18nService.getLocalizedString( PROPERTY_EMAIL_FRIEND_OBJECT, request.getLocale( ) );
+        String strObject = I18nService.getLocalizedString( PROPERTY_EMAIL_FRIEND_OBJECT, getLocale( request ) );
         String strBaseUrl = AppPathService.getBaseUrl( request );
 
         Map<String, Object> emailModel = new HashMap<String, Object>( );
@@ -1548,7 +1550,7 @@ public class CalendarApp implements XPageApplication
         emailModel.put( Constants.MARK_ACTION, Constants.ACTION_SHOW_RESULT );
 
         HtmlTemplate templateAgenda = AppTemplateService.getTemplate( TEMPLATE_SEND_NOTIFICATION_MAIL,
-                request.getLocale( ), emailModel );
+                getLocale( request ), emailModel );
 
         String strNewsLetterCode = templateAgenda.getHtml( );
 
@@ -1687,5 +1689,17 @@ public class CalendarApp implements XPageApplication
             return user;
         }
         throw new PageNotFoundException( );
+    }
+    
+    /**
+     * Default getLocale() implementation. Could be overriden
+     * 
+     * @param request
+     *            The HTTP request
+     * @return The Locale
+     */
+    protected Locale getLocale( HttpServletRequest request )
+    {
+        return LocaleService.getContextUserLocale( request );
     }
 }
