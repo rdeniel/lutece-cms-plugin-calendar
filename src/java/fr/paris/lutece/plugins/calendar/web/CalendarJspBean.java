@@ -229,10 +229,10 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         _nItemsPerPage = Paginator.getItemsPerPage( request, Paginator.PARAMETER_ITEMS_PER_PAGE, _nItemsPerPage,
                 _nDefaultItemsPerPage );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         List<AgendaResource> listCalendar = _calendarService.getAgendaResources( getUser( ), getPlugin( ) );
 
-        LocalizedPaginator<AgendaResource> paginator = new LocalizedPaginator<AgendaResource>( listCalendar,
+        LocalizedPaginator<AgendaResource> paginator = new LocalizedPaginator<>( listCalendar,
                 _nItemsPerPage, getHomeUrl( request ), Constants.PARAMETER_PAGE_INDEX, _strCurrentPageIndex,
                 getLocale( ) );
 
@@ -263,7 +263,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         {
             throw new AccessDeniedException( "Access denied" );
         }
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( Constants.MARK_CALENDAR_PARAMETERS, _calendarService.getCalendarParameters( getPlugin( ) ) );
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_ADVANCED_PARAMETERS, getLocale( ),
                 model );
@@ -281,7 +281,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
     {
         setPageTitleProperty( Constants.PROPERTY_PAGE_TITLE_CREATE_CALENDAR );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         ReferenceList ref = null;
 
         try
@@ -381,7 +381,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
                 nSortEvents = Integer.parseInt( strSortEvents );
             }
 
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             model.put( Constants.MARK_CALENDAR, _calendarService.getAgendaResource( nCalendarId ) );
             model.put( Constants.MARK_WORKGROUPS_LIST,
                     AdminWorkgroupService.getUserWorkgroups( getUser( ), getLocale( ) ) );
@@ -399,7 +399,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
             url.addParameter( Constants.PARAMETER_CALENDAR_ID, nCalendarId );
             url.addParameter( Constants.PARAMETER_SORT_EVENTS, nSortEvents );
 
-            LocalizedPaginator<SimpleEvent> paginator = new LocalizedPaginator<SimpleEvent>( listEvents,
+            LocalizedPaginator<SimpleEvent> paginator = new LocalizedPaginator<>( listEvents,
                     _nItemsPerPage, url.getUrl( ), Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
             model.put( Constants.MARK_PAGINATOR, paginator );
@@ -606,7 +606,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         {
             int nCalendarId = Integer.parseInt( strCalendarId );
 
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
 
             List<SimpleEvent> listEvents = null;
@@ -648,7 +648,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
                 url.addParameter( Parameters.SORTED_ASC, strAscSort );
             }
 
-            LocalizedPaginator<SimpleEvent> paginator = new LocalizedPaginator<SimpleEvent>( listEvents,
+            LocalizedPaginator<SimpleEvent> paginator = new LocalizedPaginator<>( listEvents,
                     _nItemsPerPage, url.getUrl( ), Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
             model.put( Constants.MARK_CALENDAR, CalendarHome.findAgendaResource( nCalendarId, getPlugin( ) ) );
@@ -686,7 +686,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
 
             SimpleEvent event = _eventListService.getEvent( nEventId, getPlugin( ) );
             int nDays = _eventListService.getRepititionDays( nEventId, getPlugin( ) );
-            Map<String, Object> model = new HashMap<String, Object>( );
+            Map<String, Object> model = new HashMap<>( );
             List<OccurrenceEvent> listOccurrences = null;
 
             // SORT
@@ -728,7 +728,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
                 url.addParameter( Parameters.SORTED_ASC, strAscSort );
             }
 
-            LocalizedPaginator<OccurrenceEvent> paginator = new LocalizedPaginator<OccurrenceEvent>( listOccurrences,
+            LocalizedPaginator<OccurrenceEvent> paginator = new LocalizedPaginator<>( listOccurrences,
                     _nItemsPerPage, url.getUrl( ), Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
             model.put( Constants.MARK_EVENT, event );
@@ -796,7 +796,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
             String[] arrayCategory = request.getParameterValues( Constants.PARAMETER_CATEGORY );
 
             //Categories
-            List<Category> listCategories = new ArrayList<Category>( );
+            List<Category> listCategories = new ArrayList<>( );
 
             if ( arrayCategory != null )
             {
@@ -1038,7 +1038,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         SimpleEvent event = CalendarHome.findEvent( nIdEvent, getPlugin( ) );
         event.setImageUrl( EventImageResourceService.getInstance( ).getResourceImageEvent( event.getId( ) ) );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         String strBooleanTimeSpan = "TRUE";
 
@@ -1053,7 +1053,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
 
         Collection<Category> categoryDefaultList = CategoryHome.findAll( getPlugin( ) );
         Collection<Category> categoryList = event.getListCategories( );
-        HashMap<String, Object> mapCategorySelected = new HashMap<String, Object>( );
+        HashMap<String, Object> mapCategorySelected = new HashMap<>( );
 
         for ( Category catSelected : categoryList )
         {
@@ -1251,7 +1251,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         }
 
         //Categories
-        List<Category> listCategories = new ArrayList<Category>( );
+        List<Category> listCategories = new ArrayList<>( );
 
         if ( _EventCategories != null )
         {
@@ -1505,7 +1505,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
 
         OccurrenceEvent occurrence = CalendarHome.findOccurrence( nIdOccurrence, getPlugin( ) );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( Constants.MARK_OCCURRENCE, occurrence );
         model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
         model.put( MARK_EVENT_STATUS_LIST, getStatusList( request ) );
@@ -1716,7 +1716,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
      */
     public String getConfirmModifyEvent( HttpServletRequest request )
     {
-        HashMap<String, Object> mapParameters = new HashMap<String, Object>( );
+        HashMap<String, Object> mapParameters = new HashMap<>( );
         Date dateEvent = null;
         Date dateEndEvent = null;
 
@@ -2004,7 +2004,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
 
         setPageTitleProperty( Constants.PROPERTY_PAGE_TITLE_MANAGE_SUBSCRIBERS );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         model.put( Constants.MARK_CALENDAR_ID, nCalendarId );
 
@@ -2027,7 +2027,7 @@ public class CalendarJspBean extends PluginAdminPageJspBean
         UrlItem url = new UrlItem( request.getRequestURI( ) );
         url.addParameter( Constants.PARAMETER_CALENDAR_ID, Integer.toString( nCalendarId ) );
 
-        LocalizedPaginator<CalendarSubscriber> paginator = new LocalizedPaginator<CalendarSubscriber>(
+        LocalizedPaginator<CalendarSubscriber> paginator = new LocalizedPaginator<>(
                 calendarSubscribers, _nItemsPerPage, url.getUrl( ), Paginator.PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndex, getLocale( ) );
 

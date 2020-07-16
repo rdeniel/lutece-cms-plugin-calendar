@@ -42,101 +42,107 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public final class MiniCalendarPortletDAO implements IMiniCalendarPortletDAO
 {
-    // Constants
-    private static final String SQL_QUERY_SELECT = "SELECT id_portlet FROM core_portlet WHERE id_portlet = ?";
-    private static final String SQL_QUERY_SELECT_TOP_EVENT = "SELECT top_event FROM calendar_mini_portlet";
-    private static final String SQL_QUERY_UPDATE_TOP_EVENT = "UPDATE calendar_mini_portlet SET top_event= ?";
+	// Constants
+	private static final String SQL_QUERY_SELECT = "SELECT id_portlet FROM core_portlet WHERE id_portlet = ?";
+	private static final String SQL_QUERY_SELECT_TOP_EVENT = "SELECT top_event FROM calendar_mini_portlet";
+	private static final String SQL_QUERY_UPDATE_TOP_EVENT = "UPDATE calendar_mini_portlet SET top_event= ?";
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //Access methods to data
+	///////////////////////////////////////////////////////////////////////////////////////
+	//Access methods to data
 
-    /**
-     * Inserts a new record in the table. Not implemented.
-     * 
-     * @param portlet the object to be inserted
-     */
-    public void insert( Portlet portlet )
-    {
-        // Not implemented.
-    }
+	/**
+	 * Inserts a new record in the table. Not implemented.
+	 * 
+	 * @param portlet the object to be inserted
+	 */
+	public void insert( Portlet portlet )
+	{
+		// Not implemented.
+	}
 
-    /**
-     * Deletes a record from the table.
-     * 
-     * @param nPortletId the portlet id
-     * 
-     */
-    public void delete( int nPortletId )
-    {
-        // Not implemented.
-    }
+	/**
+	 * Deletes a record from the table.
+	 * 
+	 * @param nPortletId the portlet id
+	 * 
+	 */
+	public void delete( int nPortletId )
+	{
+		// Not implemented.
+	}
 
-    /**
-     * Loads the data of the portlet from the table.
-     * 
-     * @param nPortletId the portlet id
-     * @return the Portlet object
-     */
-    public Portlet load( int nPortletId )
-    {
-        MiniCalendarPortlet portlet = new MiniCalendarPortlet( );
+	/**
+	 * Loads the data of the portlet from the table.
+	 * 
+	 * @param nPortletId the portlet id
+	 * @return the Portlet object
+	 */
+	public Portlet load( int nPortletId )
+	{
+		MiniCalendarPortlet portlet = new MiniCalendarPortlet( );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT );
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT ) )
+		{
 
-        daoUtil.setInt( 1, nPortletId );
+			daoUtil.setInt( 1, nPortletId );
 
-        daoUtil.executeQuery( );
+			daoUtil.executeQuery( );
 
-        if ( daoUtil.next( ) )
-        {
-            portlet.setId( nPortletId );
-        }
+			if ( daoUtil.next( ) )
+			{
+				portlet.setId( nPortletId );
+			}
 
-        daoUtil.free( );
+			daoUtil.free( );
+		}
 
-        return portlet;
-    }
+		return portlet;
+	}
 
-    /**
-     * Updates the record in the table. Not implemented.
-     * 
-     * @param portlet
-     *            the instance of Portlet class to be updated
-     */
-    public void store( Portlet portlet )
-    {
-        // Not implemented.
-    }
+	/**
+	 * Updates the record in the table. Not implemented.
+	 * 
+	 * @param portlet
+	 *            the instance of Portlet class to be updated
+	 */
+	public void store( Portlet portlet )
+	{
+		// Not implemented.
+	}
 
-    /**
-     * Define top events are displayed or not
-     * @return true if shows top event else false
-     */
-    public boolean showTopEvent( )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_TOP_EVENT );
-        daoUtil.executeQuery( );
+	/**
+	 * Define top events are displayed or not
+	 * @return true if shows top event else false
+	 */
+	public boolean showTopEvent( )
+	{
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_TOP_EVENT ) )
+		{
+			daoUtil.executeQuery( );
 
-        boolean bTopEvent = false;
+			boolean bTopEvent = false;
 
-        while ( daoUtil.next( ) )
-        {
-            bTopEvent = daoUtil.getBoolean( 1 );
-        }
+			while ( daoUtil.next( ) )
+			{
+				bTopEvent = daoUtil.getBoolean( 1 );
+			}
 
-        daoUtil.free( );
+			daoUtil.free( );
 
-        return bTopEvent;
-    }
+			return bTopEvent;
+		}
+	}
 
-    /**
-     * Define top events are displayed or not
-     * @param top_event The top_event
-     */
-    public void updateTopEvent( boolean top_event )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_TOP_EVENT );
-        daoUtil.setBoolean( 1, top_event );
-        daoUtil.executeUpdate( );
-    }
+	/**
+	 * Define top events are displayed or not
+	 * @param top_event The top_event
+	 */
+	public void updateTopEvent( boolean top_event )
+	{
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_TOP_EVENT ) )
+		{
+			daoUtil.setBoolean( 1, top_event );
+			daoUtil.executeUpdate( );
+		}
+	}
 }

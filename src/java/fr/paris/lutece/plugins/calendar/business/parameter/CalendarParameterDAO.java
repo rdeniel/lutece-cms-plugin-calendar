@@ -49,92 +49,100 @@ import java.util.Map;
  */
 public class CalendarParameterDAO implements ICalendarParameterDAO
 {
-    private static final String SQL_QUERY_SELECT = " SELECT parameter_value FROM calendar_parameter WHERE parameter_key = ? ";
-    private static final String SQL_QUERY_UPDATE = " UPDATE calendar_parameter SET parameter_value = ? WHERE parameter_key = ? ";
-    private static final String SQL_QUERY_SELECT_ALL = " SELECT parameter_key, parameter_value FROM calendar_parameter ORDER BY parameter_key";
+	private static final String SQL_QUERY_SELECT = " SELECT parameter_value FROM calendar_parameter WHERE parameter_key = ? ";
+	private static final String SQL_QUERY_UPDATE = " UPDATE calendar_parameter SET parameter_value = ? WHERE parameter_key = ? ";
+	private static final String SQL_QUERY_SELECT_ALL = " SELECT parameter_key, parameter_value FROM calendar_parameter ORDER BY parameter_key";
 
-    /**
-     * Load the parameter value
-     * @param strParameterKey the parameter key
-     * @param plugin the plugin
-     * @return The parameter value
-     */
-    public ReferenceItem load( String strParameterKey, Plugin plugin )
-    {
-        ReferenceItem userParam = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
-        daoUtil.setString( 1, strParameterKey );
-        daoUtil.executeQuery( );
+	/**
+	 * Load the parameter value
+	 * @param strParameterKey the parameter key
+	 * @param plugin the plugin
+	 * @return The parameter value
+	 */
+	public ReferenceItem load( String strParameterKey, Plugin plugin )
+	{
+		ReferenceItem userParam = null;
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
+		{
+			daoUtil.setString( 1, strParameterKey );
+			daoUtil.executeQuery( );
 
-        if ( daoUtil.next( ) )
-        {
-            userParam = new ReferenceItem( );
-            userParam.setCode( strParameterKey );
-            userParam.setName( daoUtil.getString( 1 ) );
-        }
+			if ( daoUtil.next( ) )
+			{
+				userParam = new ReferenceItem( );
+				userParam.setCode( strParameterKey );
+				userParam.setName( daoUtil.getString( 1 ) );
+			}
 
-        daoUtil.free( );
+			daoUtil.free( );
+		}
 
-        return userParam;
-    }
+		return userParam;
+	}
 
-    /**
-     * Update the parameter value
-     * @param userParam The parameter value
-     * @param plugin The plugin
-     */
-    public void store( ReferenceItem userParam, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
+	/**
+	 * Update the parameter value
+	 * @param userParam The parameter value
+	 * @param plugin The plugin
+	 */
+	public void store( ReferenceItem userParam, Plugin plugin )
+	{
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+		{
 
-        daoUtil.setString( 1, userParam.getName( ) );
-        daoUtil.setString( 2, userParam.getCode( ) );
+			daoUtil.setString( 1, userParam.getName( ) );
+			daoUtil.setString( 2, userParam.getCode( ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
-    }
+			daoUtil.executeUpdate( );
+			daoUtil.free( );
+		}
+	}
 
-    /**
-     * Select all the parameters
-     * @param plugin Plugin
-     * @return all the parameters
-     */
-    public Map<String, String> selectAll( Plugin plugin )
-    {
-        Map<String, String> parametersList = new HashMap<String, String>( );
+	/**
+	 * Select all the parameters
+	 * @param plugin Plugin
+	 * @return all the parameters
+	 */
+	public Map<String, String> selectAll( Plugin plugin )
+	{
+		Map<String, String> parametersList = new HashMap<>( );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
-        daoUtil.executeQuery( );
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin ) )
+		{
+			daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
-        {
-            parametersList.put( daoUtil.getString( 1 ), daoUtil.getString( 2 ) );
-        }
+			while ( daoUtil.next( ) )
+			{
+				parametersList.put( daoUtil.getString( 1 ), daoUtil.getString( 2 ) );
+			}
 
-        daoUtil.free( );
+			daoUtil.free( );
+		}
 
-        return parametersList;
-    }
+		return parametersList;
+	}
 
-    /**
-     * Select all the parameters
-     * @param plugin plugin
-     * @return all the parameters
-     */
-    public ReferenceList selectParametersList( Plugin plugin )
-    {
-        ReferenceList parametersList = new ReferenceList( );
+	/**
+	 * Select all the parameters
+	 * @param plugin plugin
+	 * @return all the parameters
+	 */
+	public ReferenceList selectParametersList( Plugin plugin )
+	{
+		ReferenceList parametersList = new ReferenceList( );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin );
-        daoUtil.executeQuery( );
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_ALL, plugin ) )
+		{
+			daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
-        {
-            parametersList.addItem( daoUtil.getString( 1 ), daoUtil.getString( 2 ) );
-        }
+			while ( daoUtil.next( ) )
+			{
+				parametersList.addItem( daoUtil.getString( 1 ), daoUtil.getString( 2 ) );
+			}
 
-        daoUtil.free( );
+			daoUtil.free( );
+		}
 
-        return parametersList;
-    }
+		return parametersList;
+	}
 }

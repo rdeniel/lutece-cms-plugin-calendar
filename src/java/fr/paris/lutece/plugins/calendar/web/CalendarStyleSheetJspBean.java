@@ -185,10 +185,10 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
             strURL += ( "&" + Parameters.SORTED_ASC + "=" + strAscSort );
         }
 
-        LocalizedPaginator<StyleSheet> paginator = new LocalizedPaginator<StyleSheet>( listStyleSheets, _nItemsPerPage,
+        LocalizedPaginator<StyleSheet> paginator = new LocalizedPaginator<>( listStyleSheets, _nItemsPerPage,
                 strURL, Paginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndex, getLocale( ) );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_MODE_ID, "" );
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPage );
         model.put( MARK_PAGINATOR, paginator );
@@ -214,7 +214,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
         {
             throw new AccessDeniedException( "Access denied" );
         }
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_STYLE_LIST, getStyleList( ) );
 
         //model.put( MARK_MODE_LIST, ModeHome.getModes(  ) );
@@ -353,7 +353,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
 
         Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( MARK_STYLE_LIST, getStyleList( ) );
         //model.put( MARK_MODE_LIST, ModeHome.getModes(  ) );
         model.put( MARK_STYLESHEET, CalendarStyleSheetHome.findByPrimaryKey( nId, plugin ) );
@@ -383,7 +383,7 @@ public class CalendarStyleSheetJspBean extends AdminFeaturesPageJspBean
 
         for ( Style style : stylesList )
         {
-            HashMap<String, Object> model = new HashMap<String, Object>( );
+            HashMap<String, Object> model = new HashMap<>( );
             model.put( MARK_PORTAL_COMPONENT_NAME, PortalComponentHome.findByPrimaryKey( style.getPortalComponentId( ) )
                     .getName( ) );
 

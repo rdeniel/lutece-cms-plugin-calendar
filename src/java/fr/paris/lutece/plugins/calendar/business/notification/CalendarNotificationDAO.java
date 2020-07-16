@@ -47,120 +47,130 @@ import java.util.List;
  */
 public class CalendarNotificationDAO implements ICalendarNotificationDAO
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = " SELECT key_email, email, id_agenda,date_expiry "
-            + " FROM calendar_notify_key WHERE key_email=?";
-    private static final String SQL_QUERY_INSERT = " INSERT INTO calendar_notify_key( "
-            + " key_email, email, id_agenda, date_expiry)" + " VALUES (?,?,?,?)";
-    private static final String SQL_QUERY_UPDATE = "UPDATE calendar_notify_key "
-            + " SET key_email = ?, email = ?, id_agenda = ?,date_expiry = ? WHERE key_email = ?";
-    private static final String SQL_QUERY_DELETE = " DELETE FROM calendar_notify_key WHERE key_email = ? ";
-    private static final String SQL_QUERY_SELECT_EXPIRY = " SELECT key_email, email, id_agenda,date_expiry FROM calendar_notify_key WHERE date_expiry < NOW(  )";
+	private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = " SELECT key_email, email, id_agenda,date_expiry "
+			+ " FROM calendar_notify_key WHERE key_email=?";
+	private static final String SQL_QUERY_INSERT = " INSERT INTO calendar_notify_key( "
+			+ " key_email, email, id_agenda, date_expiry)" + " VALUES (?,?,?,?)";
+	private static final String SQL_QUERY_UPDATE = "UPDATE calendar_notify_key "
+			+ " SET key_email = ?, email = ?, id_agenda = ?,date_expiry = ? WHERE key_email = ?";
+	private static final String SQL_QUERY_DELETE = " DELETE FROM calendar_notify_key WHERE key_email = ? ";
+	private static final String SQL_QUERY_SELECT_EXPIRY = " SELECT key_email, email, id_agenda,date_expiry FROM calendar_notify_key WHERE date_expiry < NOW(  )";
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void insert( CalendarNotification calendarNotification, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public synchronized void insert( CalendarNotification calendarNotification, Plugin plugin )
+	{
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin ) )
+		{
 
-        int nPos = 0;
+			int nPos = 0;
 
-        daoUtil.setString( ++nPos, calendarNotification.getKey( ) );
-        daoUtil.setString( ++nPos, calendarNotification.getEmail( ) );
-        daoUtil.setInt( ++nPos, calendarNotification.getIdAgenda( ) );
-        daoUtil.setTimestamp( ++nPos, calendarNotification.getDateExpiry( ) );
+			daoUtil.setString( ++nPos, calendarNotification.getKey( ) );
+			daoUtil.setString( ++nPos, calendarNotification.getEmail( ) );
+			daoUtil.setInt( ++nPos, calendarNotification.getIdAgenda( ) );
+			daoUtil.setTimestamp( ++nPos, calendarNotification.getDateExpiry( ) );
 
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
-    }
+			daoUtil.executeUpdate( );
+			daoUtil.free( );
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void store( CalendarNotification calendarNotification, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void store( CalendarNotification calendarNotification, Plugin plugin )
+	{
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+		{
 
-        int nPos = 0;
+			int nPos = 0;
 
-        daoUtil.setString( ++nPos, calendarNotification.getKey( ) );
-        daoUtil.setString( ++nPos, calendarNotification.getEmail( ) );
-        daoUtil.setInt( ++nPos, calendarNotification.getIdAgenda( ) );
-        daoUtil.setTimestamp( ++nPos, calendarNotification.getDateExpiry( ) );
+			daoUtil.setString( ++nPos, calendarNotification.getKey( ) );
+			daoUtil.setString( ++nPos, calendarNotification.getEmail( ) );
+			daoUtil.setInt( ++nPos, calendarNotification.getIdAgenda( ) );
+			daoUtil.setTimestamp( ++nPos, calendarNotification.getDateExpiry( ) );
 
-        daoUtil.setString( ++nPos, calendarNotification.getKey( ) );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
-    }
+			daoUtil.setString( ++nPos, calendarNotification.getKey( ) );
+			daoUtil.executeUpdate( );
+			daoUtil.free( );
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CalendarNotification load( String strKey, Plugin plugin )
-    {
-        CalendarNotification calendarNotification = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin );
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CalendarNotification load( String strKey, Plugin plugin )
+	{
+		CalendarNotification calendarNotification = null;
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, plugin ) )
+		{
 
-        daoUtil.setString( 1, strKey );
-        daoUtil.executeQuery( );
+			daoUtil.setString( 1, strKey );
+			daoUtil.executeQuery( );
 
-        int nPos = 0;
+			int nPos = 0;
 
-        if ( daoUtil.next( ) )
-        {
-            calendarNotification = new CalendarNotification( );
-            calendarNotification.setKey( daoUtil.getString( ++nPos ) );
-            calendarNotification.setEmail( daoUtil.getString( ++nPos ) );
-            calendarNotification.setIdAgenda( daoUtil.getInt( ++nPos ) );
-            calendarNotification.setDateExpiry( daoUtil.getTimestamp( ++nPos ) );
-        }
+			if ( daoUtil.next( ) )
+			{
+				calendarNotification = new CalendarNotification( );
+				calendarNotification.setKey( daoUtil.getString( ++nPos ) );
+				calendarNotification.setEmail( daoUtil.getString( ++nPos ) );
+				calendarNotification.setIdAgenda( daoUtil.getInt( ++nPos ) );
+				calendarNotification.setDateExpiry( daoUtil.getTimestamp( ++nPos ) );
+			}
 
-        daoUtil.free( );
+			daoUtil.free( );
+		}
 
-        return calendarNotification;
-    }
+		return calendarNotification;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void delete( String strKey, Plugin plugin )
-    {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void delete( String strKey, Plugin plugin )
+	{
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+		{
 
-        daoUtil.setString( 1, strKey );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
-    }
+			daoUtil.setString( 1, strKey );
+			daoUtil.executeUpdate( );
+			daoUtil.free( );
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<CalendarNotification> selectNotificationExpiry( Plugin plugin )
-    {
-        int nPos = 0;
-        List<CalendarNotification> listNotificationExpiry = new ArrayList<CalendarNotification>( );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_EXPIRY, plugin );
-        daoUtil.executeQuery( );
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<CalendarNotification> selectNotificationExpiry( Plugin plugin )
+	{
+		int nPos = 0;
+		List<CalendarNotification> listNotificationExpiry = new ArrayList<>( );
+		try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_EXPIRY, plugin ) )
+		{
+			daoUtil.executeQuery( );
 
-        while ( daoUtil.next( ) )
-        {
-            nPos = 0;
+			while ( daoUtil.next( ) )
+			{
+				nPos = 0;
 
-            CalendarNotification calendarNotification = new CalendarNotification( );
-            calendarNotification.setKey( daoUtil.getString( ++nPos ) );
-            calendarNotification.setEmail( daoUtil.getString( ++nPos ) );
-            calendarNotification.setIdAgenda( daoUtil.getInt( ++nPos ) );
-            calendarNotification.setDateExpiry( daoUtil.getTimestamp( ++nPos ) );
-            listNotificationExpiry.add( calendarNotification );
-        }
+				CalendarNotification calendarNotification = new CalendarNotification( );
+				calendarNotification.setKey( daoUtil.getString( ++nPos ) );
+				calendarNotification.setEmail( daoUtil.getString( ++nPos ) );
+				calendarNotification.setIdAgenda( daoUtil.getInt( ++nPos ) );
+				calendarNotification.setDateExpiry( daoUtil.getTimestamp( ++nPos ) );
+				listNotificationExpiry.add( calendarNotification );
+			}
 
-        daoUtil.free( );
+			daoUtil.free( );
+		}
 
-        return listNotificationExpiry;
-    }
+		return listNotificationExpiry;
+	}
 }

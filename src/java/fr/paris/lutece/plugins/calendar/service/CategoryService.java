@@ -125,7 +125,7 @@ public final class CategoryService implements ImageResourceProvider
         Collection<Category> listCategory = CategoryHome.findAll( plugin );
         listCategory = AdminWorkgroupService.getAuthorizedCollection( listCategory, user );
 
-        Collection<CategoryDisplay> listCategoryDisplay = new ArrayList<CategoryDisplay>( );
+        Collection<CategoryDisplay> listCategoryDisplay = new ArrayList<>( );
 
         for ( Category category : listCategory )
         {
@@ -153,7 +153,7 @@ public final class CategoryService implements ImageResourceProvider
         Collection<Category> listCategory = CategoryHome.findAll( plugin );
         listCategory = AdminWorkgroupService.getAuthorizedCollection( listCategory, user );
 
-        Collection<CategoryDisplay> listCategoryDisplay = new ArrayList<CategoryDisplay>( );
+        Collection<CategoryDisplay> listCategoryDisplay = new ArrayList<>( );
 
         for ( Category category : listCategory )
         {

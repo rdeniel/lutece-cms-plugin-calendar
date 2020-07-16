@@ -90,7 +90,7 @@ public class CalendarDashboardComponent extends DashboardComponent
         UrlItem url = new UrlItem( right.getUrl(  ) );
         url.addParameter( CalendarPlugin.PLUGIN_NAME, right.getPluginName(  ) );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<>(  );
         List<AgendaResource> calendarsList = getCalendarsList( user, plugin );
         ReferenceItem nbEvents = CalendarParameterHome.findByKey( Constants.PARAMETER_DASHBOARD_NB_EVENTS, plugin );
         int nNbEvents = StringUtil.getIntValue( nbEvents.getName(  ), 0 );
@@ -127,7 +127,7 @@ public class CalendarDashboardComponent extends DashboardComponent
      */
     private Map<String, String> getNbSubscribersList( List<AgendaResource> calendarsList, Plugin plugin )
     {
-    	Map<String, String> nbSubscribersList = new HashMap<String, String>(  );
+    	Map<String, String> nbSubscribersList = new HashMap<>(  );
     	for ( AgendaResource calendar : calendarsList )
     	{
     		int nIdCalendar = StringUtil.getIntValue( calendar.getId(  ), 0 );
@@ -147,7 +147,7 @@ public class CalendarDashboardComponent extends DashboardComponent
     {
     	ReferenceItem nextDays = CalendarParameterHome.findByKey( Constants.PARAMETER_DASHBOARD_N_NEXT_DAYS, plugin );
     	int nNextDays = StringUtil.getIntValue( nextDays.getName(  ), 0 );
-    	List<SimpleEvent> eventsList = new ArrayList<SimpleEvent>(  );
+    	List<SimpleEvent> eventsList = new ArrayList<>(  );
     	for ( AgendaResource calendar : calendarsList )
     	{
     		int nIdCalendar = StringUtil.getIntValue( calendar.getId(  ), 0 );

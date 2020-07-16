@@ -143,7 +143,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
 
         AdminUser user = getUser( );
 
-        HashMap<String, Collection<CategoryDisplay>> model = new HashMap<String, Collection<CategoryDisplay>>( );
+        HashMap<String, Collection<CategoryDisplay>> model = new HashMap<>( );
         model.put( MARK_CATEGORY_LIST, CategoryService.getAllCategoriesDisplay( user ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MANAGE_CATEGORY, getLocale( ), model );
@@ -214,7 +214,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
         Plugin plugin = PluginService.getPlugin( Constants.PLUGIN_NAME );
 
         // check if category exist
-        if ( CategoryHome.findByName( strCategoryName, plugin ).size( ) > 0 )
+        if ( !CategoryHome.findByName( strCategoryName, plugin ).isEmpty( ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_CATEGORY_EXIST, AdminMessage.TYPE_STOP );
         }
@@ -257,7 +257,7 @@ public class CalendarCategoryJspBean extends AdminFeaturesPageJspBean
             return AdminMessageService.getMessageUrl( request, MESSAGE_CATEGORY_ERROR, AdminMessage.TYPE_ERROR );
         }
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
 
         model.put( MARK_CATEGORY_DISPLAY, CategoryService.getCategoryDisplay( nIdCategory ) );
         model.put( MARK_USER_WORKGROUP_LIST, refListWorkGroups );

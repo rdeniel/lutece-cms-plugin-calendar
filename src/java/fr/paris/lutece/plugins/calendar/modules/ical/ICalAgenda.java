@@ -63,8 +63,8 @@ public class ICalAgenda implements Agenda
     private static final long serialVersionUID = 331412235577651908L;
     private String _strName;
     private String _strKeyName;
-    private Map<String, List<Event>> _mapDays = new HashMap<String, List<Event>>( );
-    private List<Event> _list = new ArrayList<Event>( );
+    private Map<String, List<Event>> _mapDays = new HashMap<>( );
+    private List<Event> _list = new ArrayList<>( );
 
     /**
      * Default constructor
@@ -253,7 +253,7 @@ public class ICalAgenda implements Agenda
         }
         else
         {
-            listEvents = new ArrayList<Event>( );
+            listEvents = new ArrayList<>( );
             _mapDays.put( strDate, listEvents );
         }
 

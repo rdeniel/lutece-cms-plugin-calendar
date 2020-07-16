@@ -174,7 +174,7 @@ public class CalendarPortletJspBean extends PortletJspBean
         String strIdPage = request.getParameter( PARAMETER_PAGE_ID );
         String strBaseUrl = AppPathService.getBaseUrl( request );
 
-        Map<String, Object> model = new HashMap<String, Object>( );
+        Map<String, Object> model = new HashMap<>( );
         model.put( BOOKMARK_PORTLET_ID, strPortletId );
         model.put( BOOKMARK_PAGE_ID, strIdPage );
 
@@ -217,7 +217,7 @@ public class CalendarPortletJspBean extends PortletJspBean
             strFileAgendas = strFileAgendas.substring( 0, strFileAgendas.length( ) - 1 );
         }
 
-        List<String> listSelectedAgendaId = new ArrayList<String>( );
+        List<String> listSelectedAgendaId = new ArrayList<>( );
 
         for ( AgendaResource agenda : listSelectedAgendas )
         {
@@ -356,9 +356,9 @@ public class CalendarPortletJspBean extends PortletJspBean
     private static void modifyCalendar( HttpServletRequest request, int nPortletId, String strDateBegin,
             String strDateEnd, int nDays, boolean bIntervalPeriodicity )
     {
-        List<String> listChosenAgendas = new ArrayList<String>( );
+        List<String> listChosenAgendas = new ArrayList<>( );
 
-        Enumeration enumParameterNames = request.getParameterNames( );
+        Enumeration<?> enumParameterNames = request.getParameterNames( );
 
         while ( enumParameterNames.hasMoreElements( ) )
         {

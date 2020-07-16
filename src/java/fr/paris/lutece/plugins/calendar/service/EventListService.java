@@ -123,18 +123,11 @@ public class EventListService
             {
                 eventlist = (EventList) Class.forName( strClass ).newInstance( );
             }
-            catch ( ClassNotFoundException e )
+            catch ( ClassNotFoundException | IllegalAccessException | InstantiationException e )
             {
                 AppLogService.error( e.getMessage( ), e );
             }
-            catch ( IllegalAccessException e )
-            {
-                AppLogService.error( e.getMessage( ), e );
-            }
-            catch ( InstantiationException e )
-            {
-                AppLogService.error( e.getMessage( ), e );
-            }
+
         }
 
         return eventlist;
@@ -321,7 +314,7 @@ public class EventListService
      */
     private String getKey( int nAgendaId )
     {
-        Map<String, String> mapParams = new HashMap<String, String>( );
+        Map<String, String> mapParams = new HashMap<>( );
         mapParams.put( KEY_CALENDAR, Integer.toString( nAgendaId ) );
 
         return _cksEventList.getKey( mapParams, PortalJspBean.MODE_HTML, null );
@@ -335,7 +328,7 @@ public class EventListService
      */
     private String getKey( int nAgendaId, LuteceUser user )
     {
-        Map<String, String> mapParams = new HashMap<String, String>( );
+        Map<String, String> mapParams = new HashMap<>( );
         mapParams.put( KEY_CALENDAR, Integer.toString( nAgendaId ) );
 
         return _cksEventList.getKey( mapParams, PortalJspBean.MODE_HTML, user );

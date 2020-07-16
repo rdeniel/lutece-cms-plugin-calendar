@@ -234,7 +234,7 @@ public class CalendarServiceJspBean extends InsertServiceJspBean implements Inse
         String strCalendarId = request.getParameter( Constants.PARAMETER_CALENDAR_ID );
         String strAlt = request.getParameter( PARAMETER_ALT );
         String strName = request.getParameter( PARAMETER_NAME );
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<>(  );
 
         if ( ( strEventId == null ) || !strEventId.matches( REGEX_ID ) )
         {
@@ -267,7 +267,7 @@ public class CalendarServiceJspBean extends InsertServiceJspBean implements Inse
      */
     private Map<String, Object> getDefaultModel(  )
     {
-        HashMap<String, Object> model = new HashMap<String, Object>(  );
+        HashMap<String, Object> model = new HashMap<>(  );
         model.put( MARK_INPUT, _input );
 
         return model;
